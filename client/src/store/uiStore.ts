@@ -12,6 +12,8 @@ interface UiState {
   addToPlaylistUris: string[] | null;
   openAddToPlaylist: (uris: string[]) => void;
   closeAddToPlaylist: () => void;
+  monthlyPlaylistOpen: boolean;
+  setMonthlyPlaylistOpen: (open: boolean) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -29,4 +31,6 @@ export const useUiStore = create<UiState>((set) => ({
   addToPlaylistUris: null,
   openAddToPlaylist: (uris) => set({ addToPlaylistUris: uris }),
   closeAddToPlaylist: () => set({ addToPlaylistUris: null }),
+  monthlyPlaylistOpen: false,
+  setMonthlyPlaylistOpen: (monthlyPlaylistOpen) => set({ monthlyPlaylistOpen }),
 }));

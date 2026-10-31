@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/Toaster';
 import { PlayerProvider } from '@/features/player/PlayerProvider';
 import { AddToPlaylistDialog } from '@/features/playlists/AddToPlaylistDialog';
 import { CreatePlaylistDialog } from '@/features/playlists/CreatePlaylistDialog';
+import { MonthlyPlaylistDialog } from '@/features/playlists/MonthlyPlaylistDialog';
 import { PremiumBanner } from './PremiumBanner';
 import { Sidebar } from './Sidebar';
 
@@ -24,6 +25,7 @@ export function AppShell() {
       <Toaster />
       <AddToPlaylistDialog />
       <CreatePlaylistDialog />
+      <MonthlyPlaylistDialog />
     </PlayerProvider>
   );
 }

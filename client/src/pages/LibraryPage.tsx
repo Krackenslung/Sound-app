@@ -43,6 +43,7 @@ function unavailableMessage(err: unknown, fallback: string) {
 
 function LikedSongs() {
   const { user } = useAuth();
+  const openMonthly = useUiStore((s) => s.setMonthlyPlaylistOpen);
   const controls = usePlayerControls();
   const trackMenu = useTrackMenu();
   const currentUri = usePlayerStore((s) => s.track?.uri);
@@ -110,8 +111,7 @@ function LikedSongs() {
         <div className="flex-1" />
         <Button
           variant="secondary"
-          disabled
-          title="Coming soon"
+          onClick={() => openMonthly(true)}
           icon={<Sparkles aria-hidden className="size-4" />}
         >
           Create monthly playlist
