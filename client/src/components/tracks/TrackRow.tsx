@@ -3,6 +3,7 @@ import type { Image } from '@/api/types';
 import { Artwork } from '@/components/media/Artwork';
 import { cn } from '@/lib/cn';
 import { formatDuration } from '@/lib/format';
+import { Menu, type MenuItem } from '@/components/ui/Menu';
 import { LikeButton } from './LikeButton';
 
 export interface TrackRowProps {
@@ -18,6 +19,8 @@ export interface TrackRowProps {
   playing?: boolean;
   hideAlbum?: boolean;
   onPlay?: () => void;
+  /** Overflow menu actions (add to queue, go to album…). */
+  menuItems?: MenuItem[];
 }
 
 // Figma: TrackRow (node 3:50) — 56px row, Default / Playing (surface-2 bg, accent index + title).
@@ -32,6 +35,7 @@ export function TrackRow({
   playing = false,
   hideAlbum = false,
   onPlay,
+  menuItems,
 }: TrackRowProps) {
   return (
     <div
@@ -88,6 +92,9 @@ export function TrackRow({
       <span className="w-11 shrink-0 text-right text-caption text-text-secondary">
         {formatDuration(durationMs)}
       </span>
+      {menuItems && menuItems.length > 0 && (
+        <Menu label={`More options for ${title}`} items={menuItems} className="-mr-2" />
+      )}
     </div>
   );
 }

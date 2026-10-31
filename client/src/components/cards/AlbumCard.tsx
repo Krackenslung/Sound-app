@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { Play } from 'lucide-react';
 import type { Image } from '@/api/types';
 import { Artwork } from '@/components/media/Artwork';
@@ -8,14 +9,22 @@ export interface AlbumCardProps {
   seed: string;
   images?: Image[];
   onPlay?: () => void;
+  /** Detail page; makes the art and title a link. */
+  to?: string;
 }
 
 // Figma: AlbumCard (node 3:51) — 184px wide, 160px art, surface bg, 12px radius.
-export function AlbumCard({ title, subtitle, seed, images, onPlay }: AlbumCardProps) {
+export function AlbumCard({ title, subtitle, seed, images, onPlay, to }: AlbumCardProps) {
   return (
     <div className="group relative flex w-[184px] shrink-0 flex-col gap-3 rounded-xl bg-surface px-3 pb-4 pt-3 transition-colors hover:bg-surface-2">
       <div className="relative">
-        <Artwork images={images} size={160} seed={seed} className="size-40 rounded-lg" />
+        {to ? (
+          <Link to={to} tabIndex={-1} aria-hidden>
+            <Artwork images={images} size={160} seed={seed} className="size-40 rounded-lg" />
+          </Link>
+        ) : (
+          <Artwork images={images} size={160} seed={seed} className="size-40 rounded-lg" />
+        )}
         {onPlay && (
           <button
             type="button"
@@ -28,7 +37,13 @@ export function AlbumCard({ title, subtitle, seed, images, onPlay }: AlbumCardPr
         )}
       </div>
       <div className="flex min-w-0 flex-col gap-1">
-        <span className="truncate text-body font-semibold">{title}</span>
+        {to ? (
+          <Link to={to} className="truncate text-body font-semibold hover:underline">
+            {title}
+          </Link>
+        ) : (
+          <span className="truncate text-body font-semibold">{title}</span>
+        )}
         <span className="truncate text-caption text-text-secondary">{subtitle}</span>
       </div>
     </div>
