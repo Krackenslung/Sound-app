@@ -8,7 +8,7 @@
     "server"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22.12"
   },
   "scripts": {
     "dev": "concurrently -n server,client -c magenta,cyan \"npm:dev -w server\" \"npm:dev -w client\"",

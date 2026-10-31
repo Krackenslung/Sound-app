@@ -6,7 +6,7 @@ A web music player powered by the Spotify Web API and Web Playback SDK: play mus
 
 ## Stack
 
-React 18 + Vite + TypeScript + Tailwind (client) · Node 20 + Express (server) · Redis sessions · Docker + Caddy.
+React 18 + Vite + TypeScript + Tailwind (client) · Node 22 + Express (server) · Redis sessions · Docker + Caddy.
 
 ## Getting started
 
@@ -26,5 +26,11 @@ Use `127.0.0.1`, not `localhost` — Spotify rejects `localhost` redirect URIs.
 | `npm start`                                       | Production server (API + built client on one origin)       |
 
 In development, `/dev/components` previews the base UI components and design tokens.
+
+Try it without a Spotify account: `/?demo=1` (or **Explore demo mode** on the login page).
+
+## Deployment
+
+Docker image + Compose stack (app, Redis, Caddy) deployed by GitHub Actions on every push to `main`. Runbook: [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md).
 
 See [`CLAUDE.md`](./CLAUDE.md) for the full roadmap, design references and Spotify API constraints.
