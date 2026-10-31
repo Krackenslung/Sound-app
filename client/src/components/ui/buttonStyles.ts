@@ -4,7 +4,7 @@ export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 // Figma: Button (node 3:8) — pill, 14px/28px padding, Body Strong label.
 const variants: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-on-accent hover:bg-accent-hover',
+  primary: 'bg-accent-strong text-on-accent hover:bg-accent-strong-hover',
   secondary: 'border-[1.5px] border-border text-text-primary hover:bg-surface-hover',
   ghost: 'text-text-secondary hover:text-text-primary',
 };

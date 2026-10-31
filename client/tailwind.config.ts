@@ -18,6 +18,8 @@ export default {
       'text-muted': v('color-text-muted'),
       accent: v('color-accent'),
       'accent-hover': v('color-accent-hover'),
+      'accent-strong': v('color-accent-strong'),
+      'accent-strong-hover': v('color-accent-strong-hover'),
       'accent-2': v('color-accent-2'),
       'accent-soft': v('color-accent-soft'),
       scrim: v('color-scrim'),

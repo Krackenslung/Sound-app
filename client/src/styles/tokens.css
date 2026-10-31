@@ -7,9 +7,13 @@
   --color-border: #2b2b3a;
   --color-text-primary: #f4f4f8;
   --color-text-secondary: #a1a1b5;
-  --color-text-muted: #6b6b80;
+  /* Was #6b6b80 in Figma; raised to #84849a for WCAG AA (>= 4.5:1 on bg, surface, surface-2). */
+  --color-text-muted: #84849a;
   --color-accent: #8b5cf6;
   --color-accent-hover: #a78bfa;
+  /* Primary button fill: white text on --color-accent is only 4.23:1, this is 4.91:1 (5.95:1 on hover). */
+  --color-accent-strong: #7f4ff0;
+  --color-accent-strong-hover: #6f42e0;
   --color-accent-2: #f472b6;
   --color-on-accent: #ffffff;
   --color-warning: #fbbf24;

@@ -77,7 +77,7 @@ function TopResult({ track, onPlay }: { track: Track; onPlay: () => void }) {
             type="button"
             aria-label={`Play ${track.name}`}
             onClick={onPlay}
-            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent transition-colors hover:bg-accent-hover"
+            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-on-accent transition-colors hover:bg-accent-strong-hover"
           >
             <Play aria-hidden className="ml-0.5 size-5 fill-current" />
           </button>
@@ -280,6 +280,7 @@ export function SearchPage() {
 
   return (
     <div className="flex flex-col gap-6">
+      <h1 className="sr-only">Search</h1>
       <div className="flex items-center gap-3 rounded-full border-[1.5px] border-border bg-surface-2 px-5 py-3.5 transition-colors focus-within:border-accent">
         <SearchIcon aria-hidden className="size-5 shrink-0" />
         <input

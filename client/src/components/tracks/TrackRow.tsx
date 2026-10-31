@@ -51,7 +51,7 @@ export function TrackRow({
         <span
           className={cn(
             'text-body',
-            playing ? 'text-accent' : 'text-text-secondary',
+            playing ? 'text-accent-hover' : 'text-text-secondary',
             onPlay && 'group-focus-within:invisible group-hover:invisible',
           )}
         >
@@ -76,7 +76,7 @@ export function TrackRow({
         <span
           className={cn(
             'truncate text-body font-semibold',
-            playing ? 'text-accent' : 'text-text-primary',
+            playing ? 'text-accent-hover' : 'text-text-primary',
           )}
         >
           {title}

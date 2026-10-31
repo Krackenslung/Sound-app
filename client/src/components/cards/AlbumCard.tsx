@@ -35,7 +35,7 @@ export function AlbumCard({ title, subtitle, seed, images, onPlay, to, fluid }: 
             type="button"
             aria-label={`Play ${title}`}
             onClick={onPlay}
-            className="absolute bottom-2 right-2 flex size-11 translate-y-1 items-center justify-center rounded-full bg-accent text-on-accent opacity-0 shadow-popover transition-all hover:bg-accent-hover focus-visible:translate-y-0 focus-visible:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
+            className="absolute bottom-2 right-2 flex size-11 translate-y-1 items-center justify-center rounded-full bg-accent text-on-accent opacity-0 shadow-popover transition-all hover:bg-accent-strong-hover focus-visible:translate-y-0 focus-visible:opacity-100 group-hover:translate-y-0 group-hover:opacity-100"
           >
             <Play aria-hidden className="size-5 fill-current" />
           </button>

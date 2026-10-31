@@ -7,7 +7,7 @@ describe('Button', () => {
     const onClick = vi.fn();
     render(<Button onClick={onClick}>Play</Button>);
     const btn = screen.getByRole('button', { name: 'Play' });
-    expect(btn).toHaveClass('bg-accent', 'rounded-full');
+    expect(btn).toHaveClass('bg-accent-strong', 'rounded-full');
     expect(btn).toHaveAttribute('type', 'button');
     await userEvent.click(btn);
     expect(onClick).toHaveBeenCalledOnce();
