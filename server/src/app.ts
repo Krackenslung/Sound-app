@@ -8,6 +8,8 @@ import { loadConfig, type AppConfig } from './config.js';
 import { healthRouter } from './routes/health.js';
 import { createAuthRouter } from './routes/auth.js';
 import { createMeRouter } from './routes/me.js';
+import { createPlayerRouter } from './routes/player.js';
+import { createLibraryRouter } from './routes/library.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
@@ -31,6 +33,8 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   app.use('/api', createSessionMiddleware(config, deps.sessionStore));
   app.use('/api/auth', createAuthRouter(config));
   app.use('/api/me', createMeRouter(config));
+  app.use('/api/player', createPlayerRouter(config));
+  app.use('/api/library', createLibraryRouter(config));
   app.use('/api', notFound);
 
   if (config.isProd) {

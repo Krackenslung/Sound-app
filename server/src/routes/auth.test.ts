@@ -1,17 +1,8 @@
-import request from 'supertest';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { createApp } from '../app.js';
-import { loadConfig } from '../config.js';
+import { login, newAgent, testConfig } from '../test/helpers.js';
 import { createMockState, createSpotifyMock, type MockState } from '../test/spotifyMock.js';
 
-const config = loadConfig({
-  NODE_ENV: 'test',
-  APP_ORIGIN: 'http://127.0.0.1:5173',
-  SPOTIFY_CLIENT_ID: 'client-id',
-  SPOTIFY_CLIENT_SECRET: 'client-secret',
-  SPOTIFY_REDIRECT_URI: 'http://127.0.0.1:5173/api/auth/callback',
-  SESSION_SECRET: 'test-secret',
-});
+const config = testConfig;
 
 const state: MockState = createMockState();
 const mock = createSpotifyMock(state);
@@ -22,18 +13,6 @@ beforeEach(() => {
   Object.assign(state, createMockState());
 });
 afterEach(() => mock.resetHandlers());
-
-function newAgent() {
-  return request.agent(createApp(config));
-}
-
-async function login(agent = newAgent()) {
-  const res = await agent.get('/api/auth/login');
-  const authorize = new URL(res.headers.location);
-  const stateParam = authorize.searchParams.get('state')!;
-  const cb = await agent.get(`/api/auth/callback?code=good-code&state=${stateParam}`);
-  return { agent, authorize, callback: cb };
-}
 
 describe('GET /api/auth/login', () => {
   it('redirects to Spotify authorize with scopes, state and a PKCE challenge', async () => {
