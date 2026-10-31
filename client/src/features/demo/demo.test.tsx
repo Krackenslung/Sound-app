@@ -112,6 +112,23 @@ describe('demo backend', () => {
   });
 });
 
+describe('server without Spotify credentials', () => {
+  it('skips the login page and opens demo mode', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: RequestInfo | URL) => {
+        if (String(input) === '/api/me')
+          return json({ code: 'LOGIN_NOT_CONFIGURED', message: 'x' }, 401);
+        throw new Error(`Unexpected network call: ${String(input)}`);
+      }),
+    );
+    const { router } = renderApp('/');
+    expect(await screen.findByText('Demo mode')).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/');
+    expect(useDemoStore.getState().enabled).toBe(true);
+  });
+});
+
 describe('demo entry via URL', () => {
   it('?demo=1 turns demo mode on and persists it for the session', async () => {
     window.history.replaceState(null, '', '/?demo=1');

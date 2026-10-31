@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import type { AppConfig } from '../config.js';
+import { HttpError } from '../middleware/errorHandler.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { createSpotifyClient } from '../spotify/spotifyClient.js';
 import type { SpotifyArtist, SpotifyPaging, SpotifyTrack, SpotifyUser } from '../spotify/types.js';
@@ -32,6 +33,15 @@ export function toMe(u: SpotifyUser): MeResponse {
 
 export function createMeRouter(config: AppConfig) {
   const router = Router();
+  // With no Spotify credentials nobody can log in; tell the client so it can
+  // open demo mode instead of a login page that can't work.
+  const loginConfigured = Boolean(config.spotify.clientId && config.spotify.clientSecret);
+  router.get('/', (req, _res, next) => {
+    if (!loginConfigured && !req.session.tokens) {
+      return next(new HttpError(401, 'LOGIN_NOT_CONFIGURED', 'Spotify login is not configured'));
+    }
+    next();
+  });
   router.get('/', requireAuth, async (req, res, next) => {
     try {
       const user = await createSpotifyClient(req, config).request<SpotifyUser>('/me');

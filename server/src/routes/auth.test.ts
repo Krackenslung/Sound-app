@@ -264,3 +264,18 @@ describe('Spotify error mapping on /api/me', () => {
     expect(state.meFailures).toHaveLength(0);
   });
 });
+
+describe('GET /api/me without Spotify credentials', () => {
+  it('returns 401 LOGIN_NOT_CONFIGURED so the client can open demo mode', async () => {
+    const app = createApp(loadConfig({ NODE_ENV: 'test' }));
+    const res = await request(app).get('/api/me');
+    expect(res.status).toBe(401);
+    expect(res.body.code).toBe('LOGIN_NOT_CONFIGURED');
+  });
+
+  it('still returns plain 401 UNAUTHENTICATED when credentials are set', async () => {
+    const res = await newAgent().get('/api/me');
+    expect(res.status).toBe(401);
+    expect(res.body.code).toBe('UNAUTHENTICATED');
+  });
+});

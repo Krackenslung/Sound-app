@@ -39,7 +39,7 @@ Try it without a Spotify account: `/?demo=1` (or **Explore demo mode** on the lo
    `echo "https://$CODESPACE_NAME-5173.$GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN/api/auth/callback"`.
    Your Spotify account must also be on the app's allowlist (_User Management_).
 
-The server derives `APP_ORIGIN` and `SPOTIFY_REDIRECT_URI` from the codespace automatically, and sessions fall back to memory (no Redis needed). Secrets you added _after_ the codespace started need a rebuild or restart of the codespace to show up. Leave the port **private**; only you can open it. Demo mode (`/?demo=1`) works without any of the above.
+The server derives `APP_ORIGIN` and `SPOTIFY_REDIRECT_URI` from the codespace automatically, and sessions fall back to memory (no Redis needed). Secrets you added _after_ the codespace started need a rebuild or restart of the codespace to show up. Leave the port **private**; only you can open it. Demo mode (`/?demo=1`) works without any of the above. If the server has no Spotify credentials at all, the app skips the login page and opens demo mode automatically.
 
 ## Deployment
 
