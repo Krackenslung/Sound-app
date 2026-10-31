@@ -22,7 +22,7 @@ const TABS: Array<[Tab, string]> = [
   ['playlists', 'Playlists'],
   ['albums', 'Albums'],
 ];
-const GRID = 'grid grid-cols-[repeat(auto-fill,minmax(184px,1fr))] gap-5';
+const GRID = 'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(184px,1fr))] sm:gap-5';
 
 const Notice = ({ children }: { children: React.ReactNode }) => (
   <p className="text-body text-text-secondary">{children}</p>
@@ -64,24 +64,24 @@ function LikedSongs() {
       {/* Figma: Hero (node 7:971) */}
       <section
         aria-label="Liked Songs"
-        className="flex items-end gap-7 rounded-[20px] p-7"
+        className="flex flex-col items-start gap-5 rounded-[20px] p-5 sm:flex-row sm:items-end sm:gap-7 sm:p-7"
         style={{ backgroundImage: 'var(--gradient-liked-hero)' }}
       >
         <div
-          className="flex size-[168px] shrink-0 items-center justify-center rounded-[14px]"
+          className="flex size-28 shrink-0 items-center justify-center rounded-[14px] sm:size-[168px]"
           style={{ backgroundImage: 'var(--art-liked)' }}
         >
           <Heart aria-hidden className="size-16 text-on-accent" strokeWidth={1.6} />
         </div>
         <div className="flex min-w-0 flex-col gap-2">
           <p className="text-overline uppercase">Playlist</p>
-          <h1 className="text-display">Liked Songs</h1>
+          <h1 className="text-h1 sm:text-display">Liked Songs</h1>
           {meta && <p className="text-body text-text-secondary">{meta}</p>}
         </div>
       </section>
 
       {/* Figma: Actions (node 7:980) */}
-      <div className="flex items-center gap-5">
+      <div className="flex flex-wrap items-center gap-5">
         <button
           type="button"
           aria-label="Play Liked Songs"
@@ -191,6 +191,7 @@ function Playlists() {
           <div className={GRID}>
             {items.map((p) => (
               <AlbumCard
+                fluid
                 key={p.id}
                 title={p.name}
                 subtitle={[
@@ -236,6 +237,7 @@ function SavedAlbums() {
           <div className={GRID}>
             {items.map((a) => (
               <AlbumCard
+                fluid
                 key={a.uri}
                 title={a.name}
                 subtitle={artistNames(a.artists)}
@@ -266,7 +268,7 @@ export function LibraryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2" role="group" aria-label="Library sections">
+      <div className="flex gap-2 overflow-x-auto" role="group" aria-label="Library sections">
         {TABS.map(([t, label]) => (
           <Chip
             key={t}

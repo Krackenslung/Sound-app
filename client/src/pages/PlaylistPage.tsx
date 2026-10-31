@@ -42,19 +42,19 @@ export function PlaylistPage() {
 
   return (
     <>
-      <header className="flex items-end gap-8">
+      <header className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:gap-8">
         <Artwork
           images={p.images}
           size={232}
           seed={p.uri}
           alt={`${p.name} cover`}
-          className="size-[232px] rounded-2xl shadow-art"
+          className="size-40 sm:size-[232px] rounded-2xl shadow-art"
         />
         <div className="flex min-w-0 flex-col gap-3">
           <p className="text-overline uppercase text-accent-hover">
             {p.collaborative ? 'Collaborative playlist' : 'Playlist'}
           </p>
-          <h1 className="line-clamp-2 text-display">{p.name}</h1>
+          <h1 className="line-clamp-2 text-h1 sm:text-display">{p.name}</h1>
           {p.description && (
             <p className="line-clamp-2 text-body text-text-secondary">{p.description}</p>
           )}

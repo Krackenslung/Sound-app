@@ -11,19 +11,24 @@ export interface AlbumCardProps {
   onPlay?: () => void;
   /** Detail page; makes the art and title a link. */
   to?: string;
+  /** Fill the grid cell instead of the fixed 184px Figma width. */
+  fluid?: boolean;
 }
 
 // Figma: AlbumCard (node 3:51) — 184px wide, 160px art, surface bg, 12px radius.
-export function AlbumCard({ title, subtitle, seed, images, onPlay, to }: AlbumCardProps) {
+export function AlbumCard({ title, subtitle, seed, images, onPlay, to, fluid }: AlbumCardProps) {
+  const art = fluid ? 'aspect-square w-full rounded-lg' : 'size-40 rounded-lg';
   return (
-    <div className="group relative flex w-[184px] shrink-0 flex-col gap-3 rounded-xl bg-surface px-3 pb-4 pt-3 transition-colors hover:bg-surface-2">
+    <div
+      className={`group relative flex shrink-0 flex-col gap-3 rounded-xl bg-surface px-3 pb-4 pt-3 transition-colors hover:bg-surface-2 ${fluid ? 'w-full min-w-0' : 'w-[184px]'}`}
+    >
       <div className="relative">
         {to ? (
           <Link to={to} tabIndex={-1} aria-hidden>
-            <Artwork images={images} size={160} seed={seed} className="size-40 rounded-lg" />
+            <Artwork images={images} size={160} seed={seed} className={art} />
           </Link>
         ) : (
-          <Artwork images={images} size={160} seed={seed} className="size-40 rounded-lg" />
+          <Artwork images={images} size={160} seed={seed} className={art} />
         )}
         {onPlay && (
           <button

@@ -26,7 +26,7 @@ const FILTERS: Array<[SearchType, string]> = [
   ['playlist', 'Playlists'],
 ];
 const isSearchType = (v: string | null): v is SearchType => FILTERS.some(([t]) => t === v);
-const GRID = 'grid grid-cols-[repeat(auto-fill,minmax(184px,1fr))] gap-5';
+const GRID = 'grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(184px,1fr))] sm:gap-5';
 
 function useSearchResults<T extends SearchType>(q: string, type: T, enabled = true) {
   return useInfiniteQuery({
@@ -51,7 +51,7 @@ function TopResult({ track, onPlay }: { track: Track; onPlay: () => void }) {
   return (
     <section
       aria-labelledby="top-result-heading"
-      className="flex w-[360px] shrink-0 flex-col gap-3.5"
+      className="flex w-full shrink-0 flex-col gap-3.5 lg:w-[360px]"
     >
       <h2 id="top-result-heading" className="text-h2">
         Top result
@@ -102,7 +102,7 @@ function TrackResults({ q, onSeeAlbums }: { q: string; onSeeAlbums: () => void }
 
   return (
     <>
-      <div className="flex items-start gap-6">
+      <div className="flex flex-col items-stretch gap-6 lg:flex-row lg:items-start">
         <TopResult track={items[0]} onPlay={() => controls.playTracks([items[0].uri])} />
         <section aria-labelledby="songs-heading" className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center justify-between">
@@ -190,6 +190,7 @@ function GridResults({ q, type }: { q: string; type: Exclude<SearchType, 'track'
         {type === 'album' &&
           (results.data.items as SearchResultMap['album'][]).map((a) => (
             <AlbumCard
+              fluid
               key={a.uri}
               title={a.name}
               subtitle={[a.releaseDate?.slice(0, 4), artistNames(a.artists)]
@@ -215,6 +216,7 @@ function GridResults({ q, type }: { q: string; type: Exclude<SearchType, 'track'
         {type === 'playlist' &&
           (results.data.items as SearchResultMap['playlist'][]).map((p) => (
             <AlbumCard
+              fluid
               key={p.uri}
               title={p.name}
               subtitle={p.ownerName ? `By ${p.ownerName}` : 'Playlist'}
@@ -316,7 +318,7 @@ export function SearchPage() {
         )}
       </div>
 
-      <div className="flex gap-2" role="group" aria-label="Filter results">
+      <div className="flex gap-2 overflow-x-auto" role="group" aria-label="Filter results">
         {FILTERS.map(([t, label]) => (
           <Chip key={t} selected={type === t} onClick={() => setType(t)}>
             {label}

@@ -42,7 +42,7 @@ export function TrackRow({
       onClick={onPlay}
       aria-current={playing ? 'true' : undefined}
       className={cn(
-        'group flex h-14 w-full items-center gap-4 rounded-lg px-4 py-2 transition-colors',
+        'group flex h-14 w-full items-center gap-3 rounded-lg px-1 py-2 transition-colors md:gap-4 md:px-4',
         playing ? 'bg-surface-2' : 'hover:bg-surface',
         onPlay && 'cursor-pointer',
       )}
@@ -88,7 +88,8 @@ export function TrackRow({
           {album}
         </span>
       )}
-      <LikeButton uri={uri} title={title} />
+      {/* Figma 8:1355: no heart on mobile rows (liking stays available on Now Playing). */}
+      <LikeButton uri={uri} title={title} className="hidden md:inline-flex" />
       <span className="w-11 shrink-0 text-right text-caption text-text-secondary">
         {formatDuration(durationMs)}
       </span>

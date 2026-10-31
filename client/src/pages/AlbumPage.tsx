@@ -50,19 +50,19 @@ export function AlbumPage() {
 
   return (
     <>
-      <header className="flex items-end gap-8">
+      <header className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:gap-8">
         <Artwork
           images={a.images}
           size={232}
           seed={a.uri}
           alt={`${a.name} cover`}
-          className="size-[232px] rounded-2xl shadow-art"
+          className="size-40 sm:size-[232px] rounded-2xl shadow-art"
         />
         <div className="flex min-w-0 flex-col gap-3">
           <p className="text-overline uppercase text-accent-hover">
             {ALBUM_TYPES[a.albumType ?? ''] ?? 'Album'}
           </p>
-          <h1 className="line-clamp-2 text-display">{a.name}</h1>
+          <h1 className="line-clamp-2 text-h1 sm:text-display">{a.name}</h1>
           <p className="text-body text-text-secondary">
             <span className="font-semibold text-text-primary">
               <EntityLinks items={a.artists} pathFor={artistPath} />

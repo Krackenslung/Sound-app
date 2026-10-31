@@ -27,7 +27,7 @@ export function StatTile({
         <div className="my-1 h-8 w-2/3 animate-pulse rounded bg-surface-2" />
       ) : (
         <p
-          className={cn('truncate text-h1', value ? TONE[tone] : 'text-text-muted')}
+          className={cn('truncate text-h2 lg:text-h1', value ? TONE[tone] : 'text-text-muted')}
           title={value ?? undefined}
         >
           {value ?? '—'}

@@ -9,6 +9,9 @@ import { usePlayerControls } from '@/features/player/playerContext';
 import { artistNames } from '@/lib/format';
 import { albumPath } from '@/lib/spotifyUri';
 import { useTrackMenu } from '@/features/tracks/useTrackMenu';
+import { MobileAccountButton } from '@/components/layout/MobileAccountButton';
+import { QuickPick } from '@/components/cards/QuickPick';
+import { useIsMobile } from '@/hooks/useMediaQuery';
 import { usePlayerStore } from '@/store/playerStore';
 
 const RECENT_CARDS = 5; // keep in sync with recentAlbums' default
@@ -32,6 +35,7 @@ export function HomePage() {
   const trackMenu = useTrackMenu();
   const currentUri = usePlayerStore((s) => s.track?.uri);
   const firstName = user?.displayName.split(/\s+/)[0];
+  const isMobile = useIsMobile();
 
   const recent = useQuery({
     queryKey: ['home', 'recently-played'],
@@ -47,48 +51,80 @@ export function HomePage() {
 
   return (
     <>
-      <header className="flex flex-col gap-1.5">
-        <h1 className="text-h1">
-          {greeting()}
-          {firstName ? `, ${firstName}` : ''}
-        </h1>
-        <p className="text-text-secondary">Pick up where you left off.</p>
+      <header className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-1.5">
+          <h1 className="text-h1">
+            {greeting()}
+            {firstName && !isMobile ? `, ${firstName}` : ''}
+          </h1>
+          <p className="hidden text-text-secondary md:block">Pick up where you left off.</p>
+        </div>
+        <MobileAccountButton />
       </header>
 
-      <section aria-labelledby="recent-heading" className="flex flex-col gap-4">
-        <SectionHeader id="recent-heading" title="Recently played" seeAllTo="/stats" />
-        {recent.isPending ? (
-          <div className="flex gap-5 overflow-hidden" aria-busy="true">
-            {Array.from({ length: RECENT_CARDS }, (_, i) => (
-              <div
-                key={i}
-                className="h-[236px] w-[184px] shrink-0 animate-pulse rounded-xl bg-surface"
+      {isMobile ? (
+        <section aria-label="Quick picks" className="grid grid-cols-2 gap-2">
+          <QuickPick
+            title="Liked Songs"
+            to="/library"
+            seed="liked"
+            art={
+              <span
+                className="size-[52px] shrink-0"
+                style={{ backgroundImage: 'var(--art-liked)' }}
               />
-            ))}
-          </div>
-        ) : recent.isError ? (
-          <Notice>Couldn&apos;t load your recently played music.</Notice>
-        ) : albums.length === 0 ? (
-          <Notice>Nothing here yet — play something and it will show up.</Notice>
-        ) : (
-          <div className="flex gap-5 overflow-x-auto pb-1">
-            {albums.map((album) => (
-              <AlbumCard
-                key={album.uri}
-                title={album.name}
-                subtitle={artistNames(album.artists)}
-                images={album.images}
-                seed={album.uri}
-                to={albumPath(album.uri) ?? undefined}
-                onPlay={() => controls.playContext(album.uri)}
-              />
-            ))}
-          </div>
-        )}
-      </section>
+            }
+          />
+          {albums.slice(0, 3).map((a) => (
+            <QuickPick
+              key={a.uri}
+              title={a.name}
+              to={albumPath(a.uri) ?? '/'}
+              images={a.images}
+              seed={a.uri}
+            />
+          ))}
+        </section>
+      ) : (
+        <section aria-labelledby="recent-heading" className="flex flex-col gap-4">
+          <SectionHeader id="recent-heading" title="Recently played" seeAllTo="/stats" />
+          {recent.isPending ? (
+            <div className="flex gap-5 overflow-hidden" aria-busy="true">
+              {Array.from({ length: RECENT_CARDS }, (_, i) => (
+                <div
+                  key={i}
+                  className="h-[236px] w-[184px] shrink-0 animate-pulse rounded-xl bg-surface"
+                />
+              ))}
+            </div>
+          ) : recent.isError ? (
+            <Notice>Couldn&apos;t load your recently played music.</Notice>
+          ) : albums.length === 0 ? (
+            <Notice>Nothing here yet — play something and it will show up.</Notice>
+          ) : (
+            <div className="flex gap-5 overflow-x-auto pb-1">
+              {albums.map((album) => (
+                <AlbumCard
+                  key={album.uri}
+                  title={album.name}
+                  subtitle={artistNames(album.artists)}
+                  images={album.images}
+                  seed={album.uri}
+                  to={albumPath(album.uri) ?? undefined}
+                  onPlay={() => controls.playContext(album.uri)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
 
       <section aria-labelledby="top-heading" className="flex flex-col gap-2">
-        <SectionHeader id="top-heading" title="Your top tracks this month" seeAllTo="/stats" />
+        <SectionHeader
+          id="top-heading"
+          title={isMobile ? 'Your top tracks' : 'Your top tracks this month'}
+          seeAllTo={isMobile ? undefined : '/stats'}
+        />
         {top.isPending ? (
           <div className="flex flex-col gap-2" aria-busy="true">
             {Array.from({ length: TOP_TRACKS }, (_, i) => (

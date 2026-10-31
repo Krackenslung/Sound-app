@@ -18,7 +18,7 @@ export function BreakdownCard({ breakdown, loading, footnote }: BreakdownCardPro
   return (
     <section
       aria-labelledby="breakdown-heading"
-      className="flex w-[400px] shrink-0 flex-col gap-3 rounded-2xl border border-border bg-surface px-5 py-4"
+      className="flex w-full shrink-0 flex-col lg:w-[400px] gap-3 rounded-2xl border border-border bg-surface px-5 py-4"
     >
       <h2 id="breakdown-heading" className="text-h2">
         {title}

@@ -5,8 +5,8 @@ export function DetailSkeleton() {
   return (
     <div className="flex flex-col gap-8" aria-busy="true" role="status">
       <span className="sr-only">Loading…</span>
-      <div className="flex items-end gap-8">
-        <div className="size-[232px] animate-pulse rounded-2xl bg-surface" />
+      <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:gap-8">
+        <div className="size-40 animate-pulse sm:size-[232px] rounded-2xl bg-surface" />
         <div className="flex flex-1 flex-col gap-3">
           <div className="h-4 w-20 animate-pulse rounded bg-surface" />
           <div className="h-12 w-2/3 animate-pulse rounded bg-surface" />

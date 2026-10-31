@@ -74,7 +74,7 @@ export function StatsPage() {
 
   return (
     <>
-      <header className="flex items-center justify-between gap-6">
+      <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-h1">Your listening stats</h1>
           <p className="text-text-secondary">Based on your Spotify top items.</p>
@@ -88,7 +88,7 @@ export function StatsPage() {
       </header>
 
       {/* Figma: Summary (node 7:1249) */}
-      <section aria-label="Summary" className="flex gap-4">
+      <section aria-label="Summary" className="grid grid-cols-2 gap-3 lg:flex lg:gap-4">
         {genresMissing ? (
           <>
             <StatTile
@@ -150,7 +150,7 @@ export function StatsPage() {
         ) : topArtists.length === 0 ? (
           <Notice>Listen a bit more and your top artists will show up here.</Notice>
         ) : (
-          <ol className="flex gap-6 overflow-x-auto pb-1">
+          <ol className="flex gap-3 overflow-x-auto pb-1 sm:gap-6">
             {topArtists.map((a, i) => (
               <li key={a.uri}>
                 <ArtistCard
@@ -167,7 +167,7 @@ export function StatsPage() {
       </section>
 
       {/* Figma: Columns (node 7:1289) */}
-      <div className="flex items-start gap-6">
+      <div className="flex flex-col items-stretch gap-6 lg:flex-row lg:items-start">
         <section
           aria-labelledby="top-tracks-heading"
           className="flex min-w-0 flex-1 flex-col gap-1"

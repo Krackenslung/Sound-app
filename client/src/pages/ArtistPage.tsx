@@ -42,17 +42,17 @@ export function ArtistPage() {
 
   return (
     <>
-      <header className="flex items-end gap-8">
+      <header className="flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:gap-8">
         <Artwork
           images={a.images}
           size={232}
           seed={a.uri}
           alt={a.name}
-          className="size-[232px] rounded-full shadow-art"
+          className="size-40 sm:size-[232px] rounded-full shadow-art"
         />
         <div className="flex min-w-0 flex-col gap-3">
           <p className="text-overline uppercase text-accent-hover">Artist</p>
-          <h1 className="line-clamp-2 text-display">{a.name}</h1>
+          <h1 className="line-clamp-2 text-h1 sm:text-display">{a.name}</h1>
           {a.genres && a.genres.length > 0 && (
             <p className="text-body capitalize text-text-secondary">
               {a.genres.slice(0, 3).join(' · ')}
@@ -87,9 +87,10 @@ export function ArtistPage() {
           <p className="text-text-secondary">No releases found.</p>
         ) : (
           <>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(184px,1fr))] gap-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fill,minmax(184px,1fr))] sm:gap-5">
               {discography.map((al) => (
                 <AlbumCard
+                  fluid
                   key={al.uri}
                   title={al.name}
                   subtitle={[
