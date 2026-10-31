@@ -2,6 +2,8 @@ import { Outlet } from 'react-router';
 import { PlayerBar } from '@/components/player/PlayerBar';
 import { Toaster } from '@/components/ui/Toaster';
 import { PlayerProvider } from '@/features/player/PlayerProvider';
+import { AddToPlaylistDialog } from '@/features/playlists/AddToPlaylistDialog';
+import { CreatePlaylistDialog } from '@/features/playlists/CreatePlaylistDialog';
 import { PremiumBanner } from './PremiumBanner';
 import { Sidebar } from './Sidebar';
 
@@ -20,6 +22,8 @@ export function AppShell() {
         <PlayerBar />
       </div>
       <Toaster />
+      <AddToPlaylistDialog />
+      <CreatePlaylistDialog />
     </PlayerProvider>
   );
 }

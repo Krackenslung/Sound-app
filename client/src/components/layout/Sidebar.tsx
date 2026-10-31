@@ -1,9 +1,14 @@
 import { BarChart3, Home, Library, Music, Plus, Search } from 'lucide-react';
 import { NavItem } from './NavItem';
 import { UserCard } from './UserCard';
+import { SidebarPlaylists } from './SidebarPlaylists';
+import { useAuth } from '@/features/auth/authContext';
+import { useUiStore } from '@/store/uiStore';
 
 // Figma: Sidebar (node 4:12) — 248px wide, surface bg, right border.
 export function Sidebar() {
+  const authenticated = useAuth().status === 'authenticated';
+  const openCreate = useUiStore((s) => s.openCreatePlaylist);
   return (
     <aside
       aria-label="Sidebar"
@@ -30,16 +35,14 @@ export function Sidebar() {
         <button
           type="button"
           aria-label="Create playlist"
-          disabled
-          className="rounded-full opacity-70 hover:opacity-100 disabled:cursor-not-allowed disabled:opacity-40"
+          onClick={() => openCreate()}
+          className="rounded-full opacity-70 hover:opacity-100"
         >
           <Plus aria-hidden className="size-[18px]" />
         </button>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
-        <p className="px-3.5 text-caption text-text-muted">Your playlists will appear here.</p>
-      </div>
+      {authenticated ? <SidebarPlaylists /> : <div className="flex-1" />}
 
       <UserCard />
     </aside>

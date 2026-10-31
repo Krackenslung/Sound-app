@@ -8,10 +8,12 @@ import { buttonClasses } from '@/components/ui/buttonStyles';
 import { EntityLinks } from '@/components/ui/EntityLinks';
 import { albumPath, artistPath } from '@/lib/spotifyUri';
 import { usePlayerStore } from '@/store/playerStore';
+import { useUiStore } from '@/store/uiStore';
 
 // Figma: 03 · Now Playing (node 6:323).
 export function NowPlayingPage() {
   const track = usePlayerStore((s) => s.track);
+  const openAddToPlaylist = useUiStore((s) => s.openAddToPlaylist);
 
   if (!track) {
     return (
@@ -51,7 +53,7 @@ export function NowPlayingPage() {
             iconClassName="size-5"
             className="size-11 bg-surface-2 !opacity-100"
           />
-          <Button variant="secondary" disabled title="Coming soon">
+          <Button variant="secondary" onClick={() => openAddToPlaylist([track.uri])}>
             Add to playlist
           </Button>
           <button
