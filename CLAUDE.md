@@ -168,7 +168,7 @@ Commit a `server/.env.example` with the same keys and empty values.
   - Save/remove/check: `PUT` / `DELETE /me/library?uris=…` and `GET /me/library/contains?uris=…` — `uris` is a comma-separated **query parameter** (not a JSON body), max **40**. Replaces `/me/tracks`, `/me/albums`, `/me/following` writes.
   - Listing Liked Songs / saved albums (`GET /me/tracks`, `GET /me/albums`) is **deprecated** and may be unavailable for Development Mode apps. The server maps a 403/404/410 there to `501 ENDPOINT_UNAVAILABLE`; the client explains and still lets you play Liked Songs via the `spotify:user:{id}:collection` context.
   - Playlists: `GET /me/playlists` (`/users/{id}/playlists` returns 403), `POST /me/playlists` to create, `/playlists/{id}/tracks` → `/playlists/{id}/items` (add: body `{ uris }`; remove: body `{ items: [{ uri }], snapshot_id? }`). Playlist objects use `items.total` instead of `tracks.total`, and each entry's `track` is now `item` (`track` may linger as a deprecated alias or even a boolean).
-- **Fields reported removed for Development Mode apps (Feb 2026, unverified — third-party sources):** `popularity` (artist/track/album), artist `followers`, album `label`/`external_ids`/`available_markets`, and user `country`/`product`. Code must treat these as optional: `/api/me` returns `product: null` when missing, and the client then tries the Web Playback SDK and relies on its `account_error` to detect non-Premium accounts.
+- **Fields reported removed for Development Mode apps (Feb 2026, unverified — third-party sources):** `popularity` (artist/track/album), artist `followers` and **artist `genres`** (reports conflict for `GET /artists/{id}`; `GET /me/top/artists` is reported to omit it), album `label`/`external_ids`/`available_markets`, and user `country`/`product`. Code must treat these as optional: `/api/me` returns `product: null` and artists return `genres: null` when missing (the Stats page then swaps the genre tiles/breakdown for artist-based ones), and the client then tries the Web Playback SDK and relies on its `account_error` to detect non-Premium accounts.
 
 ### Forbidden endpoints (403 for new apps — do not use)
 
@@ -260,11 +260,11 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 5 — Personal stats
 
-- [ ] Stats page matching Figma `7:1077`: summary tiles, `ArtistCard` row, top tracks, genre breakdown card
-- [ ] Top tracks and top artists with `time_range` switcher (segmented control): `short_term` (4 wks), `medium_term` (6 mo), `long_term` (all time)
-- [ ] Recently played (`GET /me/player/recently-played`)
-- [ ] Genre breakdown chart built from top artists' `genres` (Recharts or Chart.js)
-- [ ] "Monthly playlist" generator: group liked songs by `added_at` month → create a playlist on confirm
+- [x] Stats page matching Figma `7:1077`: summary tiles, `ArtistCard` row, top tracks, genre breakdown card
+- [x] Top tracks and top artists with `time_range` switcher (segmented control): `short_term` (4 wks), `medium_term` (6 mo), `long_term` (all time)
+- [x] Recently played (`GET /me/player/recently-played`)
+- [x] Genre breakdown chart built from top artists' `genres` — plain HTML/CSS bars, as drawn in Figma `7:1347` (no chart library needed); falls back to an artist breakdown when Spotify omits `genres`
+- [x] "Monthly playlist" generator: group liked songs by `added_at` month → create a playlist on confirm — server walks Liked Songs only as far back as needed (cap 2,000), months are UTC
 
 **Done when:** the Stats page renders for a real account and the generator creates a correct playlist.
 
@@ -318,3 +318,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 2 code complete; "Done when" still needs a real Premium account (verified with a mocked SDK + MSW only) — SDK lifecycle in `PlayerProvider`, controls go to the SDK when this browser is active and to the Web API otherwise, 5 s polling keeps state in sync with other devices, like heart uses `/me/library` (Feb 2026 endpoints, found via search because developer.spotify.com was unreachable — re-check the query param format), queue/devices buttons stay disabled until Phase 3, "Next up" uses the SDK track window until the queue API lands
 - 2026-10-31 — Phase 3 code complete; "Done when" (search → play → queue → move playback to phone) still needs a real account — search (limit 10, per-type infinite "Load more"), top result + songs + albums, track menu (add to queue / go to album / go to artist), queue panel from `/me/player/queue`, device picker popover (opens automatically on `NO_ACTIVE_DEVICE`), album + artist pages; `product` missing from `/me` is now treated as "unknown" instead of "free" after reports it was removed in the Feb 2026 changes
 - 2026-10-31 — Phase 4 code complete; "Done when" (like here → shows in Spotify; playlist created here → appears there) still needs a real account — Library page (tabs, Liked Songs hero, play/shuffle, track table with header), saved albums, my playlists + playlist page, create playlist dialog, add to / remove from playlist, sidebar playlist list, optimistic updates with rollback (like/unlike incl. the Liked Songs list, create, add, remove); endpoint details confirmed via search because developer.spotify.com is still blocked; `GET /me/tracks`/`/me/albums` are deprecated, so the UI degrades gracefully if Spotify refuses them; "Create monthly playlist" button is shown but disabled until Phase 5
+- 2026-10-31 — Phase 5 code complete; "Done when" (Stats renders for a real account; generator creates a correct playlist) still needs a real account — Stats page from frame 7:1077 (summary tiles, top artists, top tracks, breakdown card, recently played), `time_range` segmented control in the URL, monthly playlist dialog on Library with per-month counts; developer reports say Feb 2026 removed artist `genres` for Development Mode apps, so genre tiles/breakdown fall back to artist-based stats when no genres come back (tiles still only show API-provided values); breakdown is HTML/CSS bars per Figma instead of Recharts
