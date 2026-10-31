@@ -82,6 +82,7 @@ Define these as CSS variables in `client/src/styles/tokens.css` and map them in 
 | `--color-warning` | `#FBBF24` | demo-mode banner, notices |
 | `--color-success` | `#34D399` | success toasts |
 | `--color-on-accent` | `#FFFFFF` | text/icons on accent or gradient fills (present in Figma, added in Phase 0) |
+| `--color-accent-soft` | accent @ 15% | device chip, active device row (from Figma `6:323`, added in Phase 2) |
 
 | Text style | Size / line height | Weight | Letter spacing |
 |---|---|---|---|
@@ -163,7 +164,7 @@ Commit a `server/.env.example` with the same keys and empty values.
 - **Refresh tokens expire 6 months** after the original authorization; refreshing does not reset that. On `invalid_grant`, destroy the session and send the user to login.
 - **Redirect URIs** must be HTTPS in production. In dev use `127.0.0.1`, not `localhost`.
 - **Playlist items** can only be read for playlists the user owns or collaborates on. Create playlists with `POST /me/playlists`.
-- Library and playlist endpoints were renamed/consolidated in the Feb 2026 migration — check the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) before implementing Phase 4.
+- Library and playlist endpoints were renamed/consolidated in the Feb 2026 migration — check the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) before implementing Phase 4. Known so far: save/remove/contains use `PUT`/`DELETE /me/library` and `GET /me/library/contains` with Spotify **URIs** (replacing `/me/tracks*`); playlist `/tracks` sub-resources were renamed to `/items`.
 
 ### Forbidden endpoints (403 for new apps — do not use)
 
@@ -220,14 +221,14 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 2 — In-browser player & controls (MVP core)
 
-- [ ] Load `https://sdk.scdn.co/spotify-player.js`; create `Spotify.Player` with `getOAuthToken` calling `/api/auth/token`
-- [ ] Handle events: `ready` (store `device_id`), `not_ready`, `player_state_changed`, `initialization_error`, `authentication_error`, `account_error`, `playback_error`
-- [ ] Call `player.activateElement()` on the first user click (needed on mobile browsers)
-- [ ] On ready, transfer playback to the browser device (`PUT /me/player`)
-- [ ] `PlayerBar` matching Figma `4:111`: play/pause, next/previous, seek bar, volume, shuffle, repeat (accent color when active), like heart
-- [ ] `NowPlaying` view matching Figma `6:323`: large art, title, artists, actions, progress (interpolated locally between state events)
-- [ ] Home page matching Figma `5:145` (greeting, recently played cards, top tracks) with `NavItem`, `AlbumCard`, `TrackRow`
-- [ ] Zustand `playerStore` is the single source of truth for player state
+- [x] Load `https://sdk.scdn.co/spotify-player.js`; create `Spotify.Player` with `getOAuthToken` calling `/api/auth/token`
+- [x] Handle events: `ready` (store `device_id`), `not_ready`, `player_state_changed`, `initialization_error`, `authentication_error`, `account_error`, `playback_error`
+- [x] Call `player.activateElement()` on the first user click (needed on mobile browsers)
+- [x] On ready, transfer playback to the browser device (`PUT /me/player`) — skipped if another device is already playing, so opening the app doesn't interrupt music elsewhere
+- [x] `PlayerBar` matching Figma `4:111`: play/pause, next/previous, seek bar, volume, shuffle, repeat (accent color when active), like heart
+- [x] `NowPlaying` view matching Figma `6:323`: large art, title, artists, actions, progress (interpolated locally between state events)
+- [x] Home page matching Figma `5:145` (greeting, recently played cards, top tracks) with `NavItem`, `AlbumCard`, `TrackRow`
+- [x] Zustand `playerStore` is the single source of truth for player state
 
 **Done when:** a Premium account can start a track from a hardcoded URI and use every control; state stays in sync with the Spotify desktop app.
 
@@ -310,3 +311,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — UI design v1 approved in Figma (8 screens, tokens, components) — added Design section and design tasks to phases
 - 2026-10-31 — Phase 0 done (except Spotify dashboard setup, which is manual) — monorepo, Express health/helmet/cors, tokens + Tailwind theme, Button/Chip/NavItem, app shell from frame 5:145; added `--color-on-accent` token from Figma; Tailwind pinned to v3 to keep `tailwind.config.ts`
 - 2026-10-31 — Phase 1 done (verified with MSW-mocked Spotify; not yet run against real Spotify — needs dashboard app + credentials) — PKCE + client secret on the token endpoint, refresh-token rotation handled, per-session refresh dedupe, session id regenerated on login, `trust proxy` set in production; in dev the server falls back to in-memory sessions when `REDIS_URL` is unset; 'Explore demo mode' is disabled until Phase 6; developer.spotify.com was unreachable from the build environment, so auth details follow the OAuth/PKCE spec and should be re-checked against the docs
+- 2026-10-31 — Phase 2 code complete; "Done when" still needs a real Premium account (verified with a mocked SDK + MSW only) — SDK lifecycle in `PlayerProvider`, controls go to the SDK when this browser is active and to the Web API otherwise, 5 s polling keeps state in sync with other devices, like heart uses `/me/library` (Feb 2026 endpoints, found via search because developer.spotify.com was unreachable — re-check the query param format), queue/devices buttons stay disabled until Phase 3, "Next up" uses the SDK track window until the queue API lands
