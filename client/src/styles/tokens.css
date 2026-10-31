@@ -14,6 +14,9 @@
   --color-on-accent: #ffffff;
   --color-warning: #fbbf24;
   --color-success: #34d399;
+  /* Demo banner (Figma 8:1322): warning at 12% fill / 40% border. */
+  --color-warning-soft: rgb(251 191 36 / 0.12);
+  --color-warning-line: rgb(251 191 36 / 0.4);
   /* 5th breakdown bar (Figma 7:1377). */
   --color-chart-cyan: #22d3ee;
   /* Accent at 15% — device chip / active device row (Figma 6:323). */

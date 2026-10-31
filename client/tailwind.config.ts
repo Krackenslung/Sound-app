@@ -24,6 +24,8 @@ export default {
       'chart-cyan': v('color-chart-cyan'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
+      'warning-soft': v('color-warning-soft'),
+      'warning-line': v('color-warning-line'),
       success: v('color-success'),
     },
     fontFamily: {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { LogOut, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '@/features/auth/authContext';
 import { useDismiss } from '@/hooks/useDismiss';
+import { useDemo } from '@/features/demo/demoStore';
 
 function initials(name: string) {
   return (
@@ -17,6 +18,7 @@ function initials(name: string) {
 
 export function UserCard() {
   const { user, isPremium, logout } = useAuth();
+  const demo = useDemo();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -46,11 +48,13 @@ export function UserCard() {
           >
             {!user
               ? 'Not signed in'
-              : user.product == null
-                ? 'Spotify account'
-                : isPremium
-                  ? 'Premium'
-                  : 'Free'}
+              : demo
+                ? 'Demo'
+                : user.product == null
+                  ? 'Spotify account'
+                  : isPremium
+                    ? 'Premium'
+                    : 'Free'}
           </span>
         </div>
         {user && (
@@ -85,7 +89,7 @@ export function UserCard() {
             className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-body font-semibold text-text-primary hover:bg-surface-hover"
           >
             <LogOut aria-hidden className="size-4" />
-            Log out
+            {demo ? 'Exit demo' : 'Log out'}
           </button>
         </div>
       )}

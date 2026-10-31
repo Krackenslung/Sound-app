@@ -5,6 +5,7 @@ import { PlayerProvider } from '@/features/player/PlayerProvider';
 import { AddToPlaylistDialog } from '@/features/playlists/AddToPlaylistDialog';
 import { CreatePlaylistDialog } from '@/features/playlists/CreatePlaylistDialog';
 import { MonthlyPlaylistDialog } from '@/features/playlists/MonthlyPlaylistDialog';
+import { DemoBanner } from './DemoBanner';
 import { PremiumBanner } from './PremiumBanner';
 import { Sidebar } from './Sidebar';
 
@@ -16,6 +17,7 @@ export function AppShell() {
         <div className="flex min-h-0 flex-1">
           <Sidebar />
           <main className="flex min-w-0 flex-1 flex-col gap-8 overflow-y-auto px-10 py-8">
+            <DemoBanner />
             <PremiumBanner />
             <Outlet />
           </main>
