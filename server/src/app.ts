@@ -1,22 +1,36 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
+import type { Store } from 'express-session';
 import helmet from 'helmet';
 import cors from 'cors';
 import { loadConfig, type AppConfig } from './config.js';
 import { healthRouter } from './routes/health.js';
+import { createAuthRouter } from './routes/auth.js';
+import { createMeRouter } from './routes/me.js';
+import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public');
 
-export function createApp(config: AppConfig = loadConfig()) {
+export interface AppDeps {
+  sessionStore?: Store;
+}
+
+export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) {
   const app = express();
   app.disable('x-powered-by');
+  // Behind Caddy in production: needed so `secure` cookies are set over the proxied HTTPS connection.
+  if (config.isProd) app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors({ origin: config.appOrigin, credentials: true }));
   app.use(express.json({ limit: '100kb' }));
 
   app.use('/api/health', healthRouter);
+
+  app.use('/api', createSessionMiddleware(config, deps.sessionStore));
+  app.use('/api/auth', createAuthRouter(config));
+  app.use('/api/me', createMeRouter(config));
   app.use('/api', notFound);
 
   if (config.isProd) {
