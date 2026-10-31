@@ -10,7 +10,8 @@ export interface MeResponse {
   id: string;
   displayName: string;
   email: string | null;
-  product: string;
+  /** `null` when Spotify doesn't return it (reported removed for Development Mode apps in Feb 2026). */
+  product: string | null;
   country: string | null;
   avatarUrl: string | null;
 }
@@ -23,7 +24,7 @@ export function toMe(u: SpotifyUser): MeResponse {
     id: u.id,
     displayName: u.display_name || u.id,
     email: u.email ?? null,
-    product: u.product ?? 'free',
+    product: u.product ?? null,
     country: u.country ?? null,
     avatarUrl: avatar?.url ?? null,
   };
