@@ -5,6 +5,7 @@ export class HttpError extends Error {
     public status: number,
     public code: string,
     message?: string,
+    public details?: Record<string, unknown>,
   ) {
     super(message ?? code);
     this.name = 'HttpError';
@@ -17,7 +18,10 @@ export const notFound: RequestHandler = (_req, _res, next) => {
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof HttpError) {
-    res.status(err.status).json({ code: err.code, message: err.message });
+    if (err.status === 429 && typeof err.details?.retryAfter === 'number') {
+      res.set('Retry-After', String(err.details.retryAfter));
+    }
+    res.status(err.status).json({ code: err.code, message: err.message, ...err.details });
     return;
   }
   const status = typeof err?.status === 'number' ? err.status : 500;
