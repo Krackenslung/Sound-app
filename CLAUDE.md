@@ -207,14 +207,14 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 1 — Authentication
 
-- [ ] `GET /api/auth/login` → redirect to Spotify authorize with scopes, `state` (stored in session), and PKCE challenge
-- [ ] `GET /api/auth/callback` → validate `state`, exchange code, store tokens + expiry in the Redis-backed session, redirect to `/`
-- [ ] `GET /api/auth/token` → returns a valid access token (refreshing if < 60 s left) for the Web Playback SDK
-- [ ] `POST /api/auth/logout` → destroy session
-- [ ] `requireAuth` middleware; `GET /api/me` returns profile incl. `product` (premium/free)
-- [ ] Session cookie: `httpOnly`, `sameSite=lax`, `secure` in prod
-- [ ] Client: login page matching Figma `5:83` (Continue with Spotify / Explore demo mode / Premium notice), auth context, protected routes, banner if user is not Premium
-- [ ] Sidebar user card shows real name, avatar and plan
+- [x] `GET /api/auth/login` → redirect to Spotify authorize with scopes, `state` (stored in session), and PKCE challenge
+- [x] `GET /api/auth/callback` → validate `state`, exchange code, store tokens + expiry in the Redis-backed session, redirect to `/`
+- [x] `GET /api/auth/token` → returns a valid access token (refreshing if < 60 s left) for the Web Playback SDK
+- [x] `POST /api/auth/logout` → destroy session
+- [x] `requireAuth` middleware; `GET /api/me` returns profile incl. `product` (premium/free)
+- [x] Session cookie: `httpOnly`, `sameSite=lax`, `secure` in prod
+- [x] Client: login page matching Figma `5:83` (Continue with Spotify / Explore demo mode / Premium notice), auth context, protected routes, banner if user is not Premium
+- [x] Sidebar user card shows real name, avatar and plan
 
 **Done when:** you can log in, refresh the page and stay logged in, log out, and an expired access token refreshes transparently (test with a mocked expiry).
 
@@ -309,3 +309,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 <!-- One line per finished phase: YYYY-MM-DD — Phase N done — notes -->
 - 2026-10-31 — UI design v1 approved in Figma (8 screens, tokens, components) — added Design section and design tasks to phases
 - 2026-10-31 — Phase 0 done (except Spotify dashboard setup, which is manual) — monorepo, Express health/helmet/cors, tokens + Tailwind theme, Button/Chip/NavItem, app shell from frame 5:145; added `--color-on-accent` token from Figma; Tailwind pinned to v3 to keep `tailwind.config.ts`
+- 2026-10-31 — Phase 1 done (verified with MSW-mocked Spotify; not yet run against real Spotify — needs dashboard app + credentials) — PKCE + client secret on the token endpoint, refresh-token rotation handled, per-session refresh dedupe, session id regenerated on login, `trust proxy` set in production; in dev the server falls back to in-memory sessions when `REDIS_URL` is unset; 'Explore demo mode' is disabled until Phase 6; developer.spotify.com was unreachable from the build environment, so auth details follow the OAuth/PKCE spec and should be re-checked against the docs
