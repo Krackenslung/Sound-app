@@ -1,21 +1,35 @@
 import type { RouteObject } from 'react-router';
 import { AppShell } from '@/components/layout/AppShell';
+import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
 import { HomePage } from '@/pages/HomePage';
+import { LoginPage } from '@/pages/LoginPage';
 import { PlaceholderPage } from '@/pages/PlaceholderPage';
 import { ComponentsPreviewPage } from '@/pages/ComponentsPreviewPage';
 
 export const routes: RouteObject[] = [
+  { path: 'login', element: <LoginPage /> },
   {
-    element: <AppShell />,
+    element: <ProtectedRoute />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: 'search', element: <PlaceholderPage title="Search" /> },
-      { path: 'library', element: <PlaceholderPage title="Library" /> },
-      { path: 'stats', element: <PlaceholderPage title="Stats" /> },
-      ...(import.meta.env.DEV
-        ? [{ path: 'dev/components', element: <ComponentsPreviewPage /> }]
-        : []),
-      { path: '*', element: <PlaceholderPage title="Not found" /> },
+      {
+        element: <AppShell />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: 'search', element: <PlaceholderPage title="Search" /> },
+          { path: 'library', element: <PlaceholderPage title="Library" /> },
+          { path: 'stats', element: <PlaceholderPage title="Stats" /> },
+          { path: '*', element: <PlaceholderPage title="Not found" /> },
+        ],
+      },
     ],
   },
+  // Dev-only preview, reachable without logging in.
+  ...(import.meta.env.DEV
+    ? [
+        {
+          element: <AppShell />,
+          children: [{ path: 'dev/components', element: <ComponentsPreviewPage /> }],
+        },
+      ]
+    : []),
 ];
