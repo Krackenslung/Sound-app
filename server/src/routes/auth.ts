@@ -26,6 +26,11 @@ export function createAuthRouter(config: AppConfig) {
     `${config.appOrigin}/login?error=${encodeURIComponent(error)}`;
 
   router.get('/login', (req, res) => {
+    // Without credentials Spotify only shows a cryptic "INVALID_CLIENT" page.
+    if (!config.spotify.clientId || !config.spotify.clientSecret) {
+      req.log?.warn('SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not set');
+      return res.redirect(loginUrl('not_configured'));
+    }
     const state = randomToken(16);
     const { verifier, challenge } = createPkcePair();
     req.session.oauth = { state, verifier, createdAt: Date.now() };

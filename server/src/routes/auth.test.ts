@@ -1,4 +1,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import request from 'supertest';
+import { createApp } from '../app.js';
+import { loadConfig } from '../config.js';
 import { login, newAgent, testConfig } from '../test/helpers.js';
 import { createMockState, createSpotifyMock, type MockState } from '../test/spotifyMock.js';
 
@@ -34,6 +37,13 @@ describe('GET /api/auth/login', () => {
         'playlist-modify-private',
       ]),
     );
+  });
+
+  it('sends you back to /login?error=not_configured when Spotify credentials are missing', async () => {
+    const app = createApp(loadConfig({ NODE_ENV: 'test' }));
+    const res = await request(app).get('/api/auth/login');
+    expect(res.status).toBe(302);
+    expect(res.headers.location).toBe('http://127.0.0.1:5173/login?error=not_configured');
   });
 
   it('sets an httpOnly, SameSite=Lax session cookie', async () => {

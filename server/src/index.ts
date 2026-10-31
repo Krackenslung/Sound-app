@@ -31,7 +31,18 @@ const sessionStore = await createStore();
 const app = createApp(config, { sessionStore, logger });
 
 const server = app.listen(config.port, '0.0.0.0', () => {
-  logger.info({ port: config.port, env: config.nodeEnv }, 'server listening');
+  logger.info(
+    {
+      port: config.port,
+      env: config.nodeEnv,
+      appOrigin: config.appOrigin,
+      redirectUri: config.spotify.redirectUri,
+    },
+    'server listening',
+  );
+  if (!config.spotify.clientId || !config.spotify.clientSecret) {
+    logger.warn('SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not set: Spotify login is disabled');
+  }
 });
 
 // Graceful shutdown for `docker compose up -d` / redeploys: stop accepting connections, let

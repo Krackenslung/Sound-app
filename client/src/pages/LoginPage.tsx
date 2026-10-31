@@ -24,6 +24,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   not_allowlisted:
     "Your Spotify account isn't on this app's invite list yet. Explore demo mode in the meantime.",
   session_expired: 'Your session expired. Please log in again.',
+  not_configured:
+    'Spotify login isn’t set up on this server: SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET are missing. Explore demo mode in the meantime.',
 };
 
 const FEATURES: Array<[LucideIcon, string]> = [
