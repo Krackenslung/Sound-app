@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { useDemoStore } from '@/features/demo/demoStore';
-import { OpenInSpotify, spotifyUrl } from './OpenInSpotify';
+import { spotifyUrl } from '@/lib/spotifyUri';
+import { OpenInSpotify } from './OpenInSpotify';
 
 describe('spotifyUrl', () => {
   it.each([

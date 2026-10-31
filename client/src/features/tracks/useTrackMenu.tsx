@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { Disc3, ListMusic, ListPlus, UserRound } from 'lucide-react';
 import { useUiStore } from '@/store/uiStore';
 import { useDemo } from '@/features/demo/demoStore';
-import { spotifyUrl } from '@/components/brand/OpenInSpotify';
+import { spotifyUrl } from '@/lib/spotifyUri';
 import { SpotifyIcon } from '@/components/brand/SpotifyIcon';
 import type { MenuItem } from '@/components/ui/Menu';
 import { usePlayerControls } from '@/features/player/playerContext';
