@@ -2,7 +2,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import type { Store } from 'express-session';
-import helmet from 'helmet';
 import cors from 'cors';
 import { loadConfig, type AppConfig } from './config.js';
 import { healthRouter } from './routes/health.js';
@@ -16,6 +15,7 @@ import { createPlaylistsRouter } from './routes/playlists.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { createLogger, httpLogger, type Logger } from './logger.js';
+import { securityHeaders } from './middleware/security.js';
 import {
   apiRateLimit,
   authRateLimit,
@@ -38,7 +38,7 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   app.use(httpLogger(logger));
   // Behind Caddy in production: needed so `secure` cookies are set over the proxied HTTPS connection.
   if (config.isProd) app.set('trust proxy', 1);
-  app.use(helmet());
+  app.use(securityHeaders(config));
   app.use(cors({ origin: config.appOrigin, credentials: true }));
   // Largest legitimate body is ~4 KB (100 track URIs).
   app.use(express.json({ limit: '16kb' }));
