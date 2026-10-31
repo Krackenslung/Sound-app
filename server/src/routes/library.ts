@@ -5,6 +5,7 @@ import { TRACK_URI, intParam, uriList } from '../middleware/validate.js';
 import { toAlbumSummary, toTrack, isTrack } from '../spotify/mappers.js';
 import type { SpotifyPaging, SpotifySavedAlbum, SpotifySavedTrack } from '../spotify/types.js';
 import { asUnavailable } from '../spotify/unavailable.js';
+import { collectLikedSince, monthOf } from '../spotify/likedTracks.js';
 import { createSpotifyClient } from '../spotify/spotifyClient.js';
 
 // Feb 2026 migration: type-specific save/remove/contains endpoints (/me/tracks, /me/tracks/contains)
@@ -63,6 +64,28 @@ export function createLibraryRouter(config: AppConfig) {
       });
     } catch (err) {
       next(asUnavailable(err, "Spotify doesn't currently let this app list your saved albums."));
+    }
+  });
+
+  /** Liked-song counts per month (UTC) for the last `months` months, newest first. */
+  router.get('/months', async (req, res, next) => {
+    try {
+      const months = intParam(req.query.months, { name: 'months', min: 1, max: 24, fallback: 12 });
+      const now = new Date();
+      const since = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (months - 1), 1));
+      const { entries, truncated } = await collectLikedSince(req, config, since);
+      const counts = new Map<string, number>();
+      for (const e of entries)
+        counts.set(monthOf(e.addedAt), (counts.get(monthOf(e.addedAt)) ?? 0) + 1);
+      const items = Array.from({ length: months }, (_, i) => {
+        const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+        const key = d.toISOString().slice(0, 7);
+        return { month: key, count: counts.get(key) ?? 0 };
+      });
+      res.set('Cache-Control', 'no-store');
+      res.json({ items, truncated });
+    } catch (err) {
+      next(err);
     }
   });
 

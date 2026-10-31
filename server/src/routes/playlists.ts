@@ -17,6 +17,7 @@ import type {
 } from '../spotify/types.js';
 import { getUserId } from '../spotify/userId.js';
 import { asUnavailable } from '../spotify/unavailable.js';
+import { collectLikedSince, monthLabel, parseMonth } from '../spotify/likedTracks.js';
 
 const PAGE = 50;
 const MAX_ADD = 100;
@@ -80,6 +81,50 @@ export function createPlaylistsRouter(config: AppConfig) {
         }),
       ]);
       res.status(201).json(withOwnership(created, userId));
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  /**
+   * "Monthly playlist" generator: every song liked during `month` (UTC), oldest first, in a new
+   * playlist. Walks Liked Songs only as far back as needed.
+   */
+  router.post('/monthly', async (req, res, next) => {
+    try {
+      const { key, start, end } = parseMonth(req.body?.month);
+      const { entries, truncated } = await collectLikedSince(req, config, start);
+      const uris = entries
+        .filter((e) => new Date(e.addedAt) < end)
+        .sort((a, b) => a.addedAt.localeCompare(b.addedAt))
+        .map((e) => e.uri);
+      const unique = [...new Set(uris)];
+      if (unique.length === 0) {
+        throw new HttpError(400, 'EMPTY_MONTH', `You didn't like any songs in ${monthLabel(key)}.`);
+      }
+      const name = `Liked in ${monthLabel(key)}`;
+      const [userId, created] = await Promise.all([
+        getUserId(req, config),
+        client(req).request<SpotifyPlaylistSummary>('/me/playlists', {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            public: false,
+            description: `Songs you liked in ${monthLabel(key)}. Made with Pulse Player.`,
+          }),
+        }),
+      ]);
+      for (let i = 0; i < unique.length; i += MAX_ADD) {
+        await client(req).request(`/playlists/${created.id}/items`, {
+          method: 'POST',
+          body: JSON.stringify({ uris: unique.slice(i, i + MAX_ADD) }),
+        });
+      }
+      res.status(201).json({
+        playlist: { ...withOwnership(created, userId), totalItems: unique.length },
+        added: unique.length,
+        truncated,
+      });
     } catch (err) {
       next(err);
     }
