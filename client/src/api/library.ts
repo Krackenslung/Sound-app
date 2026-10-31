@@ -1,4 +1,5 @@
 import { api } from './client';
+import type { AlbumSummary, OffsetPage, SavedTrack } from './types';
 
 const MAX_PER_REQUEST = 40;
 const BATCH_WINDOW_MS = 10;
@@ -44,3 +45,9 @@ export const saveTracks = (uris: string[]) =>
 
 export const removeTracks = (uris: string[]) =>
   api<void>('/library', { method: 'DELETE', body: JSON.stringify({ uris }) });
+
+export const fetchLikedTracks = (offset = 0) =>
+  api<OffsetPage<SavedTrack>>(`/library/tracks?offset=${offset}`);
+
+export const fetchSavedAlbums = (offset = 0) =>
+  api<OffsetPage<AlbumSummary>>(`/library/albums?offset=${offset}`);

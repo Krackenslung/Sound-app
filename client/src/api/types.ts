@@ -89,3 +89,14 @@ export interface QueueState {
   currentlyPlaying: Track | null;
   queue: Track[];
 }
+
+export interface SavedTrack {
+  addedAt: string | null;
+  track: Track;
+}
+
+export interface MyPlaylist extends PlaylistSummary {
+  isOwner: boolean;
+  /** Owned or collaborative — items can be read and edited. */
+  editable: boolean;
+}
