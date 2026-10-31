@@ -128,7 +128,6 @@ const intParam = (v: string | null, fallback: number) =>
   v == null || v === '' ? fallback : Number(v);
 
 function stripPlaylist(p: DemoState['playlists'][number]): MyPlaylist {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { trackUris, ...rest } = p;
   return { ...rest, totalItems: trackUris.length };
 }
