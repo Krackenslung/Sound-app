@@ -12,7 +12,7 @@ export function Sidebar() {
   return (
     <aside
       aria-label="Sidebar"
-      className="flex h-full w-sidebar shrink-0 flex-col gap-6 border-r border-border bg-surface px-4 pb-5 pt-6"
+      className="hidden h-full w-sidebar shrink-0 flex-col gap-6 border-r border-border bg-surface px-4 pb-5 pt-6 md:flex"
     >
       <div className="flex items-center gap-2.5 pl-2">
         <span className="flex size-8 items-center justify-center rounded-[9px] bg-gradient-to-br from-accent to-accent-2 to-50%">

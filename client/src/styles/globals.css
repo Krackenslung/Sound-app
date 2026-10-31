@@ -70,6 +70,20 @@
   .slider[data-variant='neutral']:not(:hover):not(:focus-visible)::-moz-range-thumb {
     opacity: 0;
   }
+  /* On the album-art backdrop (mobile Now Playing, Figma 8:1271): white fill, translucent track. */
+  .slider[data-variant='on-art'] {
+    --fill: var(--color-text-primary);
+  }
+  .slider[data-variant='on-art']::-webkit-slider-runnable-track {
+    background: linear-gradient(
+      to right,
+      var(--fill) var(--pct),
+      var(--color-on-art-track) var(--pct)
+    );
+  }
+  .slider[data-variant='on-art']::-moz-range-track {
+    background: var(--color-on-art-track);
+  }
   .slider:disabled::-webkit-slider-thumb {
     opacity: 0;
   }

@@ -1,6 +1,6 @@
 import { useCallback, useId, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Speaker } from 'lucide-react';
+import { Laptop, Speaker } from 'lucide-react';
 import { playerApi } from '@/api/player';
 import { toRows } from '@/features/player/deviceRows';
 import { usePlayerControls } from '@/features/player/playerContext';
@@ -27,7 +27,7 @@ function EqBars({ animate }: { animate: boolean }) {
 }
 
 // Figma: Device picker popover (node 6:594), anchored to the PlayerBar devices icon.
-export function DevicePicker() {
+export function DevicePicker({ placement = 'bar' }: { placement?: 'bar' | 'mini' | 'sheet' } = {}) {
   const open = useUiStore((s) => s.devicePickerOpen);
   const setOpen = useUiStore((s) => s.setDevicePickerOpen);
   const localId = usePlayerStore((s) => s.deviceId);
@@ -60,11 +60,28 @@ export function DevicePicker() {
         title={activeDevice ? `Playing on ${activeDevice.name}` : 'Connect to a device'}
         onClick={() => setOpen(!open)}
         className={cn(
-          'rounded-full transition-colors',
-          open || remoteActive ? 'text-accent' : 'text-text-primary opacity-75 hover:opacity-100',
+          'flex items-center gap-2 rounded-full transition-colors',
+          placement === 'sheet'
+            ? 'text-accent-hover'
+            : open || remoteActive
+              ? 'text-accent'
+              : 'text-text-primary opacity-80 hover:opacity-100',
         )}
       >
-        <Speaker aria-hidden className="size-5" strokeWidth={1.8} />
+        {placement === 'sheet' ? (
+          <>
+            <Laptop aria-hidden className="size-[18px]" strokeWidth={1.8} />
+            <span className="text-body font-semibold">
+              {activeDevice
+                ? activeDevice.isLocal
+                  ? 'This browser'
+                  : activeDevice.name
+                : 'Connect a device'}
+            </span>
+          </>
+        ) : (
+          <Speaker aria-hidden className="size-5" strokeWidth={1.8} />
+        )}
       </button>
 
       {open && (
@@ -72,7 +89,14 @@ export function DevicePicker() {
           id={panelId}
           role="dialog"
           aria-label="Connect to a device"
-          className="absolute bottom-full right-0 z-40 mb-5 flex w-80 flex-col gap-1 rounded-[14px] border border-border bg-surface-2 p-3 shadow-popover"
+          className={cn(
+            'absolute bottom-full z-40 flex w-80 max-w-[calc(100vw-24px)] flex-col gap-1 rounded-[14px] border border-border bg-surface-2 p-3 shadow-popover',
+            placement === 'sheet'
+              ? 'left-0 mb-3'
+              : placement === 'mini'
+                ? '-right-12 mb-4'
+                : 'right-0 mb-5',
+          )}
         >
           <div className="flex flex-col gap-0.5 px-2 pb-2 pt-1">
             <p className="text-h3">Connect to a device</p>

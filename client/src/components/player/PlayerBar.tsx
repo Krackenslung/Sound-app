@@ -85,7 +85,7 @@ export function PlayerBar() {
   return (
     <footer
       aria-label="Player"
-      className="flex h-player-bar shrink-0 items-center gap-6 border-t border-border bg-surface px-6"
+      className="hidden h-player-bar shrink-0 items-center gap-6 border-t border-border bg-surface px-6 md:flex"
     >
       <div className="flex min-w-0 flex-1 items-center gap-3.5">
         {track ? (

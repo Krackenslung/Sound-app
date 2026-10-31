@@ -22,6 +22,7 @@ export default {
       'accent-soft': v('color-accent-soft'),
       scrim: v('color-scrim'),
       'chart-cyan': v('color-chart-cyan'),
+      art: v('color-art'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
       'warning-soft': v('color-warning-soft'),
