@@ -15,7 +15,9 @@ export function createQueryClient() {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        retry: (count, error) => count < 1 && (!isApiError(error) || error.status >= 500),
+        // 501 = endpoint unavailable for this app; retrying cannot help.
+        retry: (count, error) =>
+          count < 1 && (!isApiError(error) || (error.status >= 500 && error.status !== 501)),
       },
     },
   });
