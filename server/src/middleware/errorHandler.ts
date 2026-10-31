@@ -24,6 +24,15 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     res.status(err.status).json({ code: err.code, message: err.message, ...err.details });
     return;
   }
+  // body-parser errors: oversized and malformed JSON bodies.
+  if (err?.type === 'entity.too.large') {
+    res.status(413).json({ code: 'PAYLOAD_TOO_LARGE', message: 'Request body is too large' });
+    return;
+  }
+  if (err?.type === 'entity.parse.failed') {
+    res.status(400).json({ code: 'INVALID_JSON', message: 'Request body is not valid JSON' });
+    return;
+  }
   const status = typeof err?.status === 'number' ? err.status : 500;
   // Only the error itself is logged (pino serialises name/message/stack) — never request data.
   if (status >= 500) req.log?.error({ err }, 'unhandled error');

@@ -16,12 +16,19 @@ import { createPlaylistsRouter } from './routes/playlists.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { createLogger, httpLogger, type Logger } from './logger.js';
+import {
+  apiRateLimit,
+  authRateLimit,
+  DEFAULT_RATE_LIMITS,
+  type RateLimits,
+} from './middleware/rateLimit.js';
 
 const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public');
 
 export interface AppDeps {
   sessionStore?: Store;
   logger?: Logger;
+  rateLimits?: RateLimits;
 }
 
 export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) {
@@ -33,9 +40,14 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   if (config.isProd) app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors({ origin: config.appOrigin, credentials: true }));
-  app.use(express.json({ limit: '100kb' }));
+  // Largest legitimate body is ~4 KB (100 track URIs).
+  app.use(express.json({ limit: '16kb' }));
 
   app.use('/api/health', healthRouter);
+
+  const limits = deps.rateLimits ?? DEFAULT_RATE_LIMITS;
+  app.use(['/api/auth/login', '/api/auth/callback'], authRateLimit(limits));
+  app.use('/api', apiRateLimit(limits));
 
   app.use('/api', createSessionMiddleware(config, deps.sessionStore));
   app.use('/api/auth', createAuthRouter(config));
