@@ -110,3 +110,20 @@ export interface SpotifyPlaylistSummary {
   items?: { total?: number } | null;
   tracks?: { total?: number } | null;
 }
+
+/** Playlist entry. Feb 2026: `track` was renamed to `item` (`track` may linger as a deprecated alias or a boolean). */
+export interface SpotifyPlaylistEntry {
+  added_at: string | null;
+  item?: SpotifyTrack | null;
+  track?: SpotifyTrack | boolean | null;
+}
+
+export interface SpotifySavedTrack {
+  added_at: string;
+  track: SpotifyTrack;
+}
+
+export interface SpotifySavedAlbum {
+  added_at: string;
+  album: SpotifyAlbumFull;
+}

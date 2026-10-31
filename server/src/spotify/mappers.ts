@@ -5,6 +5,7 @@ import type {
   SpotifyDevice,
   SpotifyImage,
   SpotifyPlaybackState,
+  SpotifyPlaylistEntry,
   SpotifyPlaylistSummary,
   SpotifyTrack,
 } from './types.js';
@@ -187,3 +188,14 @@ export function toDevice(d: SpotifyDevice): DeviceDto {
 export const isTrack = (
   t: { type?: string; album?: unknown } | null | undefined,
 ): t is SpotifyTrack => Boolean(t && t.album && (t.type === undefined || t.type === 'track'));
+
+export interface SavedTrackDto {
+  addedAt: string | null;
+  track: TrackDto;
+}
+
+/** Reads the track from a playlist entry, accepting both the new `item` and the old `track` field. */
+export function playlistEntryTrack(e: SpotifyPlaylistEntry): SpotifyTrack | null {
+  const candidate = e.item ?? (typeof e.track === 'object' ? e.track : null);
+  return isTrack(candidate) ? candidate : null;
+}

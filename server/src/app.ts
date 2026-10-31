@@ -12,6 +12,7 @@ import { createPlayerRouter } from './routes/player.js';
 import { createLibraryRouter } from './routes/library.js';
 import { createSearchRouter } from './routes/search.js';
 import { createCatalogRouter } from './routes/catalog.js';
+import { createPlaylistsRouter } from './routes/playlists.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
@@ -38,6 +39,7 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   app.use('/api/player', createPlayerRouter(config));
   app.use('/api/library', createLibraryRouter(config));
   app.use('/api/search', createSearchRouter(config));
+  app.use('/api/playlists', createPlaylistsRouter(config));
   app.use('/api', createCatalogRouter(config));
   app.use('/api', notFound);
 

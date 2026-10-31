@@ -64,3 +64,19 @@ export function uriList(
   }
   return list as string[];
 }
+
+export function stringField(
+  raw: unknown,
+  name: string,
+  { min = 0, max }: { min?: number; max: number },
+): string | undefined {
+  if (raw === undefined || raw === null) {
+    if (min > 0) throw bad(`${name} is required`);
+    return undefined;
+  }
+  if (typeof raw !== 'string') throw bad(`${name} must be a string`);
+  const v = raw.trim();
+  if (v.length < min) throw bad(`${name} is required`);
+  if (v.length > max) throw bad(`${name} must be at most ${max} characters`);
+  return v;
+}

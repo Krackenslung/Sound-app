@@ -35,6 +35,7 @@ export function createMeRouter(config: AppConfig) {
   router.get('/', requireAuth, async (req, res, next) => {
     try {
       const user = await createSpotifyClient(req, config).request<SpotifyUser>('/me');
+      req.session.userId = user.id;
       res.set('Cache-Control', 'no-store');
       res.json(toMe(user));
     } catch (err) {
