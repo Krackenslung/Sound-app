@@ -21,6 +21,7 @@ export default {
       'accent-2': v('color-accent-2'),
       'accent-soft': v('color-accent-soft'),
       scrim: v('color-scrim'),
+      'chart-cyan': v('color-chart-cyan'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
       success: v('color-success'),

@@ -4,7 +4,7 @@ import type { Image } from '@/api/types';
 
 const GRADIENTS = 9;
 
-function gradientFor(seed: string) {
+function gradientFor(seed: string = '') {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
   return `var(--art-${(h % GRADIENTS) + 1})`;
