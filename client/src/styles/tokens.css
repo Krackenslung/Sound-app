@@ -1,0 +1,19 @@
+/* Design tokens — source of truth: Figma "Pulse Player — App Design" (Foundations, node 2:25). */
+:root {
+  --color-bg: #0b0b10;
+  --color-surface: #14141c;
+  --color-surface-2: #1d1d28;
+  --color-surface-hover: #262634;
+  --color-border: #2b2b3a;
+  --color-text-primary: #f4f4f8;
+  --color-text-secondary: #a1a1b5;
+  --color-text-muted: #6b6b80;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #a78bfa;
+  --color-accent-2: #f472b6;
+  --color-on-accent: #ffffff;
+  --color-warning: #fbbf24;
+  --color-success: #34d399;
+
+  color-scheme: dark;
+}
