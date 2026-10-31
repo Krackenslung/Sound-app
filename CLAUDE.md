@@ -165,6 +165,7 @@ Commit a `server/.env.example` with the same keys and empty values.
 - **Redirect URIs** must be HTTPS in production. In dev use `127.0.0.1`, not `localhost`.
 - **Playlist items** can only be read for playlists the user owns or collaborates on. Create playlists with `POST /me/playlists`.
 - Library and playlist endpoints were renamed/consolidated in the Feb 2026 migration — check the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) before implementing Phase 4. Known so far: save/remove/contains use `PUT`/`DELETE /me/library` and `GET /me/library/contains` with Spotify **URIs** (replacing `/me/tracks*`); playlist `/tracks` sub-resources were renamed to `/items`.
+- **Fields reported removed for Development Mode apps (Feb 2026, unverified — third-party sources):** `popularity` (artist/track/album), artist `followers`, album `label`/`external_ids`/`available_markets`, and user `country`/`product`. Code must treat these as optional: `/api/me` returns `product: null` when missing, and the client then tries the Web Playback SDK and relies on its `account_error` to detect non-Premium accounts.
 
 ### Forbidden endpoints (403 for new apps — do not use)
 
@@ -234,12 +235,12 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 3 — Search, queue & devices
 
-- [ ] `GET /api/search?q=&type=&offset=` (limit fixed at 10) with "Load more"
-- [ ] Search page matching Figma `6:639`: debounced input, `Chip` filters for Tracks / Albums / Artists / Playlists, top result card, songs list, "Load more results"
-- [ ] Click a track → play it; "Add to queue" action (`POST /me/player/queue`)
-- [ ] Queue panel (`GET /me/player/queue`) as on the Now Playing frame
-- [ ] Device picker popover anchored to the PlayerBar devices icon, as in Figma `6:323` (`GET /me/player/devices`, `PUT /me/player` to transfer)
-- [ ] Album page (`GET /albums/{id}`) and artist page (`GET /artists/{id}`, `GET /artists/{id}/albums`)
+- [x] `GET /api/search?q=&type=&offset=` (limit fixed at 10) with "Load more"
+- [x] Search page matching Figma `6:639`: debounced input, `Chip` filters for Tracks / Albums / Artists / Playlists, top result card, songs list, "Load more results"
+- [x] Click a track → play it; "Add to queue" action (`POST /me/player/queue`)
+- [x] Queue panel (`GET /me/player/queue`) as on the Now Playing frame
+- [x] Device picker popover anchored to the PlayerBar devices icon, as in Figma `6:323` (`GET /me/player/devices`, `PUT /me/player` to transfer)
+- [x] Album page (`GET /albums/{id}`) and artist page (`GET /artists/{id}`, `GET /artists/{id}/albums`) — no top tracks on the artist page (`/artists/{id}/top-tracks` is forbidden)
 
 **Done when:** you can search, play, queue, and move playback between browser and phone.
 
@@ -312,3 +313,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 0 done (except Spotify dashboard setup, which is manual) — monorepo, Express health/helmet/cors, tokens + Tailwind theme, Button/Chip/NavItem, app shell from frame 5:145; added `--color-on-accent` token from Figma; Tailwind pinned to v3 to keep `tailwind.config.ts`
 - 2026-10-31 — Phase 1 done (verified with MSW-mocked Spotify; not yet run against real Spotify — needs dashboard app + credentials) — PKCE + client secret on the token endpoint, refresh-token rotation handled, per-session refresh dedupe, session id regenerated on login, `trust proxy` set in production; in dev the server falls back to in-memory sessions when `REDIS_URL` is unset; 'Explore demo mode' is disabled until Phase 6; developer.spotify.com was unreachable from the build environment, so auth details follow the OAuth/PKCE spec and should be re-checked against the docs
 - 2026-10-31 — Phase 2 code complete; "Done when" still needs a real Premium account (verified with a mocked SDK + MSW only) — SDK lifecycle in `PlayerProvider`, controls go to the SDK when this browser is active and to the Web API otherwise, 5 s polling keeps state in sync with other devices, like heart uses `/me/library` (Feb 2026 endpoints, found via search because developer.spotify.com was unreachable — re-check the query param format), queue/devices buttons stay disabled until Phase 3, "Next up" uses the SDK track window until the queue API lands
+- 2026-10-31 — Phase 3 code complete; "Done when" (search → play → queue → move playback to phone) still needs a real account — search (limit 10, per-type infinite "Load more"), top result + songs + albums, track menu (add to queue / go to album / go to artist), queue panel from `/me/player/queue`, device picker popover (opens automatically on `NO_ACTIVE_DEVICE`), album + artist pages; `product` missing from `/me` is now treated as "unknown" instead of "free" after reports it was removed in the Feb 2026 changes
