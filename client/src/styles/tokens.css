@@ -18,6 +18,12 @@
   --color-accent-soft: rgb(139 92 246 / 0.15);
   /* Glow under hero album art (Figma 6:323). */
   --shadow-art: 0 24px 64px -8px rgb(139 92 246 / 0.35);
+  /* Modal backdrop: bg at 80%. */
+  --color-scrim: rgb(11 11 16 / 0.8);
+  /* Liked Songs hero (Figma 7:971): deep violet → surface. */
+  --gradient-liked-hero: linear-gradient(to right, #5b21b6, var(--color-surface));
+  /* Liked Songs cover (Figma 7:972). */
+  --art-liked: linear-gradient(135deg, #8b5cf6 0%, #22d3ee 50%);
   --shadow-popover: 0 16px 40px 0 rgb(0 0 0 / 0.5);
 
   color-scheme: dark;

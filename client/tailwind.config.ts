@@ -20,6 +20,7 @@ export default {
       'accent-hover': v('color-accent-hover'),
       'accent-2': v('color-accent-2'),
       'accent-soft': v('color-accent-soft'),
+      scrim: v('color-scrim'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
       success: v('color-success'),
