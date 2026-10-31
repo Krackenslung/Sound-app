@@ -3,6 +3,11 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
+// GitHub Codespaces serves the dev server on https://<name>-5173.<domain>; Vite
+// rejects unknown Host headers unless they're allowed.
+const codespacesDomain = process.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN;
+const allowedHosts = codespacesDomain ? [`.${codespacesDomain}`] : [];
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -15,6 +20,7 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 5173,
     strictPort: true,
+    allowedHosts,
     // Demo-mode fixtures live in /fixtures at the repo root.
     fs: { allow: ['..'] },
     proxy: {

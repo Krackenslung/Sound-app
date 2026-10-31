@@ -23,6 +23,18 @@ const REQUIRED_IN_PROD = [
   'APP_ORIGIN',
 ] as const;
 
+/**
+ * In a GitHub Codespace the dev client is reached through a forwarded HTTPS URL
+ * (`https://<codespace>-5173.<domain>`), not 127.0.0.1. Derive it so OAuth
+ * redirects and CORS work without hand-editing APP_ORIGIN per codespace.
+ */
+export function codespacesOrigin(env: NodeJS.ProcessEnv): string | undefined {
+  const name = env.CODESPACE_NAME;
+  const domain = env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN;
+  if (!name || !domain || env.NODE_ENV === 'production') return undefined;
+  return `https://${name}-5173.${domain}`;
+}
+
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const nodeEnv = env.NODE_ENV ?? 'development';
   const isProd = nodeEnv === 'production';
@@ -32,7 +44,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     if (missing.length) throw new Error(`Missing required env vars: ${missing.join(', ')}`);
   }
 
-  const appOrigin = env.APP_ORIGIN || 'http://127.0.0.1:5173';
+  const appOrigin = env.APP_ORIGIN || codespacesOrigin(env) || 'http://127.0.0.1:5173';
   return {
     nodeEnv,
     isProd,

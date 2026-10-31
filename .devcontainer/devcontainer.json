@@ -1,0 +1,31 @@
+{
+  "name": "Pulse Player",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "postCreateCommand": "npm install",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "Pulse Player (dev)", "onAutoForward": "openBrowser" },
+    "3001": { "label": "API (proxied through 5173)", "onAutoForward": "ignore" },
+    "4173": { "label": "Production preview", "onAutoForward": "notify" }
+  },
+  "secrets": {
+    "SPOTIFY_CLIENT_ID": {
+      "description": "Client ID of your app in the Spotify Developer Dashboard."
+    },
+    "SPOTIFY_CLIENT_SECRET": {
+      "description": "Client secret of the same Spotify app. Stays on the server; never sent to the browser."
+    },
+    "SESSION_SECRET": {
+      "description": "Optional: a long random string for signing session cookies (a dev default is used if empty)."
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  }
+}
