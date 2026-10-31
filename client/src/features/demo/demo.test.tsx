@@ -111,3 +111,14 @@ describe('demo backend', () => {
     );
   });
 });
+
+describe('demo entry via URL', () => {
+  it('?demo=1 turns demo mode on and persists it for the session', async () => {
+    window.history.replaceState(null, '', '/?demo=1');
+    vi.resetModules();
+    const { useDemoStore: fresh } = await import('./demoStore');
+    expect(fresh.getState().enabled).toBe(true);
+    expect(sessionStorage.getItem('pulse.demo')).toBe('1');
+    window.history.replaceState(null, '', '/');
+  });
+});

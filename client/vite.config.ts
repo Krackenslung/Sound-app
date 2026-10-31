@@ -21,6 +21,12 @@ export default defineConfig({
       '/api': { target: 'http://127.0.0.1:3001', changeOrigin: false },
     },
   },
+  // `vite preview` (production build) talks to the same local API.
+  preview: {
+    host: '127.0.0.1',
+    port: 4173,
+    proxy: { '/api': { target: 'http://127.0.0.1:3001', changeOrigin: false } },
+  },
   build: {
     outDir: '../server/public',
     emptyOutDir: true,

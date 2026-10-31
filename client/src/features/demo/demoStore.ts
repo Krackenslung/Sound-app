@@ -4,6 +4,11 @@ const KEY = 'pulse.demo';
 
 function read(): boolean {
   try {
+    // Shareable entry point: /?demo=1 opens straight into demo mode.
+    if (new URLSearchParams(window.location.search).get('demo') === '1') {
+      sessionStorage.setItem(KEY, '1');
+      return true;
+    }
     return sessionStorage.getItem(KEY) === '1';
   } catch {
     return false;
