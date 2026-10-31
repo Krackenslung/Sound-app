@@ -164,7 +164,10 @@ Commit a `server/.env.example` with the same keys and empty values.
 - **Refresh tokens expire 6 months** after the original authorization; refreshing does not reset that. On `invalid_grant`, destroy the session and send the user to login.
 - **Redirect URIs** must be HTTPS in production. In dev use `127.0.0.1`, not `localhost`.
 - **Playlist items** can only be read for playlists the user owns or collaborates on. Create playlists with `POST /me/playlists`.
-- Library and playlist endpoints were renamed/consolidated in the Feb 2026 migration — check the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) before implementing Phase 4. Known so far: save/remove/contains use `PUT`/`DELETE /me/library` and `GET /me/library/contains` with Spotify **URIs** (replacing `/me/tracks*`); playlist `/tracks` sub-resources were renamed to `/items`.
+- Library and playlist endpoints were renamed/consolidated in the Feb 2026 migration — check the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) before implementing Phase 4. Confirmed for Phase 4 (API reference via search + developer reports — re-check against the official guide when reachable):
+  - Save/remove/check: `PUT` / `DELETE /me/library?uris=…` and `GET /me/library/contains?uris=…` — `uris` is a comma-separated **query parameter** (not a JSON body), max **40**. Replaces `/me/tracks`, `/me/albums`, `/me/following` writes.
+  - Listing Liked Songs / saved albums (`GET /me/tracks`, `GET /me/albums`) is **deprecated** and may be unavailable for Development Mode apps. The server maps a 403/404/410 there to `501 ENDPOINT_UNAVAILABLE`; the client explains and still lets you play Liked Songs via the `spotify:user:{id}:collection` context.
+  - Playlists: `GET /me/playlists` (`/users/{id}/playlists` returns 403), `POST /me/playlists` to create, `/playlists/{id}/tracks` → `/playlists/{id}/items` (add: body `{ uris }`; remove: body `{ items: [{ uri }], snapshot_id? }`). Playlist objects use `items.total` instead of `tracks.total`, and each entry's `track` is now `item` (`track` may linger as a deprecated alias or even a boolean).
 - **Fields reported removed for Development Mode apps (Feb 2026, unverified — third-party sources):** `popularity` (artist/track/album), artist `followers`, album `label`/`external_ids`/`available_markets`, and user `country`/`product`. Code must treat these as optional: `/api/me` returns `product: null` when missing, and the client then tries the Web Playback SDK and relies on its `account_error` to detect non-Premium accounts.
 
 ### Forbidden endpoints (403 for new apps — do not use)
@@ -246,12 +249,12 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 4 — Library & playlists
 
-- [ ] Re-read the Feb 2026 migration guide; confirm current library/playlist endpoint paths and field names
-- [ ] Library page matching Figma `7:803`: tabs, Liked Songs hero, play/shuffle actions, track table with header row
-- [ ] Liked Songs: list (paginated), save/unsave heart toggle on every track row
-- [ ] My playlists list (`GET /me/playlists`) and playlist detail (owned/collaborative only)
-- [ ] Create playlist (`POST /me/playlists`), add/remove tracks
-- [ ] Optimistic updates with TanStack Query + rollback on error
+- [x] Re-read the Feb 2026 migration guide; confirm current library/playlist endpoint paths and field names — developer.spotify.com is blocked in the build environment, so confirmed via the API reference (search snippets) and developer reports; see the constraints section
+- [x] Library page matching Figma `7:803`: tabs, Liked Songs hero, play/shuffle actions, track table with header row
+- [x] Liked Songs: list (paginated), save/unsave heart toggle on every track row
+- [x] My playlists list (`GET /me/playlists`) and playlist detail (owned/collaborative only)
+- [x] Create playlist (`POST /me/playlists`), add/remove tracks
+- [x] Optimistic updates with TanStack Query + rollback on error
 
 **Done when:** liking a track in the app shows up in the Spotify app, and a playlist created here appears there.
 
@@ -314,3 +317,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 1 done (verified with MSW-mocked Spotify; not yet run against real Spotify — needs dashboard app + credentials) — PKCE + client secret on the token endpoint, refresh-token rotation handled, per-session refresh dedupe, session id regenerated on login, `trust proxy` set in production; in dev the server falls back to in-memory sessions when `REDIS_URL` is unset; 'Explore demo mode' is disabled until Phase 6; developer.spotify.com was unreachable from the build environment, so auth details follow the OAuth/PKCE spec and should be re-checked against the docs
 - 2026-10-31 — Phase 2 code complete; "Done when" still needs a real Premium account (verified with a mocked SDK + MSW only) — SDK lifecycle in `PlayerProvider`, controls go to the SDK when this browser is active and to the Web API otherwise, 5 s polling keeps state in sync with other devices, like heart uses `/me/library` (Feb 2026 endpoints, found via search because developer.spotify.com was unreachable — re-check the query param format), queue/devices buttons stay disabled until Phase 3, "Next up" uses the SDK track window until the queue API lands
 - 2026-10-31 — Phase 3 code complete; "Done when" (search → play → queue → move playback to phone) still needs a real account — search (limit 10, per-type infinite "Load more"), top result + songs + albums, track menu (add to queue / go to album / go to artist), queue panel from `/me/player/queue`, device picker popover (opens automatically on `NO_ACTIVE_DEVICE`), album + artist pages; `product` missing from `/me` is now treated as "unknown" instead of "free" after reports it was removed in the Feb 2026 changes
+- 2026-10-31 — Phase 4 code complete; "Done when" (like here → shows in Spotify; playlist created here → appears there) still needs a real account — Library page (tabs, Liked Songs hero, play/shuffle, track table with header), saved albums, my playlists + playlist page, create playlist dialog, add to / remove from playlist, sidebar playlist list, optimistic updates with rollback (like/unlike incl. the Liked Songs list, create, add, remove); endpoint details confirmed via search because developer.spotify.com is still blocked; `GET /me/tracks`/`/me/albums` are deprecated, so the UI degrades gracefully if Spotify refuses them; "Create monthly playlist" button is shown but disabled until Phase 5
