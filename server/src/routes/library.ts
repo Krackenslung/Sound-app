@@ -1,16 +1,70 @@
 import { Router } from 'express';
 import type { AppConfig } from '../config.js';
 import { requireAuth } from '../middleware/requireAuth.js';
-import { TRACK_URI, uriList } from '../middleware/validate.js';
+import { TRACK_URI, intParam, uriList } from '../middleware/validate.js';
+import { toAlbumSummary, toTrack, isTrack } from '../spotify/mappers.js';
+import type { SpotifyPaging, SpotifySavedAlbum, SpotifySavedTrack } from '../spotify/types.js';
+import { asUnavailable } from '../spotify/unavailable.js';
 import { createSpotifyClient } from '../spotify/spotifyClient.js';
 
 // Feb 2026 migration: type-specific save/remove/contains endpoints (/me/tracks, /me/tracks/contains)
 // were replaced by generic /me/library endpoints that take Spotify URIs.
 const MAX_URIS = 40;
+const PAGE = 50;
 
 export function createLibraryRouter(config: AppConfig) {
   const router = Router();
   router.use(requireAuth);
+
+  // GET /me/tracks is deprecated after the Feb 2026 changes and may be unavailable for Development
+  // Mode apps; asUnavailable() turns that into ENDPOINT_UNAVAILABLE for the client.
+  router.get('/tracks', async (req, res, next) => {
+    try {
+      const offset = intParam(req.query.offset, {
+        name: 'offset',
+        min: 0,
+        max: 100_000,
+        fallback: 0,
+      });
+      const page = await createSpotifyClient(req, config).request<SpotifyPaging<SpotifySavedTrack>>(
+        `/me/tracks?limit=${PAGE}&offset=${offset}`,
+      );
+      res.set('Cache-Control', 'no-store');
+      res.json({
+        items: page.items
+          .filter((i) => isTrack(i.track))
+          .map((i) => ({ addedAt: i.added_at, track: toTrack(i.track) })),
+        offset,
+        total: page.total ?? null,
+        nextOffset: page.next ? offset + PAGE : null,
+      });
+    } catch (err) {
+      next(asUnavailable(err, "Spotify doesn't currently let this app list your Liked Songs."));
+    }
+  });
+
+  router.get('/albums', async (req, res, next) => {
+    try {
+      const offset = intParam(req.query.offset, {
+        name: 'offset',
+        min: 0,
+        max: 100_000,
+        fallback: 0,
+      });
+      const page = await createSpotifyClient(req, config).request<SpotifyPaging<SpotifySavedAlbum>>(
+        `/me/albums?limit=${PAGE}&offset=${offset}`,
+      );
+      res.set('Cache-Control', 'no-store');
+      res.json({
+        items: page.items.map((i) => toAlbumSummary(i.album)),
+        offset,
+        total: page.total ?? null,
+        nextOffset: page.next ? offset + PAGE : null,
+      });
+    } catch (err) {
+      next(asUnavailable(err, "Spotify doesn't currently let this app list your saved albums."));
+    }
+  });
 
   router.get('/contains', async (req, res, next) => {
     try {
