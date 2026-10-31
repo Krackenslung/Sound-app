@@ -81,3 +81,32 @@ export interface SpotifyPlaybackState {
   currently_playing_type?: string;
   context?: { uri: string } | null;
 }
+
+export interface SpotifyAlbumFull extends SpotifyAlbumRef {
+  album_type?: string;
+  release_date?: string;
+  total_tracks?: number;
+  tracks?: SpotifyPaging<Omit<SpotifyTrack, 'album'>>;
+}
+
+export interface SpotifyArtist {
+  id: string;
+  uri: string;
+  name: string;
+  images?: SpotifyImage[];
+  genres?: string[];
+}
+
+export interface SpotifyPlaylistSummary {
+  id: string;
+  uri: string;
+  name: string;
+  description?: string | null;
+  images?: SpotifyImage[] | null;
+  owner?: { id: string; display_name?: string | null };
+  collaborative?: boolean;
+  public?: boolean | null;
+  // Feb 2026: `tracks` was renamed to `items` on playlist objects; accept either.
+  items?: { total?: number } | null;
+  tracks?: { total?: number } | null;
+}

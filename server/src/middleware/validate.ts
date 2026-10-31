@@ -44,6 +44,12 @@ export const SPOTIFY_URI =
   /^spotify:(album|artist|playlist|show):[A-Za-z0-9]{1,64}$|^spotify:user:[\w.-]{1,64}:collection$/;
 export const TRACK_URI = /^spotify:track:[A-Za-z0-9]{1,64}$/;
 export const DEVICE_ID = /^[\w-]{1,128}$/;
+export const SPOTIFY_ID = /^[A-Za-z0-9]{1,64}$/;
+
+export function idParam(raw: unknown, name = 'id'): string {
+  if (typeof raw !== 'string' || !SPOTIFY_ID.test(raw)) throw bad(`${name} is invalid`);
+  return raw;
+}
 
 export function uriList(
   raw: unknown,

@@ -10,6 +10,8 @@ import { createAuthRouter } from './routes/auth.js';
 import { createMeRouter } from './routes/me.js';
 import { createPlayerRouter } from './routes/player.js';
 import { createLibraryRouter } from './routes/library.js';
+import { createSearchRouter } from './routes/search.js';
+import { createCatalogRouter } from './routes/catalog.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
@@ -35,6 +37,8 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   app.use('/api/me', createMeRouter(config));
   app.use('/api/player', createPlayerRouter(config));
   app.use('/api/library', createLibraryRouter(config));
+  app.use('/api/search', createSearchRouter(config));
+  app.use('/api', createCatalogRouter(config));
   app.use('/api', notFound);
 
   if (config.isProd) {

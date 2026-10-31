@@ -1,4 +1,13 @@
-import type { SpotifyAlbumRef, SpotifyImage, SpotifyPlaybackState, SpotifyTrack } from './types.js';
+import type {
+  SpotifyAlbumFull,
+  SpotifyAlbumRef,
+  SpotifyArtist,
+  SpotifyDevice,
+  SpotifyImage,
+  SpotifyPlaybackState,
+  SpotifyPlaylistSummary,
+  SpotifyTrack,
+} from './types.js';
 
 export interface ImageDto {
   url: string;
@@ -86,3 +95,95 @@ export function toPlaybackState(s: SpotifyPlaybackState): PlaybackStateDto {
     track,
   };
 }
+
+export interface AlbumSummaryDto extends AlbumRefDto {
+  albumType: string | null;
+  releaseDate: string | null;
+  totalTracks: number | null;
+}
+
+export interface AlbumDto extends AlbumSummaryDto {
+  tracks: TrackDto[];
+}
+
+export interface ArtistDto {
+  id: string;
+  uri: string;
+  name: string;
+  images: ImageDto[];
+  genres: string[];
+}
+
+export interface PlaylistSummaryDto {
+  id: string;
+  uri: string;
+  name: string;
+  description: string | null;
+  images: ImageDto[];
+  ownerId: string | null;
+  ownerName: string | null;
+  collaborative: boolean;
+  totalItems: number | null;
+}
+
+export interface DeviceDto {
+  id: string | null;
+  name: string;
+  type: string;
+  isActive: boolean;
+  volumePercent: number | null;
+}
+
+export function toAlbumSummary(a: SpotifyAlbumFull): AlbumSummaryDto {
+  return {
+    ...toAlbumRef(a),
+    albumType: a.album_type ?? null,
+    releaseDate: a.release_date ?? null,
+    totalTracks: a.total_tracks ?? null,
+  };
+}
+
+/** Album tracks come without an `album` field; attach the parent album ref. */
+export function toAlbum(a: SpotifyAlbumFull, tracks: Omit<SpotifyTrack, 'album'>[]): AlbumDto {
+  const ref: SpotifyAlbumRef = {
+    id: a.id,
+    name: a.name,
+    uri: a.uri,
+    images: a.images,
+    artists: a.artists,
+  };
+  return { ...toAlbumSummary(a), tracks: tracks.map((t) => toTrack({ ...t, album: ref })) };
+}
+
+export function toArtist(a: SpotifyArtist): ArtistDto {
+  return { id: a.id, uri: a.uri, name: a.name, images: images(a.images), genres: a.genres ?? [] };
+}
+
+export function toPlaylistSummary(p: SpotifyPlaylistSummary): PlaylistSummaryDto {
+  return {
+    id: p.id,
+    uri: p.uri,
+    name: p.name,
+    description: p.description || null,
+    images: images(p.images ?? undefined),
+    ownerId: p.owner?.id ?? null,
+    ownerName: p.owner?.display_name ?? null,
+    collaborative: Boolean(p.collaborative),
+    totalItems: p.items?.total ?? p.tracks?.total ?? null,
+  };
+}
+
+export function toDevice(d: SpotifyDevice): DeviceDto {
+  return {
+    id: d.id,
+    name: d.name,
+    type: d.type,
+    isActive: d.is_active,
+    volumePercent: d.volume_percent,
+  };
+}
+
+/** Only real tracks (not episodes/ads, which have no album). */
+export const isTrack = (
+  t: { type?: string; album?: unknown } | null | undefined,
+): t is SpotifyTrack => Boolean(t && t.album && (t.type === undefined || t.type === 'track'));

@@ -12,8 +12,8 @@ import {
 } from '../middleware/validate.js';
 import { HttpError } from '../middleware/errorHandler.js';
 import { createSpotifyClient } from '../spotify/spotifyClient.js';
-import { toPlaybackState } from '../spotify/mappers.js';
-import type { SpotifyPlaybackState } from '../spotify/types.js';
+import { isTrack, toDevice, toPlaybackState, toTrack } from '../spotify/mappers.js';
+import type { SpotifyDevice, SpotifyPlaybackState, SpotifyTrack } from '../spotify/types.js';
 
 function deviceQuery(req: Request) {
   const deviceId = optionalString(req.body?.deviceId, 'deviceId', DEVICE_ID);
@@ -31,6 +31,47 @@ export function createPlayerRouter(config: AppConfig) {
       const state = await client(req).request<SpotifyPlaybackState | undefined>('/me/player');
       res.set('Cache-Control', 'no-store');
       res.json(state ? toPlaybackState(state) : null);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/devices', async (req, res, next) => {
+    try {
+      const r = await client(req).request<{ devices: SpotifyDevice[] }>('/me/player/devices');
+      res.set('Cache-Control', 'no-store');
+      res.json({ devices: (r?.devices ?? []).map(toDevice) });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/queue', async (req, res, next) => {
+    try {
+      const r = await client(req).request<{
+        currently_playing: SpotifyTrack | null;
+        queue: SpotifyTrack[];
+      }>('/me/player/queue');
+      res.set('Cache-Control', 'no-store');
+      res.json({
+        currentlyPlaying: isTrack(r?.currently_playing) ? toTrack(r.currently_playing) : null,
+        queue: (r?.queue ?? []).filter(isTrack).map(toTrack),
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.post('/queue', async (req, res, next) => {
+    try {
+      const uri = optionalString(req.body?.uri, 'uri', TRACK_URI);
+      if (!uri) throw new HttpError(400, 'BAD_REQUEST', 'uri is required');
+      const dq = deviceQuery(req);
+      await client(req).request(
+        `/me/player/queue?uri=${encodeURIComponent(uri)}${dq.replace('?', '&')}`,
+        { method: 'POST' },
+      );
+      res.status(204).end();
     } catch (err) {
       next(err);
     }
