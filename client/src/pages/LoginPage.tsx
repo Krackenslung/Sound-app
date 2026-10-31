@@ -11,6 +11,7 @@ import {
 import { LOGIN_URL } from '@/api/auth';
 import { buttonClasses } from '@/components/ui/buttonStyles';
 import { Button } from '@/components/ui/Button';
+import { loginPageEnabled } from '@/features/auth/loginPage';
 import { useAuth } from '@/features/auth/authContext';
 import { FullScreenLoader } from '@/features/auth/ProtectedRoute';
 import { useDemoActions } from '@/features/demo/useDemoActions';
@@ -62,7 +63,9 @@ export function LoginPage() {
   const error = errorKey ? (ERROR_MESSAGES[errorKey] ?? 'Something went wrong logging in.') : null;
 
   if (status === 'loading') return <FullScreenLoader />;
-  if (status === 'authenticated') return <Navigate to="/" replace />;
+  if (status === 'authenticated' && (loginPageEnabled() || !error)) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="relative flex min-h-full items-center justify-center overflow-hidden bg-bg px-6 py-16">

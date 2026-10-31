@@ -1,15 +1,13 @@
 import { useCallback, useId, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { LogOut, UserRound } from 'lucide-react';
 import { useAuth } from '@/features/auth/authContext';
-import { useDemo } from '@/features/demo/demoStore';
+import { useAccountAction } from '@/features/auth/useAccountAction';
 import { useDismiss } from '@/hooks/useDismiss';
 
 // Figma 8:1333 — account button next to the mobile greeting (the sidebar user card is hidden < 768px).
 export function MobileAccountButton() {
-  const { user, logout } = useAuth();
-  const demo = useDemo();
-  const navigate = useNavigate();
+  const { user } = useAuth();
+  const account = useAccountAction();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -43,15 +41,14 @@ export function MobileAccountButton() {
           <button
             type="button"
             role="menuitem"
-            onClick={async () => {
+            onClick={() => {
               close();
-              await logout();
-              navigate('/login', { replace: true });
+              void account.run();
             }}
             className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-body font-semibold hover:bg-surface-hover"
           >
             <LogOut aria-hidden className="size-4" />
-            {demo ? 'Exit demo' : 'Log out'}
+            {account.label}
           </button>
         </div>
       )}

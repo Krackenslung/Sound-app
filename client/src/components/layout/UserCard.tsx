@@ -1,7 +1,7 @@
 import { useCallback, useId, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { LogOut, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '@/features/auth/authContext';
+import { useAccountAction } from '@/features/auth/useAccountAction';
 import { useDismiss } from '@/hooks/useDismiss';
 import { useDemo } from '@/features/demo/demoStore';
 
@@ -17,9 +17,9 @@ function initials(name: string) {
 }
 
 export function UserCard() {
-  const { user, isPremium, logout } = useAuth();
+  const { user, isPremium } = useAuth();
   const demo = useDemo();
-  const navigate = useNavigate();
+  const account = useAccountAction();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -81,15 +81,14 @@ export function UserCard() {
           <button
             type="button"
             role="menuitem"
-            onClick={async () => {
+            onClick={() => {
               setOpen(false);
-              await logout();
-              navigate('/login', { replace: true });
+              void account.run();
             }}
             className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-body font-semibold text-text-primary hover:bg-surface-hover"
           >
             <LogOut aria-hidden className="size-4" />
-            {demo ? 'Exit demo' : 'Log out'}
+            {account.label}
           </button>
         </div>
       )}

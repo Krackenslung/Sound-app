@@ -44,5 +44,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: false,
+    // Most tests cover the login page; the skip-login default has its own tests.
+    env: { VITE_SHOW_LOGIN: 'true' },
   },
 });

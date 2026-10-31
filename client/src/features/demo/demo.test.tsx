@@ -129,6 +129,39 @@ describe('server without Spotify credentials', () => {
   });
 });
 
+describe('login page off (default)', () => {
+  beforeEach(() => vi.stubEnv('VITE_SHOW_LOGIN', ''));
+  afterEach(() => vi.unstubAllEnvs());
+
+  it('sends logged-out visitors straight into demo mode', async () => {
+    stubLoggedOutNetwork();
+    const { router } = renderApp('/');
+    expect(await screen.findByText('Demo mode')).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe('/');
+    expect(useDemoStore.getState().enabled).toBe(true);
+  });
+
+  it('redirects /login into the app too', async () => {
+    stubLoggedOutNetwork();
+    const { router } = renderApp('/login');
+    await waitFor(() => expect(router.state.location.pathname).toBe('/'));
+    expect(await screen.findByText('Demo mode')).toBeInTheDocument();
+  });
+
+  it('still shows the login page when Spotify sent back an error', async () => {
+    stubLoggedOutNetwork();
+    renderApp('/login?error=access_denied');
+    expect(await screen.findByText('Spotify login was cancelled.')).toBeInTheDocument();
+  });
+
+  it('offers "Log in with Spotify" in the demo account menu', async () => {
+    stubLoggedOutNetwork();
+    renderApp('/');
+    await userEvent.click(await screen.findByRole('button', { name: 'Account menu' }));
+    expect(screen.getByRole('menuitem', { name: 'Log in with Spotify' })).toBeInTheDocument();
+  });
+});
+
 describe('demo entry via URL', () => {
   it('?demo=1 turns demo mode on and persists it for the session', async () => {
     window.history.replaceState(null, '', '/?demo=1');

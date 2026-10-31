@@ -1,3 +1,4 @@
+import { loginPageEnabled } from '@/features/auth/loginPage';
 import { useDemoStore } from '@/features/demo/demoStore';
 import { api, isApiError } from './client';
 
@@ -14,15 +15,15 @@ export interface Me {
 export const LOGIN_URL = '/api/auth/login';
 
 /**
- * Current user, or `null` when not logged in. When the server has no Spotify
- * credentials, login can't work, so this switches to demo mode and returns the
- * demo user instead.
+ * Current user, or `null` when not logged in. Logged-out visitors are switched
+ * to demo mode (and get the demo user) when the login page is off, or when the
+ * server has no Spotify credentials so login can't work anyway.
  */
 export async function fetchMe(): Promise<Me | null> {
   try {
     return await api<Me>('/me');
   } catch (e) {
-    if (isApiError(e, 401) && e.code === 'LOGIN_NOT_CONFIGURED') {
+    if (isApiError(e, 401) && (e.code === 'LOGIN_NOT_CONFIGURED' || !loginPageEnabled())) {
       useDemoStore.getState().setEnabled(true);
       return api<Me>('/me');
     }
