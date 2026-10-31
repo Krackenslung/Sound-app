@@ -33,6 +33,8 @@ export type SdkStatus = 'idle' | 'loading' | 'ready' | 'not_ready' | 'error';
 export interface PlayerState extends PlaybackSnapshot {
   sdkStatus: SdkStatus;
   sdkError: string | null;
+  /** The SDK reported an account error: this account can't stream (not Premium). */
+  accountBlocked: boolean;
   /** Device id of this browser's Web Playback SDK player. */
   deviceId: string | null;
   activeDevice: ActiveDevice | null;
@@ -65,6 +67,7 @@ const initial = {
   ...emptyPlayback,
   sdkStatus: 'idle' as SdkStatus,
   sdkError: null,
+  accountBlocked: false,
   deviceId: null,
   activeDevice: null,
   volume: 0.7,

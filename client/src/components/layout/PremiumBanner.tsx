@@ -1,9 +1,11 @@
 import { AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/features/auth/authContext';
+import { usePlayerStore } from '@/store/playerStore';
 
 export function PremiumBanner() {
-  const { user, isPremium } = useAuth();
-  if (!user || isPremium) return null;
+  const { knownNonPremium } = useAuth();
+  const accountBlocked = usePlayerStore((s) => s.accountBlocked);
+  if (!knownNonPremium && !accountBlocked) return null;
   return (
     <div
       role="status"

@@ -4,7 +4,8 @@ export interface Me {
   id: string;
   displayName: string;
   email: string | null;
-  product: 'premium' | 'free' | 'open' | string;
+  /** `null` when Spotify doesn't report it (Development Mode apps after Feb 2026). */
+  product: 'premium' | 'free' | 'open' | string | null;
   country: string | null;
   avatarUrl: string | null;
 }

@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useId, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { LogOut, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '@/features/auth/authContext';
+import { useDismiss } from '@/hooks/useDismiss';
 
 function initials(name: string) {
   return (
@@ -20,20 +21,9 @@ export function UserCard() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
+  const close = useCallback(() => setOpen(false), []);
 
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) setOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, [open]);
+  useDismiss(ref, open, close);
 
   const name = user?.displayName ?? 'Guest';
 
@@ -54,7 +44,13 @@ export function UserCard() {
               isPremium ? 'text-caption text-accent-hover' : 'text-caption text-text-secondary'
             }
           >
-            {user ? (isPremium ? 'Premium' : 'Free') : 'Not signed in'}
+            {!user
+              ? 'Not signed in'
+              : user.product == null
+                ? 'Spotify account'
+                : isPremium
+                  ? 'Premium'
+                  : 'Free'}
           </span>
         </div>
         {user && (

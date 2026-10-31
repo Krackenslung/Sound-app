@@ -30,6 +30,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       status,
       user,
       isPremium: user?.product === 'premium',
+      playbackAllowed: Boolean(user) && (user!.product === 'premium' || user!.product == null),
+      knownNonPremium: Boolean(user) && user!.product != null && user!.product !== 'premium',
       error: query.error,
       retry: () => void query.refetch(),
       logout,
