@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Navigate, useSearchParams } from 'react-router';
 import {
   AlertCircle,
@@ -11,7 +12,7 @@ import {
 import { LOGIN_URL } from '@/api/auth';
 import { buttonClasses } from '@/components/ui/buttonStyles';
 import { Button } from '@/components/ui/Button';
-import { loginPageEnabled } from '@/features/auth/loginPage';
+import { autoLogin, autoLoginWouldLoop, loggedOutMode } from '@/features/auth/loggedOut';
 import { useAuth } from '@/features/auth/authContext';
 import { FullScreenLoader } from '@/features/auth/ProtectedRoute';
 import { useDemoActions } from '@/features/demo/useDemoActions';
@@ -25,6 +26,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   not_allowlisted:
     "Your Spotify account isn't on this app's invite list yet. Explore demo mode in the meantime.",
   session_expired: 'Your session expired. Please log in again.',
+  session_not_saved:
+    'You logged in with Spotify, but the session didn’t stick (cookies blocked?). Try again, or explore demo mode.',
   not_configured:
     'Spotify login isn’t set up on this server: SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET are missing. Explore demo mode in the meantime.',
 };
@@ -60,12 +63,22 @@ export function LoginPage() {
   const { enterDemo } = useDemoActions();
   const [params] = useSearchParams();
   const errorKey = params.get('error');
-  const error = errorKey ? (ERROR_MESSAGES[errorKey] ?? 'Something went wrong logging in.') : null;
+  // In `spotify` mode a logged-out visitor goes straight to Spotify; the login
+  // page only shows errors, or when redirecting again would loop.
+  const [loopDetected] = useState(autoLoginWouldLoop);
+  const redirecting =
+    status === 'unauthenticated' && !errorKey && !loopDetected && loggedOutMode() === 'spotify';
+  useEffect(() => {
+    if (redirecting) autoLogin();
+  }, [redirecting]);
+  const shownKey = errorKey ?? (loopDetected ? 'session_not_saved' : null);
+  const error = shownKey ? (ERROR_MESSAGES[shownKey] ?? 'Something went wrong logging in.') : null;
 
   if (status === 'loading') return <FullScreenLoader />;
-  if (status === 'authenticated' && (loginPageEnabled() || !error)) {
+  if (status === 'authenticated' && (loggedOutMode() === 'login' || !error)) {
     return <Navigate to="/" replace />;
   }
+  if (redirecting) return <FullScreenLoader />;
 
   return (
     <div className="relative flex min-h-full items-center justify-center overflow-hidden bg-bg px-6 py-16">

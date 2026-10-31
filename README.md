@@ -27,7 +27,7 @@ Use `127.0.0.1`, not `localhost` — Spotify rejects `localhost` redirect URIs.
 
 In development, `/dev/components` previews the base UI components and design tokens.
 
-Logged-out visitors skip the login page and land in **demo mode** (sample data, simulated playback); log in from the account menu or the demo banner. To show the login page instead, build or run the client with `VITE_SHOW_LOGIN=true` (e.g. in `client/.env.local`).
+**Logged-out visitors** are sent straight to Spotify login (after the first approval Spotify returns immediately, so you're effectively logged in by default). Change it with `VITE_LOGGED_OUT` in `client/.env.local`: `demo` lands visitors in demo mode, `login` shows the login page. If the server has no Spotify credentials, the app always opens in demo mode. Demo mode is also at `/?demo=1`.
 
 ## Run it in GitHub Codespaces
 

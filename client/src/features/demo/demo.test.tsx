@@ -129,8 +129,8 @@ describe('server without Spotify credentials', () => {
   });
 });
 
-describe('login page off (default)', () => {
-  beforeEach(() => vi.stubEnv('VITE_SHOW_LOGIN', ''));
+describe('logged-out mode: demo', () => {
+  beforeEach(() => vi.stubEnv('VITE_LOGGED_OUT', 'demo'));
   afterEach(() => vi.unstubAllEnvs());
 
   it('sends logged-out visitors straight into demo mode', async () => {

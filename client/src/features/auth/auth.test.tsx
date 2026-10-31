@@ -79,3 +79,45 @@ describe('auth flow', () => {
     expect(await screen.findByRole('link', { name: 'Continue with Spotify' })).toBeInTheDocument();
   });
 });
+
+describe('logged-out mode: spotify (default)', () => {
+  const assign = vi.fn();
+  beforeEach(() => {
+    vi.stubEnv('VITE_LOGGED_OUT', '');
+    vi.stubGlobal('location', { ...window.location, assign });
+    assign.mockClear();
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it('sends a logged-out visitor straight to Spotify login', async () => {
+    mockApi({ me: 401 });
+    renderApp('/');
+    await waitFor(() => expect(assign).toHaveBeenCalledWith('/api/auth/login'));
+    expect(screen.getByRole('status')).toBeInTheDocument(); // loader, not the login page
+  });
+
+  it('logs a logged-in user in without any detour', async () => {
+    mockApi({ me: premiumUser });
+    renderApp('/');
+    expect(await screen.findByRole('heading', { level: 1, name: /Jesus/ })).toBeInTheDocument();
+    expect(assign).not.toHaveBeenCalled();
+  });
+
+  it('shows the login page instead of looping when the session does not stick', async () => {
+    sessionStorage.setItem('pulse.autoLogin', String(Date.now()));
+    mockApi({ me: 401 });
+    renderApp('/');
+    expect(await screen.findByText(/session didn’t stick/)).toBeInTheDocument();
+    expect(assign).not.toHaveBeenCalled();
+  });
+
+  it('shows Spotify login errors instead of redirecting again', async () => {
+    mockApi({ me: 401 });
+    renderApp('/login?error=access_denied');
+    expect(await screen.findByText('Spotify login was cancelled.')).toBeInTheDocument();
+    expect(assign).not.toHaveBeenCalled();
+  });
+});

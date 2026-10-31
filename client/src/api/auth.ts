@@ -1,4 +1,4 @@
-import { loginPageEnabled } from '@/features/auth/loginPage';
+import { clearAutoLogin, loggedOutMode } from '@/features/auth/loggedOut';
 import { useDemoStore } from '@/features/demo/demoStore';
 import { api, isApiError } from './client';
 
@@ -12,23 +12,28 @@ export interface Me {
   avatarUrl: string | null;
 }
 
-export const LOGIN_URL = '/api/auth/login';
+export { LOGIN_URL } from '@/features/auth/loggedOut';
 
 /**
- * Current user, or `null` when not logged in. Logged-out visitors are switched
- * to demo mode (and get the demo user) when the login page is off, or when the
- * server has no Spotify credentials so login can't work anyway.
+ * Current user, or `null` when not logged in. What happens to a logged-out
+ * visitor depends on `loggedOutMode()`: demo mode, or `null` (→ login page,
+ * which in the default `spotify` mode redirects to Spotify login). A server without Spotify credentials
+ * always gives demo mode.
  */
 export async function fetchMe(): Promise<Me | null> {
   try {
-    return await api<Me>('/me');
+    const me = await api<Me>('/me');
+    clearAutoLogin();
+    return me;
   } catch (e) {
-    if (isApiError(e, 401) && (e.code === 'LOGIN_NOT_CONFIGURED' || !loginPageEnabled())) {
+    if (!isApiError(e, 401)) throw e;
+    const mode = loggedOutMode();
+    if (e.code === 'LOGIN_NOT_CONFIGURED' || mode === 'demo') {
       useDemoStore.getState().setEnabled(true);
       return api<Me>('/me');
     }
-    if (isApiError(e, 401)) return null;
-    throw e;
+    // `spotify` mode: the login page redirects to Spotify (see LoginPage).
+    return null;
   }
 }
 

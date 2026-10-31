@@ -1,24 +1,26 @@
 import { useNavigate } from 'react-router';
-import { LOGIN_URL } from '@/api/auth';
 import { useDemo } from '@/features/demo/demoStore';
 import { useAuth } from './authContext';
-import { loginPageEnabled } from './loginPage';
+import { LOGIN_URL, clearAutoLogin, loggedOutMode } from './loggedOut';
 
-/** The account menu's single action: log out, exit demo, or (login page off) log in from demo. */
+/** The account menu's single action: log out, exit demo, or log in from demo. */
 export function useAccountAction() {
   const { logout } = useAuth();
   const demo = useDemo();
   const navigate = useNavigate();
-  const loginFromDemo = demo && !loginPageEnabled();
+  const mode = loggedOutMode();
+  const loginFromDemo = demo && mode !== 'login';
 
   return {
     label: loginFromDemo ? 'Log in with Spotify' : demo ? 'Exit demo' : 'Log out',
     run: async () => {
       await logout();
-      if (loginFromDemo) window.location.assign(LOGIN_URL);
-      else if (loginPageEnabled()) navigate('/login', { replace: true });
-      // Fresh start: the app reloads logged out and opens in demo mode.
-      else window.location.assign('/');
+      if (loginFromDemo) {
+        clearAutoLogin();
+        window.location.assign(LOGIN_URL);
+      } else if (mode === 'login') navigate('/login', { replace: true });
+      // After logging out, show demo mode; in `spotify` mode a plain reload would log straight back in.
+      else window.location.assign(mode === 'spotify' ? '/?demo=1' : '/');
     },
   };
 }
