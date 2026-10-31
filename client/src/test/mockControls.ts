@@ -13,6 +13,7 @@ export function mockControls(overrides: Partial<PlayerControls> = {}): PlayerCon
     playTracks: vi.fn(),
     playContext: vi.fn(),
     addToQueue: vi.fn(),
+    shufflePlay: vi.fn(),
     transferTo: vi.fn(),
     ...overrides,
   };

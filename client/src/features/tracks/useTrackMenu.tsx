@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router';
-import { Disc3, ListPlus, UserRound } from 'lucide-react';
+import { Disc3, ListMusic, ListPlus, UserRound } from 'lucide-react';
+import { useUiStore } from '@/store/uiStore';
 import type { MenuItem } from '@/components/ui/Menu';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { albumPath, artistPath } from '@/lib/spotifyUri';
@@ -14,6 +15,7 @@ interface MenuTrack {
 export function useTrackMenu() {
   const navigate = useNavigate();
   const controls = usePlayerControls();
+  const openAddToPlaylist = useUiStore((s) => s.openAddToPlaylist);
 
   return (track: MenuTrack, { hideAlbum = false }: { hideAlbum?: boolean } = {}): MenuItem[] => {
     const items: MenuItem[] = [
@@ -22,6 +24,11 @@ export function useTrackMenu() {
         icon: <ListPlus aria-hidden className="size-4" />,
         onSelect: () => controls.addToQueue(track.uri),
         disabled: !controls.canControl,
+      },
+      {
+        label: 'Add to playlist',
+        icon: <ListMusic aria-hidden className="size-4" />,
+        onSelect: () => openAddToPlaylist([track.uri]),
       },
     ];
     const album = albumPath(track.album.uri);

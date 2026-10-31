@@ -16,6 +16,8 @@ export interface PlayerControls {
   /** Play an album/playlist/artist context, optionally starting at a track. */
   playContext: (contextUri: string, offsetUri?: string) => void;
   addToQueue: (uri: string) => void;
+  /** Turn shuffle on, then play the context. */
+  shufflePlay: (contextUri: string) => void;
   /** Move playback to another device, keeping the current play/pause state. */
   transferTo: (deviceId: string) => void;
 }

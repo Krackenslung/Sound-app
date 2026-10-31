@@ -258,6 +258,15 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
           }),
         );
       },
+      shufflePlay: (contextUri) => {
+        void playerRef.current?.activateElement();
+        store().patch({ shuffle: true });
+        run(async () => {
+          // Sequential on purpose: shuffle must be on before playback starts.
+          await playerApi.shuffle(true, target());
+          await playerApi.play({ deviceId: target(), contextUri });
+        });
+      },
       addToQueue: (uri) => {
         run(
           async () => {
