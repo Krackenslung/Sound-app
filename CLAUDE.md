@@ -140,7 +140,9 @@ npm run dev            # client on 127.0.0.1:5173 with /api proxied to server on
 npm run lint
 npm run typecheck
 npm test
-npm run build          # builds client into server/public, compiles server
+npm run test:coverage  # server coverage gate (>= 70% on src/spotify and src/routes)
+npm run build
+npm run check:secrets  # after build: fails if the client bundle contains secrets          # builds client into server/public, compiles server
 npm start              # production: Express serves API + built client on one origin
 docker compose up -d --build
 ```
@@ -287,12 +289,12 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 7 — Testing & hardening
 
-- [ ] Server unit tests: token refresh, retry/backoff, 429 handling, `invalid_grant` logout
-- [ ] Route tests with Supertest + MSW-mocked Spotify
-- [ ] Client tests for PlayerBar, search, and auth redirect
-- [ ] `express-rate-limit` on `/api/*`; request size limits
-- [ ] CSP via `helmet` allowing `sdk.scdn.co`, `i.scdn.co` (images), `api.spotify.com`
-- [ ] Structured logging (pino), no tokens in logs
+- [x] Server unit tests: token refresh, retry/backoff, 429 handling, `invalid_grant` logout
+- [x] Route tests with Supertest + MSW-mocked Spotify
+- [x] Client tests for PlayerBar, search, and auth redirect
+- [x] `express-rate-limit` on `/api/*`; request size limits — 300 req/min/IP on `/api/*`, 20/min on login/callback, `/api/health` exempt, JSON `429 RATE_LIMITED` + `Retry-After`; JSON bodies capped at 16 KB (`413 PAYLOAD_TOO_LARGE`), bad JSON → `400 INVALID_JSON`
+- [x] CSP via `helmet` allowing `sdk.scdn.co`, `i.scdn.co` (images), `api.spotify.com` — strict (`'self'`, no `unsafe-inline`); also `mosaic.scdn.co` + `*.spotifycdn.com` for playlist/newer images and `frame-src sdk.scdn.co` for the SDK's playback iframe; verified zero violations on the production build (fonts kept out of `data:` URIs)
+- [x] Structured logging (pino), no tokens in logs — `pino-http` logs method, sanitised URL (OAuth `code`/`state` redacted), status, timing; never headers or bodies; token fields redacted; a test runs login → refresh → logout and greps the logs for every secret
 
 **Done when:** coverage ≥ 70% on `server/src/spotify` and `server/src/routes`; no secrets in logs or client bundle (`grep` the build).
 
@@ -323,3 +325,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 4 code complete; "Done when" (like here → shows in Spotify; playlist created here → appears there) still needs a real account — Library page (tabs, Liked Songs hero, play/shuffle, track table with header), saved albums, my playlists + playlist page, create playlist dialog, add to / remove from playlist, sidebar playlist list, optimistic updates with rollback (like/unlike incl. the Liked Songs list, create, add, remove); endpoint details confirmed via search because developer.spotify.com is still blocked; `GET /me/tracks`/`/me/albums` are deprecated, so the UI degrades gracefully if Spotify refuses them; "Create monthly playlist" button is shown but disabled until Phase 5
 - 2026-10-31 — Phase 5 code complete; "Done when" (Stats renders for a real account; generator creates a correct playlist) still needs a real account — Stats page from frame 7:1077 (summary tiles, top artists, top tracks, breakdown card, recently played), `time_range` segmented control in the URL, monthly playlist dialog on Library with per-month counts; developer reports say Feb 2026 removed artist `genres` for Development Mode apps, so genre tiles/breakdown fall back to artist-based stats when no genres come back (tiles still only show API-provided values); breakdown is HTML/CSS bars per Figma instead of Recharts
 - 2026-10-31 — Phase 6 done — "Done when" met locally on the production build: Lighthouse (mobile) Login 98/100/96, Home 93/100/100, Search 93/100/100, Stats desktop 100/100/100 (Perf/A11y/BP; Login BP 96 is the expected 401 from `/api/me` while logged out), and demo mode works fully logged out with zero network calls (tested). Added: demo mode + banner, mobile layout (tab bar, mini player, full-screen Now Playing, quick picks), keyboard shortcuts, album-art color, Spotify attribution, PWA manifest, axe-clean a11y, route-level code splitting (main JS 415 → 288 kB). Design deviations for WCAG AA: `--color-text-muted` → `#84849A`, primary buttons use new `--color-accent-strong`, playing-row text uses `accent-hover` — Figma should be updated to match
+- 2026-10-31 — Phase 7 done — "Done when" met: coverage src/spotify 95% stmts / 86% branches, src/routes 94% / 75% (thresholds enforced in `server/vitest.config.ts`); `npm run check:secrets` finds nothing in the client build (verified it fails on a planted secret); logging test proves no tokens/cookies/OAuth codes/client secret in logs. Added Spotify client unit tests (refresh-once, 5xx backoff 250/500 ms then 502, 429 Retry-After/RATE_LIMITED/QUOTA_EXCEEDED, invalid_grant session destroy, refresh dedupe, PKCE), rate limiting + 16 KB body cap, strict CSP (checked in a real browser), pino logging. 251 tests total
