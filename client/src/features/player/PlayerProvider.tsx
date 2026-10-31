@@ -12,6 +12,7 @@ import { playerErrorMessage } from './errors';
 import { apiStateToSnapshot, NEXT_REPEAT, sdkStateToSnapshot } from './mappers';
 import { PlayerControlsContext, type PlayerControls } from './playerContext';
 import { loadSpotifySdk } from './sdk';
+import { useDemo } from '@/features/demo/demoStore';
 
 const PLAYER_NAME = 'Pulse Player (Web)';
 const REMOTE_POLL_MS = 5000;
@@ -25,7 +26,9 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const playerRef = useRef<Spotify.Player | null>(null);
   const authenticated = status === 'authenticated';
   const accountBlocked = usePlayerStore((s) => s.accountBlocked);
-  const sdkEnabled = authenticated && playbackAllowed && !accountBlocked;
+  const demo = useDemo();
+  // Demo mode simulates playback through the (demo) Web API instead of the real SDK.
+  const sdkEnabled = authenticated && playbackAllowed && !accountBlocked && !demo;
 
   const handleError = useCallback(
     (err: unknown) => {

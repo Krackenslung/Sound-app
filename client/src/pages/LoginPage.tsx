@@ -13,6 +13,7 @@ import { buttonClasses } from '@/components/ui/buttonStyles';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/features/auth/authContext';
 import { FullScreenLoader } from '@/features/auth/ProtectedRoute';
+import { useDemoActions } from '@/features/demo/useDemoActions';
 import { cn } from '@/lib/cn';
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -52,6 +53,7 @@ const COLLAGE = [
 // Figma: 01 · Login (node 5:83)
 export function LoginPage() {
   const { status } = useAuth();
+  const { enterDemo } = useDemoActions();
   const [params] = useSearchParams();
   const errorKey = params.get('error');
   const error = errorKey ? (ERROR_MESSAGES[errorKey] ?? 'Something went wrong logging in.') : null;
@@ -130,7 +132,7 @@ export function LoginPage() {
             <a href={LOGIN_URL} className={buttonClasses('primary', 'w-full')}>
               Continue with Spotify
             </a>
-            <Button variant="secondary" className="w-full" disabled title="Coming soon">
+            <Button variant="secondary" className="w-full" onClick={enterDemo}>
               Explore demo mode
             </Button>
           </div>
