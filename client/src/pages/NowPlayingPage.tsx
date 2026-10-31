@@ -8,6 +8,7 @@ import { useIsMobile } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/Button';
 import { buttonClasses } from '@/components/ui/buttonStyles';
 import { EntityLinks } from '@/components/ui/EntityLinks';
+import { OpenInSpotify } from '@/components/brand/OpenInSpotify';
 import { albumPath, artistPath } from '@/lib/spotifyUri';
 import { usePlayerStore } from '@/store/playerStore';
 import { useUiStore } from '@/store/uiStore';
@@ -72,6 +73,7 @@ export function NowPlayingPage() {
           >
             <MoreHorizontal aria-hidden className="size-5" />
           </button>
+          <OpenInSpotify uri={track.uri} iconOnly className="ml-1" />
         </div>
       </section>
 

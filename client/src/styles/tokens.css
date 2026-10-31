@@ -19,6 +19,8 @@
   --color-art: #2e2a7a;
   --color-art-glow: #8b5cf6;
   --color-on-art-track: rgb(255 255 255 / 0.2);
+  /* Spotify brand green — only for the Spotify logo (attribution), per Spotify's brand guidelines. */
+  --color-spotify-green: #1ed760;
   /* Demo banner (Figma 8:1322): warning at 12% fill / 40% border. */
   --color-warning-soft: rgb(251 191 36 / 0.12);
   --color-warning-line: rgb(251 191 36 / 0.4);

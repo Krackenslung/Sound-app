@@ -7,6 +7,7 @@ import { BreakdownCard } from '@/components/stats/BreakdownCard';
 import { StatTile } from '@/components/stats/StatTile';
 import { TrackRow } from '@/components/tracks/TrackRow';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { SpotifyIcon } from '@/components/brand/SpotifyIcon';
 import { usePlayerControls } from '@/features/player/playerContext';
 import {
   artistBreakdown,
@@ -77,7 +78,10 @@ export function StatsPage() {
       <header className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex flex-col gap-1.5">
           <h1 className="text-h1">Your listening stats</h1>
-          <p className="text-text-secondary">Based on your Spotify top items.</p>
+          <p className="flex items-center gap-2 text-text-secondary">
+            Based on your Spotify top items
+            <SpotifyIcon title="Spotify" />
+          </p>
         </div>
         <SegmentedControl
           label="Time range"

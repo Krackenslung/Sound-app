@@ -23,6 +23,7 @@ export default {
       scrim: v('color-scrim'),
       'chart-cyan': v('color-chart-cyan'),
       art: v('color-art'),
+      'spotify-green': v('color-spotify-green'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
       'warning-soft': v('color-warning-soft'),

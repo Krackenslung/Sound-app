@@ -7,6 +7,7 @@ import { TrackTableHeader } from '@/components/tracks/TrackTableHeader';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { LoadMore } from '@/components/ui/LoadMore';
+import { OpenInSpotify } from '@/components/brand/OpenInSpotify';
 import { useAuth } from '@/features/auth/authContext';
 import { useLikedTracks, useMyPlaylists, useSavedAlbums } from '@/features/library/queries';
 import { usePlayerControls } from '@/features/player/playerContext';
@@ -108,6 +109,7 @@ function LikedSongs() {
         >
           <MoreHorizontal aria-hidden className="size-6" />
         </button>
+        {collectionUri && <OpenInSpotify uri={collectionUri} iconOnly />}
         <div className="flex-1" />
         <Button
           variant="secondary"

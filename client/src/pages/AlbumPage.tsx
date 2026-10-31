@@ -6,6 +6,7 @@ import { isApiError } from '@/api/client';
 import { Artwork } from '@/components/media/Artwork';
 import { TrackRow } from '@/components/tracks/TrackRow';
 import { Button } from '@/components/ui/Button';
+import { OpenInSpotify } from '@/components/brand/OpenInSpotify';
 import { EntityLinks } from '@/components/ui/EntityLinks';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { useTrackMenu } from '@/features/tracks/useTrackMenu';
@@ -69,7 +70,7 @@ export function AlbumPage() {
             </span>
             {meta.map((m) => ` · ${m}`)}
           </p>
-          <div className="pt-2">
+          <div className="flex flex-wrap items-center gap-3 pt-2">
             <Button
               onClick={() => controls.playContext(a.uri)}
               disabled={!controls.canControl}
@@ -78,6 +79,7 @@ export function AlbumPage() {
             >
               Play
             </Button>
+            <OpenInSpotify uri={a.uri} />
           </div>
         </div>
       </header>

@@ -18,6 +18,7 @@ import { LikeButton } from '@/components/tracks/LikeButton';
 import { Slider } from '@/components/ui/Slider';
 import { EntityLinks } from '@/components/ui/EntityLinks';
 import { DevicePicker } from './DevicePicker';
+import { OpenInSpotify } from '@/components/brand/OpenInSpotify';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { usePlaybackPosition } from '@/hooks/usePlaybackPosition';
 import { cn } from '@/lib/cn';
@@ -107,6 +108,7 @@ export function PlayerBar() {
               </span>
             </div>
             <LikeButton uri={track.uri} title={track.name} iconClassName="size-5" />
+            <OpenInSpotify uri={track.uri} iconOnly />
           </>
         ) : (
           <>

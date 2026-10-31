@@ -5,6 +5,7 @@ import { Artwork } from '@/components/media/Artwork';
 import { TrackRow } from '@/components/tracks/TrackRow';
 import { TrackTableHeader } from '@/components/tracks/TrackTableHeader';
 import { LoadMore } from '@/components/ui/LoadMore';
+import { OpenInSpotify } from '@/components/brand/OpenInSpotify';
 import { usePlaylist, usePlaylistItems, useRemoveFromPlaylist } from '@/features/library/queries';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { useTrackMenu } from '@/features/tracks/useTrackMenu';
@@ -81,6 +82,7 @@ export function PlaylistPage() {
         >
           <Shuffle aria-hidden className="size-6" />
         </button>
+        <OpenInSpotify uri={p.uri} className="ml-auto" />
       </div>
 
       <section aria-label="Playlist tracks" className="flex flex-col gap-1">

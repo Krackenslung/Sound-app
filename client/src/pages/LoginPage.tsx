@@ -15,6 +15,7 @@ import { useAuth } from '@/features/auth/authContext';
 import { FullScreenLoader } from '@/features/auth/ProtectedRoute';
 import { useDemoActions } from '@/features/demo/useDemoActions';
 import { cn } from '@/lib/cn';
+import { SpotifyIcon } from '@/components/brand/SpotifyIcon';
 
 const ERROR_MESSAGES: Record<string, string> = {
   access_denied: 'Spotify login was cancelled.',
@@ -143,7 +144,10 @@ export function LoginPage() {
             development.
           </p>
 
-          <p className="mt-9 text-caption text-text-muted">Content and data provided by Spotify.</p>
+          <p className="mt-9 flex items-center gap-2 text-caption text-text-muted">
+            Content and data provided by
+            <SpotifyIcon title="Spotify" />
+          </p>
         </main>
       </div>
     </div>
