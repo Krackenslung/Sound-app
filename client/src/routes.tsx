@@ -6,6 +6,8 @@ import { NowPlayingPage } from '@/pages/NowPlayingPage';
 import { SearchPage } from '@/pages/SearchPage';
 import { AlbumPage } from '@/pages/AlbumPage';
 import { ArtistPage } from '@/pages/ArtistPage';
+import { LibraryPage } from '@/pages/LibraryPage';
+import { PlaylistPage } from '@/pages/PlaylistPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { PlaceholderPage } from '@/pages/PlaceholderPage';
 import { ComponentsPreviewPage } from '@/pages/ComponentsPreviewPage';
@@ -23,7 +25,8 @@ export const routes: RouteObject[] = [
           { path: 'search', element: <SearchPage /> },
           { path: 'album/:id', element: <AlbumPage /> },
           { path: 'artist/:id', element: <ArtistPage /> },
-          { path: 'library', element: <PlaceholderPage title="Library" /> },
+          { path: 'library', element: <LibraryPage /> },
+          { path: 'playlist/:id', element: <PlaylistPage /> },
           { path: 'stats', element: <PlaceholderPage title="Stats" /> },
           { path: '*', element: <PlaceholderPage title="Not found" /> },
         ],
