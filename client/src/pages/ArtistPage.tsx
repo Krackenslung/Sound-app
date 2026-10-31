@@ -53,7 +53,7 @@ export function ArtistPage() {
         <div className="flex min-w-0 flex-col gap-3">
           <p className="text-overline uppercase text-accent-hover">Artist</p>
           <h1 className="line-clamp-2 text-display">{a.name}</h1>
-          {a.genres.length > 0 && (
+          {a.genres && a.genres.length > 0 && (
             <p className="text-body capitalize text-text-secondary">
               {a.genres.slice(0, 3).join(' · ')}
             </p>

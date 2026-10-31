@@ -55,7 +55,8 @@ export interface Artist {
   uri: string;
   name: string;
   images: Image[];
-  genres: string[];
+  /** `null` when Spotify omits genres (Development Mode apps after Feb 2026). */
+  genres: string[] | null;
 }
 
 export interface PlaylistSummary {
