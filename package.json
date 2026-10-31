@@ -18,7 +18,9 @@
     "typecheck": "npm run typecheck -w client && npm run typecheck -w server",
     "test": "npm test -w client && npm test -w server",
     "build": "npm run build -w client && npm run build -w server",
-    "start": "npm start -w server"
+    "start": "npm start -w server",
+    "test:coverage": "npm run test:coverage -w server",
+    "check:secrets": "node scripts/check-secrets.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
