@@ -75,7 +75,7 @@ Define these as CSS variables in `client/src/styles/tokens.css` and map them in 
 | `--color-border` | `#2B2B3A` | dividers, outlines |
 | `--color-text-primary` | `#F4F4F8` | main text, icons |
 | `--color-text-secondary` | `#A1A1B5` | artist names, metadata |
-| `--color-text-muted` | `#6B6B80` | overlines, table headers |
+| `--color-text-muted` | `#84849A` | overlines, table headers — was `#6B6B80` in Figma (3.5:1); raised in Phase 6 for WCAG AA. **Update Figma.** |
 | `--color-accent` | `#8B5CF6` | primary buttons, progress fill, playing state |
 | `--color-accent-hover` | `#A78BFA` | hover, accent text on dark |
 | `--color-accent-2` | `#F472B6` | liked (heart) state |
@@ -83,6 +83,9 @@ Define these as CSS variables in `client/src/styles/tokens.css` and map them in 
 | `--color-success` | `#34D399` | success toasts |
 | `--color-on-accent` | `#FFFFFF` | text/icons on accent or gradient fills (present in Figma, added in Phase 0) |
 | `--color-accent-soft` | accent @ 15% | device chip, active device row (from Figma `6:323`, added in Phase 2) |
+| `--color-accent-strong` | `#7F4FF0` (hover `#6F42E0`) | primary button fill — white on `#8B5CF6` is only 4.23:1 (added in Phase 6). **Update Figma.** |
+| `--color-art` / `--color-art-glow` | `#2E2A7A` / accent (defaults) | set at runtime from the album art (mini player, mobile Now Playing) |
+| `--color-spotify-green` | `#1ED760` | Spotify logo only (attribution) |
 
 | Text style | Size / line height | Weight | Letter spacing |
 |---|---|---|---|
@@ -270,15 +273,15 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 6 — Polish & demo mode
 
-- [ ] **Demo mode**: if not logged in or the API returns the "user not registered" 403, offer "Try demo" — serves `fixtures/*.json` through the same client API layer (flag in a context, no real API calls)
-- [ ] Keyboard shortcuts: Space play/pause, ←/→ seek ±10 s, Shift+←/→ prev/next, `/` focus search
-- [ ] Dynamic accent color extracted from the album art
-- [ ] Demo banner matching Figma `8:1320`
-- [ ] Responsive layout < 768px matching Figma `8:1250` and `8:1320`: sidebar → bottom tab bar, PlayerBar → mini player, full-screen Now Playing
-- [ ] Skeleton loaders, empty/error states in the same visual style
-- [ ] PWA manifest + icons, installable
-- [ ] Accessibility pass: labels on icon buttons, focus rings, contrast
-- [ ] Spotify attribution/logo per branding guidelines
+- [x] **Demo mode**: if not logged in or the API returns the "user not registered" 403, offer "Try demo" — serves `fixtures/*.json` through the same client API layer (flag in a context, no real API calls) — `api()` routes to an in-browser backend (`features/demo/demoBackend.ts`, lazy-loaded) with simulated playback on a "Demo player" device; `/?demo=1` opens it directly
+- [x] Keyboard shortcuts: Space play/pause, ←/→ seek ±10 s, Shift+←/→ prev/next, `/` focus search
+- [x] Dynamic accent color extracted from the album art — sets `--color-art`/`--color-art-glow` (mini player, mobile Now Playing gradient, desktop art glow); darkened until secondary text keeps ≥ 4.5:1
+- [x] Demo banner matching Figma `8:1320`
+- [x] Responsive layout < 768px matching Figma `8:1250` and `8:1320`: sidebar → bottom tab bar, PlayerBar → mini player, full-screen Now Playing
+- [x] Skeleton loaders, empty/error states in the same visual style
+- [x] PWA manifest + icons, installable (manifest + 192/512/maskable/apple-touch icons; no service worker — current Chrome doesn't require one to install)
+- [x] Accessibility pass: labels on icon buttons, focus rings, contrast — axe-core clean (WCAG 2.1 AA) on all main pages at 1440 and 390 px; required raising `--color-text-muted` and adding `--color-accent-strong` (see tokens)
+- [x] Spotify attribution/logo per branding guidelines — official icon (Spotify Green, ≥ 21px) + "Open Spotify" links on album/artist/playlist/Now Playing/Liked Songs, "Open in Spotify" in track menus, credit on Login and Stats; hidden in demo mode (sample IDs)
 
 **Done when:** Lighthouse ≥ 90 for Performance, Accessibility and Best Practices; demo mode works fully logged out.
 
@@ -319,3 +322,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 3 code complete; "Done when" (search → play → queue → move playback to phone) still needs a real account — search (limit 10, per-type infinite "Load more"), top result + songs + albums, track menu (add to queue / go to album / go to artist), queue panel from `/me/player/queue`, device picker popover (opens automatically on `NO_ACTIVE_DEVICE`), album + artist pages; `product` missing from `/me` is now treated as "unknown" instead of "free" after reports it was removed in the Feb 2026 changes
 - 2026-10-31 — Phase 4 code complete; "Done when" (like here → shows in Spotify; playlist created here → appears there) still needs a real account — Library page (tabs, Liked Songs hero, play/shuffle, track table with header), saved albums, my playlists + playlist page, create playlist dialog, add to / remove from playlist, sidebar playlist list, optimistic updates with rollback (like/unlike incl. the Liked Songs list, create, add, remove); endpoint details confirmed via search because developer.spotify.com is still blocked; `GET /me/tracks`/`/me/albums` are deprecated, so the UI degrades gracefully if Spotify refuses them; "Create monthly playlist" button is shown but disabled until Phase 5
 - 2026-10-31 — Phase 5 code complete; "Done when" (Stats renders for a real account; generator creates a correct playlist) still needs a real account — Stats page from frame 7:1077 (summary tiles, top artists, top tracks, breakdown card, recently played), `time_range` segmented control in the URL, monthly playlist dialog on Library with per-month counts; developer reports say Feb 2026 removed artist `genres` for Development Mode apps, so genre tiles/breakdown fall back to artist-based stats when no genres come back (tiles still only show API-provided values); breakdown is HTML/CSS bars per Figma instead of Recharts
+- 2026-10-31 — Phase 6 done — "Done when" met locally on the production build: Lighthouse (mobile) Login 98/100/96, Home 93/100/100, Search 93/100/100, Stats desktop 100/100/100 (Perf/A11y/BP; Login BP 96 is the expected 401 from `/api/me` while logged out), and demo mode works fully logged out with zero network calls (tested). Added: demo mode + banner, mobile layout (tab bar, mini player, full-screen Now Playing, quick picks), keyboard shortcuts, album-art color, Spotify attribution, PWA manifest, axe-clean a11y, route-level code splitting (main JS 415 → 288 kB). Design deviations for WCAG AA: `--color-text-muted` → `#84849A`, primary buttons use new `--color-accent-strong`, playing-row text uses `accent-hover` — Figma should be updated to match
