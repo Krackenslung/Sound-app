@@ -37,6 +37,15 @@ export default {
         caption: ['12px', { lineHeight: '16px', letterSpacing: '0', fontWeight: '500' }],
         overline: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '700' }],
       },
+      keyframes: {
+        eq: {
+          '0%, 100%': { transform: 'scaleY(0.45)' },
+          '50%': { transform: 'scaleY(1)' },
+        },
+      },
+      animation: {
+        eq: 'eq 0.9s ease-in-out infinite',
+      },
       boxShadow: {
         art: v('shadow-art'),
         popover: v('shadow-popover'),

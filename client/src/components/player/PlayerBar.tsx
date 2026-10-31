@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import type { LucideIcon } from 'lucide-react';
 import {
   ListMusic,
@@ -9,7 +9,6 @@ import {
   Shuffle,
   SkipBack,
   SkipForward,
-  Speaker,
   Volume1,
   Volume2,
   VolumeX,
@@ -17,10 +16,13 @@ import {
 import { Artwork } from '@/components/media/Artwork';
 import { LikeButton } from '@/components/tracks/LikeButton';
 import { Slider } from '@/components/ui/Slider';
+import { EntityLinks } from '@/components/ui/EntityLinks';
+import { DevicePicker } from './DevicePicker';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { usePlaybackPosition } from '@/hooks/usePlaybackPosition';
 import { cn } from '@/lib/cn';
-import { artistNames, formatDuration } from '@/lib/format';
+import { formatDuration } from '@/lib/format';
+import { artistPath } from '@/lib/spotifyUri';
 import { usePlayerStore } from '@/store/playerStore';
 
 function IconButton({
@@ -71,6 +73,9 @@ export function PlayerBar() {
   const volume = usePlayerStore((s) => s.volume);
   const activeDevice = usePlayerStore((s) => s.activeDevice);
   const position = usePlaybackPosition();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const onNowPlaying = location.pathname === '/now-playing';
 
   const can = controls.canControl;
   const hasTrack = Boolean(track);
@@ -98,7 +103,7 @@ export function PlayerBar() {
                 {track.name}
               </Link>
               <span className="truncate text-caption text-text-secondary">
-                {artistNames(track.artists)}
+                <EntityLinks items={track.artists} pathFor={artistPath} />
               </span>
             </div>
             <LikeButton uri={track.uri} title={track.name} iconClassName="size-5" />
@@ -192,18 +197,11 @@ export function PlayerBar() {
         <IconButton
           icon={ListMusic}
           label="Queue"
-          disabled
-          className="size-5 opacity-75"
-          title="Queue"
+          active={onNowPlaying}
+          onClick={() => (onNowPlaying ? navigate(-1) : navigate('/now-playing'))}
+          className={cn('size-5', !onNowPlaying && 'opacity-75')}
         />
-        <IconButton
-          icon={Speaker}
-          label="Devices"
-          disabled
-          active={Boolean(activeDevice && !activeDevice.isLocal)}
-          className="size-5 opacity-75"
-          title={activeDevice ? `Playing on ${activeDevice.name}` : 'Devices'}
-        />
+        <DevicePicker />
         <IconButton
           icon={VolumeIcon}
           label={volume === 0 ? 'Unmute' : 'Mute'}
