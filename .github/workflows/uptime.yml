@@ -1,0 +1,21 @@
+name: Uptime
+
+on:
+  schedule:
+    - cron: '7,22,37,52 * * * *' # every 15 minutes (off the hour)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: GET /api/health
+        env:
+          DOMAIN: ${{ vars.PULSE_DOMAIN || 'music.gallardoapps.com' }}
+        run: |
+          # A failed run triggers GitHub's workflow-failure notification.
+          curl -fsS --max-time 10 --retry 3 --retry-delay 10 --retry-all-errors "https://$DOMAIN/api/health" \
+            | grep -q '"ok":true'
