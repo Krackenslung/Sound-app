@@ -7,6 +7,8 @@ import { TrackRow } from '@/components/tracks/TrackRow';
 import { useAuth } from '@/features/auth/authContext';
 import { usePlayerControls } from '@/features/player/playerContext';
 import { artistNames } from '@/lib/format';
+import { albumPath } from '@/lib/spotifyUri';
+import { useTrackMenu } from '@/features/tracks/useTrackMenu';
 import { usePlayerStore } from '@/store/playerStore';
 
 const RECENT_CARDS = 5; // keep in sync with recentAlbums' default
@@ -27,6 +29,7 @@ function Notice({ children }: { children: React.ReactNode }) {
 export function HomePage() {
   const { user } = useAuth();
   const controls = usePlayerControls();
+  const trackMenu = useTrackMenu();
   const currentUri = usePlayerStore((s) => s.track?.uri);
   const firstName = user?.displayName.split(/\s+/)[0];
 
@@ -76,6 +79,7 @@ export function HomePage() {
                 subtitle={artistNames(album.artists)}
                 images={album.images}
                 seed={album.uri}
+                to={albumPath(album.uri) ?? undefined}
                 onPlay={() => controls.playContext(album.uri)}
               />
             ))}
@@ -109,6 +113,7 @@ export function HomePage() {
                 images={t.album.images}
                 playing={t.uri === currentUri}
                 onPlay={() => controls.playTracks(topUris, i)}
+                menuItems={trackMenu(t)}
               />
             ))}
           </div>
