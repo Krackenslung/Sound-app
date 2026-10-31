@@ -15,6 +15,9 @@ export interface PlayerControls {
   playTracks: (uris: string[], index?: number) => void;
   /** Play an album/playlist/artist context, optionally starting at a track. */
   playContext: (contextUri: string, offsetUri?: string) => void;
+  addToQueue: (uri: string) => void;
+  /** Move playback to another device, keeping the current play/pause state. */
+  transferTo: (deviceId: string) => void;
 }
 
 export const PlayerControlsContext = createContext<PlayerControls | null>(null);

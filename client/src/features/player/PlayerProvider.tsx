@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth/authContext';
 import { ME_QUERY_KEY } from '@/lib/queryClient';
 import { usePlayerStore } from '@/store/playerStore';
 import { toast } from '@/store/toastStore';
+import { useUiStore } from '@/store/uiStore';
 import { playerErrorMessage } from './errors';
 import { apiStateToSnapshot, NEXT_REPEAT, sdkStateToSnapshot } from './mappers';
 import { PlayerControlsContext, type PlayerControls } from './playerContext';
@@ -19,17 +20,21 @@ const REFRESH_AFTER_COMMAND_MS = 700;
 const store = () => usePlayerStore.getState();
 
 export function PlayerProvider({ children }: { children: ReactNode }) {
-  const { status, isPremium } = useAuth();
+  const { status, playbackAllowed } = useAuth();
   const queryClient = useQueryClient();
   const playerRef = useRef<Spotify.Player | null>(null);
   const authenticated = status === 'authenticated';
-  const sdkEnabled = authenticated && isPremium;
+  const accountBlocked = usePlayerStore((s) => s.accountBlocked);
+  const sdkEnabled = authenticated && playbackAllowed && !accountBlocked;
 
   const handleError = useCallback(
     (err: unknown) => {
       if (isApiError(err, 401)) {
         queryClient.setQueryData(ME_QUERY_KEY, null);
         return;
+      }
+      if (isApiError(err) && err.code === 'NO_ACTIVE_DEVICE') {
+        useUiStore.getState().setDevicePickerOpen(true);
       }
       toast(playerErrorMessage(err));
     },
@@ -141,6 +146,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         });
         player.addListener('account_error', () => {
           store().setSdkStatus('error', 'Playback requires Spotify Premium.');
+          usePlayerStore.setState({ accountBlocked: true });
           toast('Playback requires Spotify Premium.');
         });
         player.addListener('playback_error', ({ message }) => {
@@ -161,7 +167,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
       document.removeEventListener('keydown', activate, { capture: true });
       player?.disconnect();
       playerRef.current = null;
+      const { accountBlocked: blocked, sdkError } = store();
       store().reset();
+      // A blocked account stays blocked (and keeps its message) for the rest of the session.
+      if (blocked) usePlayerStore.setState({ accountBlocked: true, sdkStatus: 'error', sdkError });
     };
   }, [sdkEnabled, queryClient, handleError, refreshRemote]);
 
@@ -195,7 +204,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     };
 
     return {
-      canControl: authenticated && isPremium,
+      canControl: authenticated && playbackAllowed && !accountBlocked,
 
       togglePlay: () => {
         const p = local();
@@ -249,8 +258,23 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
           }),
         );
       },
+      addToQueue: (uri) => {
+        run(
+          async () => {
+            await playerApi.addToQueue(uri, target());
+            toast('Added to queue', 'success');
+            void queryClient.invalidateQueries({ queryKey: ['player', 'queue'] });
+          },
+          { refresh: false },
+        );
+      },
+      transferTo: (deviceId) => {
+        if (deviceId === store().deviceId) void playerRef.current?.activateElement();
+        const play = store().isPlaying;
+        run(() => playerApi.transfer(deviceId, play));
+      },
     };
-  }, [authenticated, isPremium, handleError, refreshSoon]);
+  }, [authenticated, playbackAllowed, accountBlocked, handleError, refreshSoon, queryClient]);
 
   return (
     <PlayerControlsContext.Provider value={controls}>{children}</PlayerControlsContext.Provider>

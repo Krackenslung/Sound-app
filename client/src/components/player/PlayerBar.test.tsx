@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router';
 import { PlayerControlsContext, type PlayerControls } from '@/features/player/playerContext';
+import { mockControls } from '@/test/mockControls';
 import { apiTrackToPlayerTrack } from '@/features/player/mappers';
 import { createQueryClient } from '@/lib/queryClient';
 import { usePlayerStore } from '@/store/playerStore';
@@ -15,19 +16,7 @@ function setup(overrides: Partial<PlayerControls> = {}) {
     'fetch',
     vi.fn(async () => json({ 'spotify:track:t1': false })),
   );
-  const controls: PlayerControls = {
-    canControl: true,
-    togglePlay: vi.fn(),
-    next: vi.fn(),
-    previous: vi.fn(),
-    seek: vi.fn(),
-    setVolume: vi.fn(),
-    toggleShuffle: vi.fn(),
-    cycleRepeat: vi.fn(),
-    playTracks: vi.fn(),
-    playContext: vi.fn(),
-    ...overrides,
-  };
+  const controls = mockControls(overrides);
   render(
     <QueryClientProvider client={createQueryClient()}>
       <MemoryRouter>

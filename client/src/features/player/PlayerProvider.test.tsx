@@ -139,8 +139,12 @@ describe('PlayerProvider + Web Playback SDK', () => {
     renderApp('/');
     await waitFor(() => expect(FakePlayer.last?.connect).toHaveBeenCalled());
     await FakePlayer.last!.emit('account_error', { message: 'premium' });
-    expect(await screen.findByText('Playback requires Spotify Premium.')).toBeInTheDocument();
-    expect(usePlayerStore.getState().sdkStatus).toBe('error');
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Playback requires Spotify Premium.',
+    );
+    // Banner shows too, and controls are disabled.
+    expect(screen.getByText(/You can still browse/)).toBeInTheDocument();
+    expect(usePlayerStore.getState()).toMatchObject({ sdkStatus: 'error', accountBlocked: true });
   });
 
   it('does not load the SDK for non-Premium users', async () => {
@@ -149,5 +153,17 @@ describe('PlayerProvider + Web Playback SDK', () => {
     renderApp('/');
     await screen.findByText('Playback requires Spotify Premium.');
     expect(loadSpotifySdk).not.toHaveBeenCalled();
+  });
+});
+
+describe('unknown plan (product missing from /me)', () => {
+  it('still loads the SDK and shows no Premium banner', async () => {
+    vi.stubGlobal('Spotify', { Player: FakePlayer });
+    vi.mocked(loadSpotifySdk).mockResolvedValueOnce();
+    mockApi({ me: { ...premiumUser, product: null } });
+    renderApp('/');
+    await waitFor(() => expect(FakePlayer.last?.connect).toHaveBeenCalled());
+    expect(screen.queryByText('Playback requires Spotify Premium.')).not.toBeInTheDocument();
+    expect(screen.getByText('Spotify account')).toBeInTheDocument();
   });
 });

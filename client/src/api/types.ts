@@ -39,3 +39,53 @@ export interface PlaybackState {
   contextUri: string | null;
   track: Track | null;
 }
+
+export interface AlbumSummary extends AlbumRef {
+  albumType: string | null;
+  releaseDate: string | null;
+  totalTracks: number | null;
+}
+
+export interface Album extends AlbumSummary {
+  tracks: Track[];
+}
+
+export interface Artist {
+  id: string;
+  uri: string;
+  name: string;
+  images: Image[];
+  genres: string[];
+}
+
+export interface PlaylistSummary {
+  id: string;
+  uri: string;
+  name: string;
+  description: string | null;
+  images: Image[];
+  ownerId: string | null;
+  ownerName: string | null;
+  collaborative: boolean;
+  totalItems: number | null;
+}
+
+export interface Device {
+  id: string | null;
+  name: string;
+  type: string;
+  isActive: boolean;
+  volumePercent: number | null;
+}
+
+export interface OffsetPage<T> {
+  items: T[];
+  offset: number;
+  total: number | null;
+  nextOffset: number | null;
+}
+
+export interface QueueState {
+  currentlyPlaying: Track | null;
+  queue: Track[];
+}

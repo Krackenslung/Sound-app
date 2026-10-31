@@ -1,5 +1,5 @@
 import { api } from './client';
-import type { PlaybackState, RepeatMode } from './types';
+import type { Device, PlaybackState, QueueState, RepeatMode } from './types';
 
 const put = (path: string, body: object = {}) =>
   api<void>(`/player${path}`, { method: 'PUT', body: JSON.stringify(body) });
@@ -16,6 +16,9 @@ export interface PlayRequest {
 
 export const playerApi = {
   getState: () => api<PlaybackState | null>('/player'),
+  devices: () => api<{ devices: Device[] }>('/player/devices').then((r) => r.devices),
+  queue: () => api<QueueState>('/player/queue'),
+  addToQueue: (uri: string, deviceId?: string) => post('/queue', { uri, deviceId }),
   transfer: (deviceId: string, play = false) => put('/transfer', { deviceId, play }),
   play: (req: PlayRequest = {}) => put('/play', req),
   pause: (deviceId?: string) => put('/pause', { deviceId }),
