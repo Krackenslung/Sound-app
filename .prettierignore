@@ -1,0 +1,6 @@
+node_modules
+dist
+server/public
+coverage
+package-lock.json
+CLAUDE.md
