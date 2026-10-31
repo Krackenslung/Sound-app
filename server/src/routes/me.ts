@@ -2,9 +2,9 @@ import { Router } from 'express';
 import type { AppConfig } from '../config.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { createSpotifyClient } from '../spotify/spotifyClient.js';
-import type { SpotifyPaging, SpotifyTrack, SpotifyUser } from '../spotify/types.js';
+import type { SpotifyArtist, SpotifyPaging, SpotifyTrack, SpotifyUser } from '../spotify/types.js';
 import { enumParam, intParam } from '../middleware/validate.js';
-import { toTrack, type TrackDto } from '../spotify/mappers.js';
+import { toArtist, toTrack, type TrackDto } from '../spotify/mappers.js';
 
 export interface MeResponse {
   id: string;
@@ -55,6 +55,24 @@ export function createMeRouter(config: AppConfig) {
         `/me/top/tracks?time_range=${timeRange}&limit=${limit}`,
       );
       res.json({ items: page.items.map(toTrack) });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  router.get('/top/artists', requireAuth, async (req, res, next) => {
+    try {
+      const timeRange = enumParam(
+        req.query.time_range,
+        'time_range',
+        ['short_term', 'medium_term', 'long_term'] as const,
+        'short_term',
+      );
+      const limit = intParam(req.query.limit, { name: 'limit', min: 1, max: 50, fallback: 10 });
+      const page = await createSpotifyClient(req, config).request<SpotifyPaging<SpotifyArtist>>(
+        `/me/top/artists?time_range=${timeRange}&limit=${limit}`,
+      );
+      res.json({ items: page.items.map(toArtist) });
     } catch (err) {
       next(err);
     }

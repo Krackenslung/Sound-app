@@ -112,7 +112,8 @@ export interface ArtistDto {
   uri: string;
   name: string;
   images: ImageDto[];
-  genres: string[];
+  /** `null` when Spotify omits the field (reported removed for Development Mode apps, Feb 2026). */
+  genres: string[] | null;
 }
 
 export interface PlaylistSummaryDto {
@@ -157,7 +158,13 @@ export function toAlbum(a: SpotifyAlbumFull, tracks: Omit<SpotifyTrack, 'album'>
 }
 
 export function toArtist(a: SpotifyArtist): ArtistDto {
-  return { id: a.id, uri: a.uri, name: a.name, images: images(a.images), genres: a.genres ?? [] };
+  return {
+    id: a.id,
+    uri: a.uri,
+    name: a.name,
+    images: images(a.images),
+    genres: Array.isArray(a.genres) ? a.genres : null,
+  };
 }
 
 export function toPlaylistSummary(p: SpotifyPlaylistSummary): PlaylistSummaryDto {
