@@ -28,6 +28,8 @@ export default defineConfig({
     proxy: { '/api': { target: 'http://127.0.0.1:3001', changeOrigin: false } },
   },
   build: {
+    // Keep fonts as files: the CSP's font-src is 'self' (no data: URIs).
+    assetsInlineLimit: (file: string) => (/\.woff2?$/.test(file) ? false : undefined),
     outDir: '../server/public',
     emptyOutDir: true,
   },
