@@ -21,7 +21,7 @@ export function DemoBanner() {
       </div>
       <button
         type="button"
-        onClick={() => leaveDemo('spotify')}
+        onClick={() => void leaveDemo('spotify')}
         className="hidden shrink-0 rounded-full px-3 py-1.5 text-caption font-semibold text-warning hover:bg-warning-soft sm:block"
       >
         Log in with Spotify

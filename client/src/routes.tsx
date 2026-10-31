@@ -1,17 +1,10 @@
 import type { RouteObject } from 'react-router';
-import { AppShell } from '@/components/layout/AppShell';
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
-import { HomePage } from '@/pages/HomePage';
-import { NowPlayingPage } from '@/pages/NowPlayingPage';
-import { SearchPage } from '@/pages/SearchPage';
-import { AlbumPage } from '@/pages/AlbumPage';
-import { ArtistPage } from '@/pages/ArtistPage';
-import { LibraryPage } from '@/pages/LibraryPage';
-import { PlaylistPage } from '@/pages/PlaylistPage';
-import { StatsPage } from '@/pages/StatsPage';
 import { LoginPage } from '@/pages/LoginPage';
-import { PlaceholderPage } from '@/pages/PlaceholderPage';
-import { ComponentsPreviewPage } from '@/pages/ComponentsPreviewPage';
+
+// Route-level code splitting: the login page ships with just the core; the app shell and each page
+// load on demand (keeps the first load light — Lighthouse Performance target).
+const shell = async () => ({ Component: (await import('@/components/layout/AppShell')).AppShell });
 
 export const routes: RouteObject[] = [
   { path: 'login', element: <LoginPage /> },
@@ -19,17 +12,49 @@ export const routes: RouteObject[] = [
     element: <ProtectedRoute />,
     children: [
       {
-        element: <AppShell />,
+        lazy: shell,
         children: [
-          { index: true, element: <HomePage /> },
-          { path: 'now-playing', element: <NowPlayingPage /> },
-          { path: 'search', element: <SearchPage /> },
-          { path: 'album/:id', element: <AlbumPage /> },
-          { path: 'artist/:id', element: <ArtistPage /> },
-          { path: 'library', element: <LibraryPage /> },
-          { path: 'playlist/:id', element: <PlaylistPage /> },
-          { path: 'stats', element: <StatsPage /> },
-          { path: '*', element: <PlaceholderPage title="Not found" /> },
+          {
+            index: true,
+            lazy: async () => ({ Component: (await import('@/pages/HomePage')).HomePage }),
+          },
+          {
+            path: 'now-playing',
+            lazy: async () => ({
+              Component: (await import('@/pages/NowPlayingPage')).NowPlayingPage,
+            }),
+          },
+          {
+            path: 'search',
+            lazy: async () => ({ Component: (await import('@/pages/SearchPage')).SearchPage }),
+          },
+          {
+            path: 'album/:id',
+            lazy: async () => ({ Component: (await import('@/pages/AlbumPage')).AlbumPage }),
+          },
+          {
+            path: 'artist/:id',
+            lazy: async () => ({ Component: (await import('@/pages/ArtistPage')).ArtistPage }),
+          },
+          {
+            path: 'library',
+            lazy: async () => ({ Component: (await import('@/pages/LibraryPage')).LibraryPage }),
+          },
+          {
+            path: 'playlist/:id',
+            lazy: async () => ({ Component: (await import('@/pages/PlaylistPage')).PlaylistPage }),
+          },
+          {
+            path: 'stats',
+            lazy: async () => ({ Component: (await import('@/pages/StatsPage')).StatsPage }),
+          },
+          {
+            path: '*',
+            lazy: async () => {
+              const { PlaceholderPage } = await import('@/pages/PlaceholderPage');
+              return { Component: () => <PlaceholderPage title="Not found" /> };
+            },
+          },
         ],
       },
     ],
@@ -38,8 +63,15 @@ export const routes: RouteObject[] = [
   ...(import.meta.env.DEV
     ? [
         {
-          element: <AppShell />,
-          children: [{ path: 'dev/components', element: <ComponentsPreviewPage /> }],
+          lazy: shell,
+          children: [
+            {
+              path: 'dev/components',
+              lazy: async () => ({
+                Component: (await import('@/pages/ComponentsPreviewPage')).ComponentsPreviewPage,
+              }),
+            },
+          ],
         },
       ]
     : []),

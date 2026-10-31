@@ -1,5 +1,4 @@
 import { isDemo } from '@/features/demo/demoStore';
-import { demoRequest } from '@/features/demo/demoBackend';
 
 export class ApiError extends Error {
   constructor(
@@ -15,7 +14,8 @@ export class ApiError extends Error {
 
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   // Demo mode: answer from fixtures in the browser — never touch the network.
-  if (isDemo()) return demoRequest<T>(path, init);
+  // The demo backend (and its fixtures) is only downloaded when demo mode is on.
+  if (isDemo()) return (await import('@/features/demo/demoBackend')).demoRequest<T>(path, init);
   const res = await fetch(`/api${path}`, {
     credentials: 'same-origin',
     ...init,

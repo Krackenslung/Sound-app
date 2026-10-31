@@ -133,7 +133,7 @@ export function LoginPage() {
             <a href={LOGIN_URL} className={buttonClasses('primary', 'w-full')}>
               Continue with Spotify
             </a>
-            <Button variant="secondary" className="w-full" onClick={enterDemo}>
+            <Button variant="secondary" className="w-full" onClick={() => void enterDemo()}>
               Explore demo mode
             </Button>
           </div>
