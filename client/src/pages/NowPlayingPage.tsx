@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import { Artwork } from '@/components/media/Artwork';
 import { LikeButton } from '@/components/tracks/LikeButton';
 import { QueuePanel } from '@/components/player/QueuePanel';
+import { MobileNowPlaying } from '@/components/player/MobileNowPlaying';
+import { useIsMobile } from '@/hooks/useMediaQuery';
 import { Button } from '@/components/ui/Button';
 import { buttonClasses } from '@/components/ui/buttonStyles';
 import { EntityLinks } from '@/components/ui/EntityLinks';
@@ -14,6 +16,7 @@ import { useUiStore } from '@/store/uiStore';
 export function NowPlayingPage() {
   const track = usePlayerStore((s) => s.track);
   const openAddToPlaylist = useUiStore((s) => s.openAddToPlaylist);
+  const isMobile = useIsMobile();
 
   if (!track) {
     return (
@@ -27,9 +30,14 @@ export function NowPlayingPage() {
     );
   }
 
+  if (isMobile) return <MobileNowPlaying track={track} />;
+
   return (
-    <div className="flex min-h-0 flex-1 gap-12">
-      <section aria-label="Now playing" className="flex w-[440px] shrink-0 flex-col gap-6">
+    <div className="flex min-h-0 flex-1 flex-col gap-8 lg:flex-row lg:gap-12">
+      <section
+        aria-label="Now playing"
+        className="flex w-full max-w-[440px] shrink-0 flex-col gap-6"
+      >
         <Artwork
           images={track.album.images}
           size={440}

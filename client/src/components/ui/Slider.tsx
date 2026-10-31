@@ -7,7 +7,7 @@ export interface SliderProps {
   step?: number;
   label: string;
   valueText?: string;
-  variant?: 'accent' | 'neutral';
+  variant?: 'accent' | 'neutral' | 'on-art';
   disabled?: boolean;
   className?: string;
   /** Called once the user finishes dragging (or on each keyboard step). */
