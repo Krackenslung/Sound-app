@@ -22,3 +22,58 @@
     @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-bg;
   }
 }
+
+@layer components {
+  /* Range input styled like the Figma seek/volume bars (PlayerBar 4:111). */
+  .slider {
+    --pct: 0%;
+    --fill: var(--color-accent);
+    @apply h-3 w-full cursor-pointer appearance-none bg-transparent disabled:cursor-not-allowed;
+  }
+  .slider::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(
+      to right,
+      var(--fill) var(--pct),
+      var(--color-surface-hover) var(--pct)
+    );
+  }
+  .slider::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-surface-hover);
+  }
+  .slider::-moz-range-progress {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--fill);
+  }
+  .slider::-webkit-slider-thumb {
+    @apply appearance-none rounded-full bg-text-primary;
+    width: 12px;
+    height: 12px;
+    margin-top: -4px;
+  }
+  .slider::-moz-range-thumb {
+    @apply rounded-full border-0 bg-text-primary;
+    width: 12px;
+    height: 12px;
+  }
+  /* Volume: no knob until hover/focus. */
+  .slider[data-variant='neutral'] {
+    --fill: var(--color-text-primary);
+  }
+  .slider[data-variant='neutral']:not(:hover):not(:focus-visible)::-webkit-slider-thumb {
+    opacity: 0;
+  }
+  .slider[data-variant='neutral']:not(:hover):not(:focus-visible)::-moz-range-thumb {
+    opacity: 0;
+  }
+  .slider:disabled::-webkit-slider-thumb {
+    opacity: 0;
+  }
+  .slider:disabled::-moz-range-thumb {
+    opacity: 0;
+  }
+}

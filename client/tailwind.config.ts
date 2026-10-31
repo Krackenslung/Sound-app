@@ -19,6 +19,7 @@ export default {
       accent: v('color-accent'),
       'accent-hover': v('color-accent-hover'),
       'accent-2': v('color-accent-2'),
+      'accent-soft': v('color-accent-soft'),
       'on-accent': v('color-on-accent'),
       warning: v('color-warning'),
       success: v('color-success'),
@@ -35,6 +36,10 @@ export default {
         body: ['14px', { lineHeight: '20px', letterSpacing: '0' }],
         caption: ['12px', { lineHeight: '16px', letterSpacing: '0', fontWeight: '500' }],
         overline: ['11px', { lineHeight: '16px', letterSpacing: '0.08em', fontWeight: '700' }],
+      },
+      boxShadow: {
+        art: v('shadow-art'),
+        popover: v('shadow-popover'),
       },
       spacing: {
         sidebar: '248px',

@@ -14,6 +14,11 @@
   --color-on-accent: #ffffff;
   --color-warning: #fbbf24;
   --color-success: #34d399;
+  /* Accent at 15% — device chip / active device row (Figma 6:323). */
+  --color-accent-soft: rgb(139 92 246 / 0.15);
+  /* Glow under hero album art (Figma 6:323). */
+  --shadow-art: 0 24px 64px -8px rgb(139 92 246 / 0.35);
+  --shadow-popover: 0 16px 40px 0 rgb(0 0 0 / 0.5);
 
   color-scheme: dark;
 }
