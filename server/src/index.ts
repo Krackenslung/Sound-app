@@ -40,9 +40,6 @@ const server = app.listen(config.port, '0.0.0.0', () => {
     },
     'server listening',
   );
-  if (!config.spotify.clientId || !config.spotify.clientSecret) {
-    logger.warn('SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not set: Spotify login is disabled');
-  }
 });
 
 // Graceful shutdown for `docker compose up -d` / redeploys: stop accepting connections, let
