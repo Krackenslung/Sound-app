@@ -17,6 +17,7 @@
   /* Album-art color for the mini player and mobile Now Playing; set at runtime from the current
      track's artwork (Phase 6), defaulting to the indigo in Figma 8:1250 / 8:1399. */
   --color-art: #2e2a7a;
+  --color-art-glow: #8b5cf6;
   --color-on-art-track: rgb(255 255 255 / 0.2);
   /* Demo banner (Figma 8:1322): warning at 12% fill / 40% border. */
   --color-warning-soft: rgb(251 191 36 / 0.12);
@@ -26,7 +27,7 @@
   /* Accent at 15% — device chip / active device row (Figma 6:323). */
   --color-accent-soft: rgb(139 92 246 / 0.15);
   /* Glow under hero album art (Figma 6:323). */
-  --shadow-art: 0 24px 64px -8px rgb(139 92 246 / 0.35);
+  --shadow-art: 0 24px 64px -8px color-mix(in srgb, var(--color-art-glow) 35%, transparent);
   /* Modal backdrop: bg at 80%. */
   --color-scrim: rgb(11 11 16 / 0.8);
   /* Liked Songs hero (Figma 7:971): deep violet → surface. */

@@ -3,6 +3,8 @@ import { PlayerBar } from '@/components/player/PlayerBar';
 import { MiniPlayer } from '@/components/player/MiniPlayer';
 import { MobileTabBar } from './MobileTabBar';
 import { useIsMobile } from '@/hooks/useMediaQuery';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useArtColor } from '@/hooks/useArtColor';
 import { Toaster } from '@/components/ui/Toaster';
 import { PlayerProvider } from '@/features/player/PlayerProvider';
 import { AddToPlaylistDialog } from '@/features/playlists/AddToPlaylistDialog';
@@ -14,11 +16,18 @@ import { Sidebar } from './Sidebar';
 
 // Figma: 02 · Home (node 5:145) — Sidebar | Main (40px x / 32px y padding, 32px section gap), PlayerBar below.
 // Below 768px (Figma 8:1320): no sidebar; mini player + bottom tab bar; 16px gutters.
+function ShellEffects() {
+  useKeyboardShortcuts();
+  useArtColor();
+  return null;
+}
+
 export function AppShell() {
   // Render one layout, not both (avoids duplicate controls for screen readers).
   const isMobile = useIsMobile();
   return (
     <PlayerProvider>
+      <ShellEffects />
       <div className="flex h-full flex-col bg-bg">
         <div className="flex min-h-0 flex-1">
           {!isMobile && <Sidebar />}
