@@ -4,9 +4,18 @@
   "postCreateCommand": "npm install",
   "forwardPorts": [5173],
   "portsAttributes": {
-    "5173": { "label": "Pulse Player (dev)", "onAutoForward": "openBrowser" },
-    "3001": { "label": "API (proxied through 5173)", "onAutoForward": "ignore" },
-    "4173": { "label": "Production preview", "onAutoForward": "notify" }
+    "5173": {
+      "label": "Pulse Player (dev)",
+      "onAutoForward": "openBrowser"
+    },
+    "3001": {
+      "label": "API (proxied through 5173)",
+      "onAutoForward": "ignore"
+    },
+    "4173": {
+      "label": "Production preview",
+      "onAutoForward": "notify"
+    }
   },
   "secrets": {
     "SPOTIFY_CLIENT_ID": {
@@ -17,6 +26,9 @@
     },
     "SESSION_SECRET": {
       "description": "Optional: a long random string for signing session cookies (a dev default is used if empty)."
+    },
+    "SPOTIFY_REFRESH_TOKEN": {
+      "description": "Owner mode: your saved Spotify login, so the app opens as you with no login. Get it with `npm run owner-token`."
     }
   },
   "customizations": {

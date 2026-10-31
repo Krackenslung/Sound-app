@@ -57,7 +57,8 @@ export function UserCard() {
                     : 'Free'}
           </span>
         </div>
-        {user && (
+        {/* Owner mode always acts as this account: nothing to log out of. */}
+        {user && !user.ownerMode && (
           <button
             type="button"
             aria-label="Account menu"

@@ -10,7 +10,8 @@
     "start": "node --env-file-if-exists=.env dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "owner-token": "tsx --env-file-if-exists=.env src/cli/ownerToken.ts"
   },
   "dependencies": {
     "connect-redis": "^10.0.0",

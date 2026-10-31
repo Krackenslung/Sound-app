@@ -79,7 +79,7 @@ export function createAuthRouter(config: AppConfig) {
     try {
       const accessToken = await getValidAccessToken(req, config);
       res.set('Cache-Control', 'no-store');
-      res.json({ accessToken, expiresAt: req.session.tokens!.expiresAt });
+      res.json({ accessToken, expiresAt: req.session.tokens?.expiresAt ?? req.owner!.expiresAt });
     } catch (err) {
       next(err);
     }

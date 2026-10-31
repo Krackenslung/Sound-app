@@ -26,6 +26,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   not_allowlisted:
     "Your Spotify account isn't on this app's invite list yet. Explore demo mode in the meantime.",
   session_expired: 'Your session expired. Please log in again.',
+  owner_token_expired:
+    'Owner mode’s saved Spotify login expired (Spotify asks again every 6 months). Run `npm run owner-token` in the terminal, then restart the server.',
   session_not_saved:
     'You logged in with Spotify, but the session didn’t stick (cookies blocked?). Try again, or explore demo mode.',
   not_configured:

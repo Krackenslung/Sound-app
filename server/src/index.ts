@@ -40,6 +40,11 @@ const server = app.listen(config.port, '0.0.0.0', () => {
     },
     'server listening',
   );
+  if (config.ownerRefreshToken) {
+    logger.warn('owner mode ON: every visitor uses the owner’s Spotify account, no login');
+  } else if (process.env.SPOTIFY_REFRESH_TOKEN) {
+    logger.warn('SPOTIFY_REFRESH_TOKEN ignored in production unless OWNER_MODE=on');
+  }
 });
 
 // Graceful shutdown for `docker compose up -d` / redeploys: stop accepting connections, let

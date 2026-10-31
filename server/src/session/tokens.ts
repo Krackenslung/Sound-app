@@ -29,6 +29,7 @@ export async function getValidAccessToken(
   { force = false }: { force?: boolean } = {},
 ): Promise<string> {
   const tokens = req.session.tokens;
+  if (!tokens && req.owner) return req.owner.accessToken({ force });
   if (!tokens) throw new HttpError(401, 'UNAUTHENTICATED', 'Not logged in');
 
   if (!force && tokens.expiresAt - Date.now() > MIN_TOKEN_TTL_MS) return tokens.accessToken;

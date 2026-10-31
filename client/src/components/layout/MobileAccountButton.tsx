@@ -38,18 +38,20 @@ export function MobileAccountButton() {
           className="absolute right-0 top-full z-30 mt-2 min-w-48 rounded-xl border border-border bg-surface-2 p-1 shadow-popover"
         >
           <p className="truncate px-3 py-2 text-caption text-text-secondary">{user?.displayName}</p>
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              close();
-              void account.run();
-            }}
-            className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-body font-semibold hover:bg-surface-hover"
-          >
-            <LogOut aria-hidden className="size-4" />
-            {account.label}
-          </button>
+          {!user?.ownerMode && (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                close();
+                void account.run();
+              }}
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-body font-semibold hover:bg-surface-hover"
+            >
+              <LogOut aria-hidden className="size-4" />
+              {account.label}
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -12,6 +12,12 @@ export interface AppConfig {
   sessionSecret: string;
   redisUrl?: string;
   spotify: SpotifyConfig;
+  /**
+   * Owner mode: the server acts as this Spotify account for every visitor, no
+   * login. On when SPOTIFY_REFRESH_TOKEN is set; in production it also needs
+   * OWNER_MODE=on, because every visitor would control the owner's account.
+   */
+  ownerRefreshToken?: string;
 }
 
 const REQUIRED_IN_PROD = [
@@ -52,6 +58,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     appOrigin,
     sessionSecret: env.SESSION_SECRET || 'dev-only-insecure-session-secret',
     redisUrl: env.REDIS_URL || undefined,
+    ownerRefreshToken:
+      env.SPOTIFY_REFRESH_TOKEN && (!isProd || env.OWNER_MODE === 'on')
+        ? env.SPOTIFY_REFRESH_TOKEN
+        : undefined,
     spotify: {
       clientId: env.SPOTIFY_CLIENT_ID ?? '',
       clientSecret: env.SPOTIFY_CLIENT_SECRET ?? '',

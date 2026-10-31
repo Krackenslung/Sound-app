@@ -29,6 +29,16 @@ In development, `/dev/components` previews the base UI components and design tok
 
 **Logged-out visitors** are sent straight to Spotify login (after the first approval Spotify returns immediately, so you're effectively logged in by default). Change it with `VITE_LOGGED_OUT` in `client/.env.local`: `demo` lands visitors in demo mode, `login` shows the login page. If the server has no Spotify credentials, the app always opens in demo mode. Demo mode is also at `/?demo=1`.
 
+## Owner mode (no login)
+
+For a personal instance: the server acts as **your** Spotify account for every visitor, so nobody logs in.
+
+1. Add `http://127.0.0.1:8888/callback` to your app's Redirect URIs in the Spotify Developer Dashboard.
+2. Run `npm run owner-token`, open the link it prints and approve once. If the page it sends you to doesn't load (normal in a codespace), copy that page's address from the address bar and paste it into the terminal.
+3. It saves `SPOTIFY_REFRESH_TOKEN` to `server/.env`. Restart `npm run dev`: the app opens as you.
+
+Spotify asks for this approval again every 6 months; the app tells you when. Anyone who can open the app controls your account, so it's off in production unless `OWNER_MODE=on`. A normal login still takes precedence over the owner account.
+
 ## Run it in GitHub Codespaces
 
 1. **Add your Spotify credentials as Codespaces secrets** (never commit them): GitHub → Settings → Codespaces → _Secrets_ → add `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` (optionally `SESSION_SECRET`) and give them access to this repository. If you create the codespace first, it also prompts for them.

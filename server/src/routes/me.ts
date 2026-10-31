@@ -37,7 +37,7 @@ export function createMeRouter(config: AppConfig) {
   // open demo mode instead of a login page that can't work.
   const loginConfigured = Boolean(config.spotify.clientId && config.spotify.clientSecret);
   router.get('/', (req, _res, next) => {
-    if (!loginConfigured && !req.session.tokens) {
+    if (!loginConfigured && !req.session.tokens && !req.owner) {
       return next(new HttpError(401, 'LOGIN_NOT_CONFIGURED', 'Spotify login is not configured'));
     }
     next();
@@ -47,7 +47,8 @@ export function createMeRouter(config: AppConfig) {
       const user = await createSpotifyClient(req, config).request<SpotifyUser>('/me');
       req.session.userId = user.id;
       res.set('Cache-Control', 'no-store');
-      res.json(toMe(user));
+      // ownerMode: the client hides "Log out", which can't apply here.
+      res.json({ ...toMe(user), ownerMode: !req.session.tokens });
     } catch (err) {
       next(err);
     }

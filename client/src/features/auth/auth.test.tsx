@@ -121,3 +121,41 @@ describe('logged-out mode: spotify (default)', () => {
     expect(assign).not.toHaveBeenCalled();
   });
 });
+
+describe('owner mode', () => {
+  const assign = vi.fn();
+  beforeEach(() => {
+    vi.stubEnv('VITE_LOGGED_OUT', ''); // default `spotify` mode must not kick in
+    vi.stubGlobal('location', { ...window.location, assign });
+    assign.mockClear();
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it('opens as the owner account with no account menu to log out from', async () => {
+    mockApi({ me: { ...premiumUser, ownerMode: true } });
+    renderApp('/');
+    expect(await screen.findByRole('heading', { level: 1, name: /Jesus/ })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Account menu' })).not.toBeInTheDocument();
+    expect(assign).not.toHaveBeenCalled();
+  });
+
+  it('explains an expired saved login instead of sending you to Spotify', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ code: 'OWNER_TOKEN_EXPIRED', message: 'x' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+      ),
+    );
+    const { router } = renderApp('/');
+    expect(await screen.findByText(/npm run owner-token/)).toBeInTheDocument();
+    expect(router.state.location.search).toBe('?error=owner_token_expired');
+    expect(assign).not.toHaveBeenCalled();
+  });
+});

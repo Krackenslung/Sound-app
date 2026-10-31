@@ -27,8 +27,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthContextValue>(() => {
     let status: AuthStatus;
     if (query.isPending) status = 'loading';
-    else if (query.isError) status = isApiError(query.error, 403) ? 'forbidden' : 'error';
-    else status = query.data ? 'authenticated' : 'unauthenticated';
+    else if (query.isError) {
+      status = isApiError(query.error, 403)
+        ? 'forbidden'
+        : isApiError(query.error, 401) && query.error.code === 'OWNER_TOKEN_EXPIRED'
+          ? 'owner_expired'
+          : 'error';
+    } else status = query.data ? 'authenticated' : 'unauthenticated';
 
     const user = query.data ?? null;
     return {

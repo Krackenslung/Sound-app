@@ -9,3 +9,14 @@ declare module 'express-session' {
     userId?: string;
   }
 }
+
+declare global {
+  namespace Express {
+    interface Request {
+      /** Owner mode: the shared owner account, when this request has no user of its own. */
+      owner?: import('../session/owner.js').OwnerTokens;
+      /** Owner mode is on but its refresh token was rejected. */
+      ownerExpired?: boolean;
+    }
+  }
+}

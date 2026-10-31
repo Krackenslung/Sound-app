@@ -21,6 +21,7 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
   }
   if (status === 'forbidden') return <Navigate to="/login?error=not_allowlisted" replace />;
+  if (status === 'owner_expired') return <Navigate to="/login?error=owner_token_expired" replace />;
   if (status === 'error') {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 bg-bg text-center">

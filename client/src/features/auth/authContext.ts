@@ -1,7 +1,14 @@
 import { createContext, useContext } from 'react';
 import type { Me } from '@/api/auth';
 
-export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'forbidden' | 'error';
+export type AuthStatus =
+  | 'loading'
+  | 'authenticated'
+  | 'unauthenticated'
+  | 'forbidden'
+  /** Owner mode is on but its saved Spotify login expired. */
+  | 'owner_expired'
+  | 'error';
 
 export interface AuthContextValue {
   status: AuthStatus;

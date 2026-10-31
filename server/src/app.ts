@@ -13,6 +13,7 @@ import { createSearchRouter } from './routes/search.js';
 import { createCatalogRouter } from './routes/catalog.js';
 import { createPlaylistsRouter } from './routes/playlists.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
+import { OwnerTokens, ownerMode } from './session/owner.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import { createLogger, httpLogger, type Logger } from './logger.js';
 import { securityHeaders } from './middleware/security.js';
@@ -29,6 +30,7 @@ export interface AppDeps {
   sessionStore?: Store;
   logger?: Logger;
   rateLimits?: RateLimits;
+  owner?: OwnerTokens;
 }
 
 export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) {
@@ -50,6 +52,12 @@ export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) 
   app.use('/api', apiRateLimit(limits));
 
   app.use('/api', createSessionMiddleware(config, deps.sessionStore));
+  const owner =
+    deps.owner ??
+    (config.ownerRefreshToken
+      ? new OwnerTokens(config.spotify, config.ownerRefreshToken)
+      : undefined);
+  app.use('/api', ownerMode(owner));
   app.use('/api/auth', createAuthRouter(config));
   app.use('/api/me', createMeRouter(config));
   app.use('/api/player', createPlayerRouter(config));

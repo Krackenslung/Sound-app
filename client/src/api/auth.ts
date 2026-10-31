@@ -10,6 +10,8 @@ export interface Me {
   product: 'premium' | 'free' | 'open' | string | null;
   country: string | null;
   avatarUrl: string | null;
+  /** The server is in owner mode: it always acts as this account, so there's no logging out. */
+  ownerMode?: boolean;
 }
 
 export { LOGIN_URL } from '@/features/auth/loggedOut';
@@ -26,7 +28,8 @@ export async function fetchMe(): Promise<Me | null> {
     clearAutoLogin();
     return me;
   } catch (e) {
-    if (!isApiError(e, 401)) throw e;
+    // Owner mode with an expired saved login: an error to show, not a login to start.
+    if (!isApiError(e, 401) || e.code === 'OWNER_TOKEN_EXPIRED') throw e;
     const mode = loggedOutMode();
     if (e.code === 'LOGIN_NOT_CONFIGURED' || mode === 'demo') {
       useDemoStore.getState().setEnabled(true);

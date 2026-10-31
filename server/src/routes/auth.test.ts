@@ -125,6 +125,7 @@ describe('session lifecycle', () => {
       product: 'premium',
       country: 'MX',
       avatarUrl: 'https://i.scdn.co/image/small',
+      ownerMode: false,
     });
     expect(state.apiAuthHeaders.at(-1)).toBe('Bearer access-0');
     expect((await agent.get('/api/me')).status).toBe(200);

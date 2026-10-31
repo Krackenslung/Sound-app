@@ -66,6 +66,8 @@ chmod 600 /opt/pulse/.env
 
 `NODE_ENV`, `PORT` and `REDIS_URL` are set by `docker-compose.yml`. Optional: `LOG_LEVEL` (default `info`).
 
+Owner mode (`SPOTIFY_REFRESH_TOKEN`, see the README) is ignored in production unless you also set `OWNER_MODE=on` — then **every visitor** of the public site uses your Spotify account. Leave it off for a public deployment.
+
 ## 5. GitHub configuration
 
 **Deploy key** — on your own machine:
