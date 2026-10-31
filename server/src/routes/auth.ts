@@ -53,13 +53,17 @@ export function createAuthRouter(config: AppConfig) {
       try {
         tokens = await exchangeCode(config.spotify, code, oauth.verifier);
       } catch (err) {
-        console.warn('[auth] token exchange failed:', (err as Error).message);
+        req.log.warn(
+          { err: { name: (err as Error).name, message: (err as Error).message } },
+          'spotify token exchange failed',
+        );
         return res.redirect(loginUrl('token_exchange_failed'));
       }
 
       // New session id after login to prevent session fixation.
       await regenerate(req);
       req.session.tokens = tokens;
+      req.log.info('user logged in');
       req.session.save((err) => (err ? next(err) : res.redirect(`${config.appOrigin}/`)));
     } catch (err) {
       next(err);

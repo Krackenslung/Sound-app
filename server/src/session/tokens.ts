@@ -41,6 +41,10 @@ export async function getValidAccessToken(
         const next = await refreshTokens(config.spotify, tokens.refreshToken);
         req.session.tokens = next;
         await saveSession(req);
+        req.log?.info(
+          { rotated: next.refreshToken !== tokens.refreshToken },
+          'access token refreshed',
+        );
         return next.accessToken;
       } finally {
         inflight.delete(key);
@@ -53,6 +57,7 @@ export async function getValidAccessToken(
     return await pending;
   } catch (err) {
     if (err instanceof SpotifyAuthError && err.isInvalidGrant) {
+      req.log?.warn('refresh token rejected (invalid_grant); session destroyed');
       await destroySession(req);
       throw new HttpError(
         401,

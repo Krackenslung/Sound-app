@@ -15,16 +15,20 @@ import { createCatalogRouter } from './routes/catalog.js';
 import { createPlaylistsRouter } from './routes/playlists.js';
 import { createSessionMiddleware } from './session/sessionMiddleware.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import { createLogger, httpLogger, type Logger } from './logger.js';
 
 const publicDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../public');
 
 export interface AppDeps {
   sessionStore?: Store;
+  logger?: Logger;
 }
 
 export function createApp(config: AppConfig = loadConfig(), deps: AppDeps = {}) {
   const app = express();
   app.disable('x-powered-by');
+  const logger = deps.logger ?? createLogger(config);
+  app.use(httpLogger(logger));
   // Behind Caddy in production: needed so `secure` cookies are set over the proxied HTTPS connection.
   if (config.isProd) app.set('trust proxy', 1);
   app.use(helmet());
