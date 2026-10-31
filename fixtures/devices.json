@@ -1,0 +1,19 @@
+{
+  "devices": [
+    {
+      "id": "demo-browser",
+      "name": "Demo player",
+      "type": "Computer"
+    },
+    {
+      "id": "demo-phone",
+      "name": "Sample iPhone",
+      "type": "Smartphone"
+    },
+    {
+      "id": "demo-speaker",
+      "name": "Living Room Speaker",
+      "type": "Speaker"
+    }
+  ]
+}

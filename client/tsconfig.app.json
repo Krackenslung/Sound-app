@@ -14,7 +14,7 @@
       "spotify-web-playback-sdk"
     ],
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] }
+    "paths": { "@/*": ["src/*"], "@fixtures/*": ["../fixtures/*"] }
   },
-  "include": ["src"]
+  "include": ["src", "../fixtures/*.json"]
 }

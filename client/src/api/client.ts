@@ -1,3 +1,6 @@
+import { isDemo } from '@/features/demo/demoStore';
+import { demoRequest } from '@/features/demo/demoBackend';
+
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -11,6 +14,8 @@ export class ApiError extends Error {
 }
 
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
+  // Demo mode: answer from fixtures in the browser — never touch the network.
+  if (isDemo()) return demoRequest<T>(path, init);
   const res = await fetch(`/api${path}`, {
     credentials: 'same-origin',
     ...init,

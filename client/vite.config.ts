@@ -6,12 +6,17 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@fixtures': fileURLToPath(new URL('../fixtures', import.meta.url)),
+    },
   },
   server: {
     host: '127.0.0.1',
     port: 5173,
     strictPort: true,
+    // Demo-mode fixtures live in /fixtures at the repo root.
+    fs: { allow: ['..'] },
     proxy: {
       '/api': { target: 'http://127.0.0.1:3001', changeOrigin: false },
     },
