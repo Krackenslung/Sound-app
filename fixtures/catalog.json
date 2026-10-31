@@ -1,0 +1,913 @@
+{
+  "artists": [
+    {
+      "id": "midnightcoast",
+      "uri": "spotify:artist:midnightcoast",
+      "name": "The Midnight Coast",
+      "images": [],
+      "genres": ["synthwave", "indie pop"]
+    },
+    {
+      "id": "lumatides",
+      "uri": "spotify:artist:lumatides",
+      "name": "Luma & The Tides",
+      "images": [],
+      "genres": ["indie pop", "dream pop"]
+    },
+    {
+      "id": "costanorte",
+      "uri": "spotify:artist:costanorte",
+      "name": "Costa Norte",
+      "images": [],
+      "genres": ["latin alternative", "synthwave"]
+    },
+    {
+      "id": "veralane",
+      "uri": "spotify:artist:veralane",
+      "name": "Vera Lane",
+      "images": [],
+      "genres": ["dream pop", "indie pop"]
+    },
+    {
+      "id": "northbound",
+      "uri": "spotify:artist:northbound",
+      "name": "Northbound",
+      "images": [],
+      "genres": ["synthwave", "lo-fi"]
+    },
+    {
+      "id": "kairowaves",
+      "uri": "spotify:artist:kairowaves",
+      "name": "Kairo Waves",
+      "images": [],
+      "genres": ["lo-fi", "synthwave"]
+    },
+    {
+      "id": "solysombra",
+      "uri": "spotify:artist:solysombra",
+      "name": "Sol y Sombra",
+      "images": [],
+      "genres": ["latin alternative"]
+    },
+    {
+      "id": "losfaros",
+      "uri": "spotify:artist:losfaros",
+      "name": "Los Faros",
+      "images": [],
+      "genres": ["latin alternative", "indie pop"]
+    },
+    {
+      "id": "harborpine",
+      "uri": "spotify:artist:harborpine",
+      "name": "Harbor & Pine",
+      "images": [],
+      "genres": ["indie pop"]
+    },
+    {
+      "id": "mirasol",
+      "uri": "spotify:artist:mirasol",
+      "name": "Mira Sol",
+      "images": [],
+      "genres": ["dream pop"]
+    }
+  ],
+  "albums": [
+    {
+      "id": "afterglowcity",
+      "uri": "spotify:album:afterglowcity",
+      "name": "Afterglow City",
+      "images": [],
+      "artists": [
+        {
+          "id": "midnightcoast",
+          "name": "The Midnight Coast",
+          "uri": "spotify:artist:midnightcoast"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2024-05-17",
+      "totalTracks": 4
+    },
+    {
+      "id": "orbitlines",
+      "uri": "spotify:album:orbitlines",
+      "name": "Orbit Lines",
+      "images": [],
+      "artists": [
+        {
+          "id": "lumatides",
+          "name": "Luma & The Tides",
+          "uri": "spotify:artist:lumatides"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2023-09-08",
+      "totalTracks": 3
+    },
+    {
+      "id": "frontera",
+      "uri": "spotify:album:frontera",
+      "name": "Frontera",
+      "images": [],
+      "artists": [
+        {
+          "id": "costanorte",
+          "name": "Costa Norte",
+          "uri": "spotify:artist:costanorte"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2025-03-21",
+      "totalTracks": 3
+    },
+    {
+      "id": "velvethours",
+      "uri": "spotify:album:velvethours",
+      "name": "Velvet Hours",
+      "images": [],
+      "artists": [
+        {
+          "id": "veralane",
+          "name": "Vera Lane",
+          "uri": "spotify:artist:veralane"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2024-11-01",
+      "totalTracks": 3
+    },
+    {
+      "id": "signalfade",
+      "uri": "spotify:album:signalfade",
+      "name": "Signal Fade",
+      "images": [],
+      "artists": [
+        {
+          "id": "northbound",
+          "name": "Northbound",
+          "uri": "spotify:artist:northbound"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2022-06-10",
+      "totalTracks": 2
+    },
+    {
+      "id": "deepfield",
+      "uri": "spotify:album:deepfield",
+      "name": "Deep Field",
+      "images": [],
+      "artists": [
+        {
+          "id": "kairowaves",
+          "name": "Kairo Waves",
+          "uri": "spotify:artist:kairowaves"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2025-08-29",
+      "totalTracks": 3
+    },
+    {
+      "id": "atardecer",
+      "uri": "spotify:album:atardecer",
+      "name": "Atardecer",
+      "images": [],
+      "artists": [
+        {
+          "id": "solysombra",
+          "name": "Sol y Sombra",
+          "uri": "spotify:artist:solysombra"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2023-04-14",
+      "totalTracks": 2
+    },
+    {
+      "id": "faroslocos",
+      "uri": "spotify:album:faroslocos",
+      "name": "Faros Locos",
+      "images": [],
+      "artists": [
+        {
+          "id": "losfaros",
+          "name": "Los Faros",
+          "uri": "spotify:artist:losfaros"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2024-02-02",
+      "totalTracks": 2
+    },
+    {
+      "id": "coastline",
+      "uri": "spotify:album:coastline",
+      "name": "Coastline",
+      "images": [],
+      "artists": [
+        {
+          "id": "harborpine",
+          "name": "Harbor & Pine",
+          "uri": "spotify:artist:harborpine"
+        }
+      ],
+      "albumType": "single",
+      "releaseDate": "2022-10-21",
+      "totalTracks": 1
+    },
+    {
+      "id": "afterneon",
+      "uri": "spotify:album:afterneon",
+      "name": "After Neon",
+      "images": [],
+      "artists": [
+        {
+          "id": "mirasol",
+          "name": "Mira Sol",
+          "uri": "spotify:artist:mirasol"
+        }
+      ],
+      "albumType": "album",
+      "releaseDate": "2025-01-31",
+      "totalTracks": 2
+    }
+  ],
+  "tracks": [
+    {
+      "id": "afterglo1",
+      "uri": "spotify:track:afterglo1",
+      "name": "Neon Avenue",
+      "durationMs": 227000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "midnightcoast",
+          "name": "The Midnight Coast",
+          "uri": "spotify:artist:midnightcoast"
+        }
+      ],
+      "album": {
+        "id": "afterglowcity",
+        "uri": "spotify:album:afterglowcity",
+        "name": "Afterglow City",
+        "images": [],
+        "artists": [
+          {
+            "id": "midnightcoast",
+            "name": "The Midnight Coast",
+            "uri": "spotify:artist:midnightcoast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "afterglo2",
+      "uri": "spotify:track:afterglo2",
+      "name": "Afterglow City",
+      "durationMs": 241000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "midnightcoast",
+          "name": "The Midnight Coast",
+          "uri": "spotify:artist:midnightcoast"
+        }
+      ],
+      "album": {
+        "id": "afterglowcity",
+        "uri": "spotify:album:afterglowcity",
+        "name": "Afterglow City",
+        "images": [],
+        "artists": [
+          {
+            "id": "midnightcoast",
+            "name": "The Midnight Coast",
+            "uri": "spotify:artist:midnightcoast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "afterglo3",
+      "uri": "spotify:track:afterglo3",
+      "name": "Last Train Home",
+      "durationMs": 203000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "midnightcoast",
+          "name": "The Midnight Coast",
+          "uri": "spotify:artist:midnightcoast"
+        }
+      ],
+      "album": {
+        "id": "afterglowcity",
+        "uri": "spotify:album:afterglowcity",
+        "name": "Afterglow City",
+        "images": [],
+        "artists": [
+          {
+            "id": "midnightcoast",
+            "name": "The Midnight Coast",
+            "uri": "spotify:artist:midnightcoast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "afterglo4",
+      "uri": "spotify:track:afterglo4",
+      "name": "Glass Skyline",
+      "durationMs": 219000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "midnightcoast",
+          "name": "The Midnight Coast",
+          "uri": "spotify:artist:midnightcoast"
+        }
+      ],
+      "album": {
+        "id": "afterglowcity",
+        "uri": "spotify:album:afterglowcity",
+        "name": "Afterglow City",
+        "images": [],
+        "artists": [
+          {
+            "id": "midnightcoast",
+            "name": "The Midnight Coast",
+            "uri": "spotify:artist:midnightcoast"
+          }
+        ]
+      }
+    },
+    {
+      "id": "orbitlin1",
+      "uri": "spotify:track:orbitlin1",
+      "name": "Paper Satellites",
+      "durationMs": 242000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "lumatides",
+          "name": "Luma & The Tides",
+          "uri": "spotify:artist:lumatides"
+        }
+      ],
+      "album": {
+        "id": "orbitlines",
+        "uri": "spotify:album:orbitlines",
+        "name": "Orbit Lines",
+        "images": [],
+        "artists": [
+          {
+            "id": "lumatides",
+            "name": "Luma & The Tides",
+            "uri": "spotify:artist:lumatides"
+          }
+        ]
+      }
+    },
+    {
+      "id": "orbitlin2",
+      "uri": "spotify:track:orbitlin2",
+      "name": "Orbit Lines",
+      "durationMs": 256000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "lumatides",
+          "name": "Luma & The Tides",
+          "uri": "spotify:artist:lumatides"
+        }
+      ],
+      "album": {
+        "id": "orbitlines",
+        "uri": "spotify:album:orbitlines",
+        "name": "Orbit Lines",
+        "images": [],
+        "artists": [
+          {
+            "id": "lumatides",
+            "name": "Luma & The Tides",
+            "uri": "spotify:artist:lumatides"
+          }
+        ]
+      }
+    },
+    {
+      "id": "orbitlin3",
+      "uri": "spotify:track:orbitlin3",
+      "name": "Low Tide",
+      "durationMs": 198000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "lumatides",
+          "name": "Luma & The Tides",
+          "uri": "spotify:artist:lumatides"
+        }
+      ],
+      "album": {
+        "id": "orbitlines",
+        "uri": "spotify:album:orbitlines",
+        "name": "Orbit Lines",
+        "images": [],
+        "artists": [
+          {
+            "id": "lumatides",
+            "name": "Luma & The Tides",
+            "uri": "spotify:artist:lumatides"
+          }
+        ]
+      }
+    },
+    {
+      "id": "frontera1",
+      "uri": "spotify:track:frontera1",
+      "name": "Baja Lights",
+      "durationMs": 198000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "costanorte",
+          "name": "Costa Norte",
+          "uri": "spotify:artist:costanorte"
+        }
+      ],
+      "album": {
+        "id": "frontera",
+        "uri": "spotify:album:frontera",
+        "name": "Frontera",
+        "images": [],
+        "artists": [
+          {
+            "id": "costanorte",
+            "name": "Costa Norte",
+            "uri": "spotify:artist:costanorte"
+          }
+        ]
+      }
+    },
+    {
+      "id": "frontera2",
+      "uri": "spotify:track:frontera2",
+      "name": "Frontera",
+      "durationMs": 232000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "costanorte",
+          "name": "Costa Norte",
+          "uri": "spotify:artist:costanorte"
+        }
+      ],
+      "album": {
+        "id": "frontera",
+        "uri": "spotify:album:frontera",
+        "name": "Frontera",
+        "images": [],
+        "artists": [
+          {
+            "id": "costanorte",
+            "name": "Costa Norte",
+            "uri": "spotify:artist:costanorte"
+          }
+        ]
+      }
+    },
+    {
+      "id": "frontera3",
+      "uri": "spotify:track:frontera3",
+      "name": "Tijuana Summer",
+      "durationMs": 211000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "costanorte",
+          "name": "Costa Norte",
+          "uri": "spotify:artist:costanorte"
+        }
+      ],
+      "album": {
+        "id": "frontera",
+        "uri": "spotify:album:frontera",
+        "name": "Frontera",
+        "images": [],
+        "artists": [
+          {
+            "id": "costanorte",
+            "name": "Costa Norte",
+            "uri": "spotify:artist:costanorte"
+          }
+        ]
+      }
+    },
+    {
+      "id": "velvetho1",
+      "uri": "spotify:track:velvetho1",
+      "name": "Slow Burn",
+      "durationMs": 235000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "veralane",
+          "name": "Vera Lane",
+          "uri": "spotify:artist:veralane"
+        }
+      ],
+      "album": {
+        "id": "velvethours",
+        "uri": "spotify:album:velvethours",
+        "name": "Velvet Hours",
+        "images": [],
+        "artists": [
+          {
+            "id": "veralane",
+            "name": "Vera Lane",
+            "uri": "spotify:artist:veralane"
+          }
+        ]
+      }
+    },
+    {
+      "id": "velvetho2",
+      "uri": "spotify:track:velvetho2",
+      "name": "Velvet Hours",
+      "durationMs": 247000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "veralane",
+          "name": "Vera Lane",
+          "uri": "spotify:artist:veralane"
+        }
+      ],
+      "album": {
+        "id": "velvethours",
+        "uri": "spotify:album:velvethours",
+        "name": "Velvet Hours",
+        "images": [],
+        "artists": [
+          {
+            "id": "veralane",
+            "name": "Vera Lane",
+            "uri": "spotify:artist:veralane"
+          }
+        ]
+      }
+    },
+    {
+      "id": "velvetho3",
+      "uri": "spotify:track:velvetho3",
+      "name": "Golden Thread",
+      "durationMs": 206000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "veralane",
+          "name": "Vera Lane",
+          "uri": "spotify:artist:veralane"
+        }
+      ],
+      "album": {
+        "id": "velvethours",
+        "uri": "spotify:album:velvethours",
+        "name": "Velvet Hours",
+        "images": [],
+        "artists": [
+          {
+            "id": "veralane",
+            "name": "Vera Lane",
+            "uri": "spotify:artist:veralane"
+          }
+        ]
+      }
+    },
+    {
+      "id": "signalfa1",
+      "uri": "spotify:track:signalfa1",
+      "name": "Static Hearts",
+      "durationMs": 179000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "northbound",
+          "name": "Northbound",
+          "uri": "spotify:artist:northbound"
+        }
+      ],
+      "album": {
+        "id": "signalfade",
+        "uri": "spotify:album:signalfade",
+        "name": "Signal Fade",
+        "images": [],
+        "artists": [
+          {
+            "id": "northbound",
+            "name": "Northbound",
+            "uri": "spotify:artist:northbound"
+          }
+        ]
+      }
+    },
+    {
+      "id": "signalfa2",
+      "uri": "spotify:track:signalfa2",
+      "name": "Signal Fade",
+      "durationMs": 224000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "northbound",
+          "name": "Northbound",
+          "uri": "spotify:artist:northbound"
+        }
+      ],
+      "album": {
+        "id": "signalfade",
+        "uri": "spotify:album:signalfade",
+        "name": "Signal Fade",
+        "images": [],
+        "artists": [
+          {
+            "id": "northbound",
+            "name": "Northbound",
+            "uri": "spotify:artist:northbound"
+          }
+        ]
+      }
+    },
+    {
+      "id": "deepfiel1",
+      "uri": "spotify:track:deepfiel1",
+      "name": "Echo Chamber",
+      "durationMs": 260000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "kairowaves",
+          "name": "Kairo Waves",
+          "uri": "spotify:artist:kairowaves"
+        }
+      ],
+      "album": {
+        "id": "deepfield",
+        "uri": "spotify:album:deepfield",
+        "name": "Deep Field",
+        "images": [],
+        "artists": [
+          {
+            "id": "kairowaves",
+            "name": "Kairo Waves",
+            "uri": "spotify:artist:kairowaves"
+          }
+        ]
+      }
+    },
+    {
+      "id": "deepfiel2",
+      "uri": "spotify:track:deepfiel2",
+      "name": "Deep Field",
+      "durationMs": 238000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "kairowaves",
+          "name": "Kairo Waves",
+          "uri": "spotify:artist:kairowaves"
+        }
+      ],
+      "album": {
+        "id": "deepfield",
+        "uri": "spotify:album:deepfield",
+        "name": "Deep Field",
+        "images": [],
+        "artists": [
+          {
+            "id": "kairowaves",
+            "name": "Kairo Waves",
+            "uri": "spotify:artist:kairowaves"
+          }
+        ]
+      }
+    },
+    {
+      "id": "deepfiel3",
+      "uri": "spotify:track:deepfiel3",
+      "name": "Neon Rain",
+      "durationMs": 238000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "kairowaves",
+          "name": "Kairo Waves",
+          "uri": "spotify:artist:kairowaves"
+        }
+      ],
+      "album": {
+        "id": "deepfield",
+        "uri": "spotify:album:deepfield",
+        "name": "Deep Field",
+        "images": [],
+        "artists": [
+          {
+            "id": "kairowaves",
+            "name": "Kairo Waves",
+            "uri": "spotify:artist:kairowaves"
+          }
+        ]
+      }
+    },
+    {
+      "id": "atardece1",
+      "uri": "spotify:track:atardece1",
+      "name": "Golden Hour Glow",
+      "durationMs": 211000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "solysombra",
+          "name": "Sol y Sombra",
+          "uri": "spotify:artist:solysombra"
+        }
+      ],
+      "album": {
+        "id": "atardecer",
+        "uri": "spotify:album:atardecer",
+        "name": "Atardecer",
+        "images": [],
+        "artists": [
+          {
+            "id": "solysombra",
+            "name": "Sol y Sombra",
+            "uri": "spotify:artist:solysombra"
+          }
+        ]
+      }
+    },
+    {
+      "id": "atardece2",
+      "uri": "spotify:track:atardece2",
+      "name": "Atardecer",
+      "durationMs": 229000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "solysombra",
+          "name": "Sol y Sombra",
+          "uri": "spotify:artist:solysombra"
+        }
+      ],
+      "album": {
+        "id": "atardecer",
+        "uri": "spotify:album:atardecer",
+        "name": "Atardecer",
+        "images": [],
+        "artists": [
+          {
+            "id": "solysombra",
+            "name": "Sol y Sombra",
+            "uri": "spotify:artist:solysombra"
+          }
+        ]
+      }
+    },
+    {
+      "id": "farosloc1",
+      "uri": "spotify:track:farosloc1",
+      "name": "Midnight Taco Run",
+      "durationMs": 168000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "losfaros",
+          "name": "Los Faros",
+          "uri": "spotify:artist:losfaros"
+        }
+      ],
+      "album": {
+        "id": "faroslocos",
+        "uri": "spotify:album:faroslocos",
+        "name": "Faros Locos",
+        "images": [],
+        "artists": [
+          {
+            "id": "losfaros",
+            "name": "Los Faros",
+            "uri": "spotify:artist:losfaros"
+          }
+        ]
+      }
+    },
+    {
+      "id": "farosloc2",
+      "uri": "spotify:track:farosloc2",
+      "name": "Neon Nights in TJ",
+      "durationMs": 185000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "losfaros",
+          "name": "Los Faros",
+          "uri": "spotify:artist:losfaros"
+        }
+      ],
+      "album": {
+        "id": "faroslocos",
+        "uri": "spotify:album:faroslocos",
+        "name": "Faros Locos",
+        "images": [],
+        "artists": [
+          {
+            "id": "losfaros",
+            "name": "Los Faros",
+            "uri": "spotify:artist:losfaros"
+          }
+        ]
+      }
+    },
+    {
+      "id": "coastlin1",
+      "uri": "spotify:track:coastlin1",
+      "name": "Neon Coast",
+      "durationMs": 216000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "harborpine",
+          "name": "Harbor & Pine",
+          "uri": "spotify:artist:harborpine"
+        }
+      ],
+      "album": {
+        "id": "coastline",
+        "uri": "spotify:album:coastline",
+        "name": "Coastline",
+        "images": [],
+        "artists": [
+          {
+            "id": "harborpine",
+            "name": "Harbor & Pine",
+            "uri": "spotify:artist:harborpine"
+          }
+        ]
+      }
+    },
+    {
+      "id": "afterneo1",
+      "uri": "spotify:track:afterneo1",
+      "name": "Under Neon",
+      "durationMs": 251000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "mirasol",
+          "name": "Mira Sol",
+          "uri": "spotify:artist:mirasol"
+        }
+      ],
+      "album": {
+        "id": "afterneon",
+        "uri": "spotify:album:afterneon",
+        "name": "After Neon",
+        "images": [],
+        "artists": [
+          {
+            "id": "mirasol",
+            "name": "Mira Sol",
+            "uri": "spotify:artist:mirasol"
+          }
+        ]
+      }
+    },
+    {
+      "id": "afterneo2",
+      "uri": "spotify:track:afterneo2",
+      "name": "After Neon",
+      "durationMs": 204000,
+      "explicit": false,
+      "artists": [
+        {
+          "id": "mirasol",
+          "name": "Mira Sol",
+          "uri": "spotify:artist:mirasol"
+        }
+      ],
+      "album": {
+        "id": "afterneon",
+        "uri": "spotify:album:afterneon",
+        "name": "After Neon",
+        "images": [],
+        "artists": [
+          {
+            "id": "mirasol",
+            "name": "Mira Sol",
+            "uri": "spotify:artist:mirasol"
+          }
+        ]
+      }
+    }
+  ]
+}

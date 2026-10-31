@@ -1,0 +1,59 @@
+/* Design tokens — source of truth: Figma "Pulse Player — App Design" (Foundations, node 2:25). */
+:root {
+  --color-bg: #0b0b10;
+  --color-surface: #14141c;
+  --color-surface-2: #1d1d28;
+  --color-surface-hover: #262634;
+  --color-border: #2b2b3a;
+  --color-text-primary: #f4f4f8;
+  --color-text-secondary: #a1a1b5;
+  /* Was #6b6b80 in Figma; raised to #84849a for WCAG AA (>= 4.5:1 on bg, surface, surface-2). */
+  --color-text-muted: #84849a;
+  --color-accent: #8b5cf6;
+  --color-accent-hover: #a78bfa;
+  /* Primary button fill: white text on --color-accent is only 4.23:1, this is 4.91:1 (5.95:1 on hover). */
+  --color-accent-strong: #7f4ff0;
+  --color-accent-strong-hover: #6f42e0;
+  --color-accent-2: #f472b6;
+  --color-on-accent: #ffffff;
+  --color-warning: #fbbf24;
+  --color-success: #34d399;
+  /* Album-art color for the mini player and mobile Now Playing; set at runtime from the current
+     track's artwork (Phase 6), defaulting to the indigo in Figma 8:1250 / 8:1399. */
+  --color-art: #2e2a7a;
+  --color-art-glow: #8b5cf6;
+  --color-on-art-track: rgb(255 255 255 / 0.2);
+  /* Spotify brand green — only for the Spotify logo (attribution), per Spotify's brand guidelines. */
+  --color-spotify-green: #1ed760;
+  /* Demo banner (Figma 8:1322): warning at 12% fill / 40% border. */
+  --color-warning-soft: rgb(251 191 36 / 0.12);
+  --color-warning-line: rgb(251 191 36 / 0.4);
+  /* 5th breakdown bar (Figma 7:1377). */
+  --color-chart-cyan: #22d3ee;
+  /* Accent at 15% — device chip / active device row (Figma 6:323). */
+  --color-accent-soft: rgb(139 92 246 / 0.15);
+  /* Glow under hero album art (Figma 6:323). */
+  --shadow-art: 0 24px 64px -8px color-mix(in srgb, var(--color-art-glow) 35%, transparent);
+  /* Modal backdrop: bg at 80%. */
+  --color-scrim: rgb(11 11 16 / 0.8);
+  /* Liked Songs hero (Figma 7:971): deep violet → surface. */
+  --gradient-liked-hero: linear-gradient(to right, #5b21b6, var(--color-surface));
+  /* Liked Songs cover (Figma 7:972). */
+  --art-liked: linear-gradient(135deg, #8b5cf6 0%, #22d3ee 50%);
+  --shadow-popover: 0 16px 40px 0 rgb(0 0 0 / 0.5);
+
+  color-scheme: dark;
+}
+
+/* Placeholder art gradients from Figma — only used when there is no real Spotify image. */
+:root {
+  --art-1: linear-gradient(135deg, #1e3a8a 0%, #f472b6 50%);
+  --art-2: linear-gradient(135deg, #0ea5e9 0%, #8b5cf6 50%);
+  --art-3: linear-gradient(135deg, #ea580c 0%, #fbbf24 50%);
+  --art-4: linear-gradient(135deg, #9d174d 0%, #f472b6 50%);
+  --art-5: linear-gradient(135deg, #065f46 0%, #34d399 50%);
+  --art-6: linear-gradient(135deg, #f59e0b 0%, #fde68a 50%);
+  --art-7: linear-gradient(135deg, #312e81 0%, #22d3ee 50%);
+  --art-8: linear-gradient(135deg, #b91c1c 0%, #f97316 50%);
+  --art-9: linear-gradient(135deg, #15803d 0%, #a3e635 50%);
+}

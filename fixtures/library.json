@@ -1,0 +1,250 @@
+{
+  "liked": [
+    {
+      "uri": "spotify:track:afterglo1",
+      "daysAgo": 1
+    },
+    {
+      "uri": "spotify:track:orbitlin1",
+      "daysAgo": 3
+    },
+    {
+      "uri": "spotify:track:frontera1",
+      "daysAgo": 6
+    },
+    {
+      "uri": "spotify:track:velvetho1",
+      "daysAgo": 9
+    },
+    {
+      "uri": "spotify:track:signalfa1",
+      "daysAgo": 14
+    },
+    {
+      "uri": "spotify:track:atardece1",
+      "daysAgo": 20
+    },
+    {
+      "uri": "spotify:track:deepfiel1",
+      "daysAgo": 27
+    },
+    {
+      "uri": "spotify:track:farosloc1",
+      "daysAgo": 33
+    },
+    {
+      "uri": "spotify:track:deepfiel3",
+      "daysAgo": 38
+    },
+    {
+      "uri": "spotify:track:velvetho2",
+      "daysAgo": 45
+    },
+    {
+      "uri": "spotify:track:frontera2",
+      "daysAgo": 52
+    },
+    {
+      "uri": "spotify:track:afterneo1",
+      "daysAgo": 61
+    },
+    {
+      "uri": "spotify:track:frontera3",
+      "daysAgo": 70
+    },
+    {
+      "uri": "spotify:track:orbitlin2",
+      "daysAgo": 84
+    },
+    {
+      "uri": "spotify:track:afterglo4",
+      "daysAgo": 96
+    },
+    {
+      "uri": "spotify:track:atardece2",
+      "daysAgo": 110
+    },
+    {
+      "uri": "spotify:track:deepfiel2",
+      "daysAgo": 130
+    },
+    {
+      "uri": "spotify:track:afterglo3",
+      "daysAgo": 160
+    }
+  ],
+  "savedAlbums": ["afterglowcity", "frontera", "deepfield", "velvethours"],
+  "playlists": [
+    {
+      "id": "latenightdrive",
+      "name": "Late Night Drive",
+      "description": "Neon-lit roads and slow synths.",
+      "tracks": [
+        "spotify:track:afterglo1",
+        "spotify:track:afterglo4",
+        "spotify:track:signalfa2",
+        "spotify:track:deepfiel2",
+        "spotify:track:afterglo3",
+        "spotify:track:deepfiel3"
+      ]
+    },
+    {
+      "id": "focusflow",
+      "name": "Focus Flow",
+      "description": "Low-key beats for deep work.",
+      "tracks": [
+        "spotify:track:deepfiel1",
+        "spotify:track:orbitlin3",
+        "spotify:track:deepfiel2",
+        "spotify:track:signalfa1"
+      ]
+    },
+    {
+      "id": "gymrotation",
+      "name": "Gym Rotation",
+      "description": null,
+      "tracks": [
+        "spotify:track:frontera1",
+        "spotify:track:farosloc1",
+        "spotify:track:farosloc2",
+        "spotify:track:frontera2"
+      ]
+    },
+    {
+      "id": "sundaymorning",
+      "name": "Sunday Morning",
+      "description": null,
+      "tracks": [
+        "spotify:track:atardece1",
+        "spotify:track:velvetho1",
+        "spotify:track:velvetho3",
+        "spotify:track:velvetho2"
+      ]
+    },
+    {
+      "id": "tijuanasummer",
+      "name": "Tijuana Summer",
+      "description": "Border-town summer anthems.",
+      "tracks": [
+        "spotify:track:frontera3",
+        "spotify:track:frontera1",
+        "spotify:track:atardece2",
+        "spotify:track:farosloc1"
+      ],
+      "collaborative": true,
+      "ownerName": "Costa Norte Fan Club",
+      "ownerId": "cnfanclub"
+    }
+  ],
+  "recentlyPlayed": [
+    {
+      "uri": "spotify:track:afterglo1",
+      "minutesAgo": 12
+    },
+    {
+      "uri": "spotify:track:orbitlin1",
+      "minutesAgo": 19
+    },
+    {
+      "uri": "spotify:track:afterglo2",
+      "minutesAgo": 26
+    },
+    {
+      "uri": "spotify:track:frontera1",
+      "minutesAgo": 64
+    },
+    {
+      "uri": "spotify:track:velvetho1",
+      "minutesAgo": 140
+    },
+    {
+      "uri": "spotify:track:deepfiel1",
+      "minutesAgo": 300
+    },
+    {
+      "uri": "spotify:track:afterneo1",
+      "minutesAgo": 900
+    },
+    {
+      "uri": "spotify:track:coastlin1",
+      "minutesAgo": 1500
+    }
+  ],
+  "topTracks": {
+    "short_term": [
+      "spotify:track:afterglo1",
+      "spotify:track:orbitlin1",
+      "spotify:track:frontera1",
+      "spotify:track:velvetho1",
+      "spotify:track:signalfa1",
+      "spotify:track:atardece1",
+      "spotify:track:deepfiel1",
+      "spotify:track:farosloc1",
+      "spotify:track:afterneo1",
+      "spotify:track:coastlin1",
+      "spotify:track:afterglo2",
+      "spotify:track:orbitlin3"
+    ],
+    "medium_term": [
+      "spotify:track:frontera1",
+      "spotify:track:velvetho1",
+      "spotify:track:signalfa1",
+      "spotify:track:atardece1",
+      "spotify:track:deepfiel1",
+      "spotify:track:farosloc1",
+      "spotify:track:afterneo1",
+      "spotify:track:coastlin1",
+      "spotify:track:afterglo2",
+      "spotify:track:orbitlin3",
+      "spotify:track:afterglo1",
+      "spotify:track:orbitlin1"
+    ],
+    "long_term": [
+      "spotify:track:atardece1",
+      "spotify:track:deepfiel1",
+      "spotify:track:farosloc1",
+      "spotify:track:afterneo1",
+      "spotify:track:coastlin1",
+      "spotify:track:afterglo2",
+      "spotify:track:orbitlin3",
+      "spotify:track:afterglo1",
+      "spotify:track:orbitlin1",
+      "spotify:track:frontera1",
+      "spotify:track:velvetho1",
+      "spotify:track:signalfa1"
+    ]
+  },
+  "topArtists": {
+    "short_term": [
+      "midnightcoast",
+      "costanorte",
+      "veralane",
+      "kairowaves",
+      "lumatides",
+      "northbound",
+      "solysombra",
+      "losfaros",
+      "harborpine",
+      "mirasol"
+    ],
+    "medium_term": [
+      "costanorte",
+      "midnightcoast",
+      "lumatides",
+      "veralane",
+      "northbound",
+      "kairowaves",
+      "losfaros",
+      "mirasol"
+    ],
+    "long_term": [
+      "lumatides",
+      "midnightcoast",
+      "northbound",
+      "costanorte",
+      "veralane",
+      "harborpine",
+      "kairowaves"
+    ]
+  }
+}

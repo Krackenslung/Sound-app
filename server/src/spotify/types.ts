@@ -1,0 +1,129 @@
+export interface TokenSet {
+  accessToken: string;
+  refreshToken: string;
+  /** Epoch ms when the access token expires. */
+  expiresAt: number;
+  scope: string;
+}
+
+export interface SpotifyTokenResponse {
+  access_token: string;
+  token_type: string;
+  scope: string;
+  expires_in: number;
+  refresh_token?: string;
+}
+
+export interface SpotifyImage {
+  url: string;
+  height: number | null;
+  width: number | null;
+}
+
+export interface SpotifyUser {
+  id: string;
+  display_name: string | null;
+  email?: string;
+  product?: 'premium' | 'free' | 'open' | string;
+  country?: string;
+  images?: SpotifyImage[];
+}
+
+export interface SpotifyArtistRef {
+  id: string | null;
+  name: string;
+  uri: string;
+}
+
+export interface SpotifyAlbumRef {
+  id: string | null;
+  name: string;
+  uri: string;
+  images?: SpotifyImage[];
+  artists?: SpotifyArtistRef[];
+}
+
+export interface SpotifyTrack {
+  id: string | null;
+  uri: string;
+  name: string;
+  duration_ms: number;
+  explicit?: boolean;
+  artists: SpotifyArtistRef[];
+  album: SpotifyAlbumRef;
+  type?: string;
+}
+
+export interface SpotifyPaging<T> {
+  items: T[];
+  total?: number;
+  limit: number;
+  offset?: number;
+  next: string | null;
+}
+
+export interface SpotifyDevice {
+  id: string | null;
+  name: string;
+  type: string;
+  is_active: boolean;
+  volume_percent: number | null;
+}
+
+export interface SpotifyPlaybackState {
+  device: SpotifyDevice;
+  shuffle_state: boolean;
+  repeat_state: 'off' | 'track' | 'context';
+  timestamp: number;
+  progress_ms: number | null;
+  is_playing: boolean;
+  item: SpotifyTrack | null;
+  currently_playing_type?: string;
+  context?: { uri: string } | null;
+}
+
+export interface SpotifyAlbumFull extends SpotifyAlbumRef {
+  album_type?: string;
+  release_date?: string;
+  total_tracks?: number;
+  tracks?: SpotifyPaging<Omit<SpotifyTrack, 'album'>>;
+}
+
+export interface SpotifyArtist {
+  id: string;
+  uri: string;
+  name: string;
+  images?: SpotifyImage[];
+  genres?: string[];
+}
+
+export interface SpotifyPlaylistSummary {
+  id: string;
+  uri: string;
+  name: string;
+  description?: string | null;
+  images?: SpotifyImage[] | null;
+  owner?: { id: string; display_name?: string | null };
+  collaborative?: boolean;
+  public?: boolean | null;
+  // Feb 2026: `tracks` was renamed to `items` on playlist objects; accept either.
+  items?: { total?: number } | null;
+  tracks?: { total?: number } | null;
+}
+
+/** Playlist entry. Feb 2026: `track` was renamed to `item` (`track` may linger as a deprecated alias or a boolean). */
+export interface SpotifyPlaylistEntry {
+  added_at: string | null;
+  item?: SpotifyTrack | null;
+  track?: SpotifyTrack | boolean | null;
+}
+
+export interface SpotifySavedTrack {
+  added_at: string;
+  track: SpotifyTrack;
+}
+
+export interface SpotifySavedAlbum {
+  added_at: string;
+  album: SpotifyAlbumFull;
+}

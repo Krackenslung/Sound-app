@@ -1,0 +1,12 @@
+# Pulse Player — HTTPS reverse proxy (automatic Let's Encrypt certificates).
+# PULSE_DOMAIN defaults to the production host; override it only for local testing.
+{$PULSE_DOMAIN:music.gallardoapps.com} {
+	encode zstd gzip
+	# Caddy sets X-Forwarded-For/-Proto; the app trusts one proxy hop (`trust proxy` = 1).
+	reverse_proxy app:3001 {
+		# Hold and retry requests for a few seconds while the app restarts during a deploy,
+		# instead of failing them.
+		lb_try_duration 10s
+		lb_try_interval 250ms
+	}
+}
