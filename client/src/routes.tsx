@@ -8,6 +8,7 @@ import { AlbumPage } from '@/pages/AlbumPage';
 import { ArtistPage } from '@/pages/ArtistPage';
 import { LibraryPage } from '@/pages/LibraryPage';
 import { PlaylistPage } from '@/pages/PlaylistPage';
+import { StatsPage } from '@/pages/StatsPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { PlaceholderPage } from '@/pages/PlaceholderPage';
 import { ComponentsPreviewPage } from '@/pages/ComponentsPreviewPage';
@@ -27,7 +28,7 @@ export const routes: RouteObject[] = [
           { path: 'artist/:id', element: <ArtistPage /> },
           { path: 'library', element: <LibraryPage /> },
           { path: 'playlist/:id', element: <PlaylistPage /> },
-          { path: 'stats', element: <PlaceholderPage title="Stats" /> },
+          { path: 'stats', element: <StatsPage /> },
           { path: '*', element: <PlaceholderPage title="Not found" /> },
         ],
       },
