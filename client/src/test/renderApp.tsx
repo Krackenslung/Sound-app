@@ -15,7 +15,10 @@ export const premiumUser: Me = {
   avatarUrl: null,
 };
 
-type Handler = (url: string, init?: RequestInit) => Response | Promise<Response>;
+type Handler = (
+  url: string,
+  init?: RequestInit,
+) => Response | undefined | Promise<Response | undefined>;
 
 export const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -33,7 +36,9 @@ export function mockApi({ me, extra }: { me: Me | number; extra?: Handler }) {
         ? json({ code: me === 403 ? 'FORBIDDEN' : 'UNAUTHENTICATED', message: 'x' }, me)
         : json(me);
     }
-    if (extra) return extra(url, init);
+    const handled = extra ? await extra(url, init) : undefined;
+    if (handled) return handled;
+    if (url === '/api/player' && !init?.method) return json(null);
     return json({ code: 'NOT_FOUND', message: 'not mocked' }, 404);
   });
   vi.stubGlobal('fetch', fetchMock);
