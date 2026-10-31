@@ -21,7 +21,7 @@ A deployed web app that lets a logged-in Spotify Premium user play music in the 
 | Layer | Choice |
 |---|---|
 | Frontend | React 18 + Vite + TypeScript, React Router (v7, `react-router` package), TanStack Query, Zustand (player state), Tailwind CSS |
-| Backend | Node.js 20 + Express + TypeScript |
+| Backend | Node.js 22 LTS + Express + TypeScript (Node 20 is EOL since April 2026, and Vitest 5 needs ≥ 22.12) |
 | Sessions | `express-session` + Redis store (`connect-redis`). **Never MemoryStore in production.** |
 | Testing | Vitest + React Testing Library (client), Vitest + Supertest (server), MSW for mocking Spotify |
 | Deploy | Docker multi-stage image, docker-compose (app + redis + caddy) on a DigitalOcean droplet, Caddy for automatic HTTPS |
@@ -133,6 +133,8 @@ Radii: cards 12–16px, album art 6–8px (rows) / 16–20px (hero), buttons and
 ```
 
 ## Commands
+
+See `docs/DEPLOYMENT.md` for the production runbook (droplet, DNS, Spotify dashboard, GitHub secrets, operations).
 
 ```bash
 npm install            # root, installs both workspaces
@@ -300,14 +302,14 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 
 ## Phase 8 — Deployment
 
-- [ ] Multi-stage `Dockerfile`: build client + server, run as non-root on `node:20-alpine`
-- [ ] `docker-compose.yml`: `app`, `redis` (volume), `caddy` (ports 80/443, volume for certs)
-- [ ] `Caddyfile`: `music.gallardoapps.com { reverse_proxy app:3001 }`
+- [x] Multi-stage `Dockerfile`: build client + server, run as non-root on `node:22-alpine` (was `node:20-alpine`; see Tech stack) — prod deps only (23.6 MB `node_modules`), `HEALTHCHECK` on `/api/health`, graceful SIGTERM shutdown
+- [x] `docker-compose.yml`: `app`, `redis` (volume), `caddy` (ports 80/443, volume for certs) — app read-only, all capabilities dropped, starts after Redis is healthy; Caddy starts after the app is healthy
+- [x] `Caddyfile`: `music.gallardoapps.com { reverse_proxy app:3001 }` — plus `encode zstd gzip` and `lb_try_duration 10s` so redeploys don't drop requests; domain overridable via `PULSE_DOMAIN`
 - [ ] DNS A record for `music.gallardoapps.com` → droplet IP
 - [ ] Add the production redirect URI in the Spotify dashboard
-- [ ] Set `trust proxy` in Express so secure cookies work behind Caddy
-- [ ] GitHub Actions: on push to `main` → lint/typecheck/test → build & push image to GHCR → SSH to droplet → `docker compose pull && docker compose up -d`
-- [ ] Production `.env` on the server only; uptime check on `/api/health`
+- [x] Set `trust proxy` in Express so secure cookies work behind Caddy (since Phase 1; verified the `Secure` cookie is set through Caddy)
+- [x] GitHub Actions: on push to `main` → lint/typecheck/test → build & push image to GHCR → SSH to droplet → `docker compose pull && docker compose up -d` (`.github/workflows/deploy.yml`; CI also runs on PRs; deploys the exact `sha-<commit>` image, then health-checks over HTTPS)
+- [ ] Production `.env` on the server only; uptime check on `/api/health` — uptime check done (`.github/workflows/uptime.yml`, every 15 min); the `.env` is a manual step (docs/DEPLOYMENT.md §4)
 - [ ] Allowlist the accounts that should have real access (max 5)
 
 **Done when:** `https://music.gallardoapps.com` loads over HTTPS, login works end to end, demo mode works for everyone else, and a push to `main` deploys automatically.
@@ -326,3 +328,4 @@ playlist-read-private playlist-read-collaborative playlist-modify-public playlis
 - 2026-10-31 — Phase 5 code complete; "Done when" (Stats renders for a real account; generator creates a correct playlist) still needs a real account — Stats page from frame 7:1077 (summary tiles, top artists, top tracks, breakdown card, recently played), `time_range` segmented control in the URL, monthly playlist dialog on Library with per-month counts; developer reports say Feb 2026 removed artist `genres` for Development Mode apps, so genre tiles/breakdown fall back to artist-based stats when no genres come back (tiles still only show API-provided values); breakdown is HTML/CSS bars per Figma instead of Recharts
 - 2026-10-31 — Phase 6 done — "Done when" met locally on the production build: Lighthouse (mobile) Login 98/100/96, Home 93/100/100, Search 93/100/100, Stats desktop 100/100/100 (Perf/A11y/BP; Login BP 96 is the expected 401 from `/api/me` while logged out), and demo mode works fully logged out with zero network calls (tested). Added: demo mode + banner, mobile layout (tab bar, mini player, full-screen Now Playing, quick picks), keyboard shortcuts, album-art color, Spotify attribution, PWA manifest, axe-clean a11y, route-level code splitting (main JS 415 → 288 kB). Design deviations for WCAG AA: `--color-text-muted` → `#84849A`, primary buttons use new `--color-accent-strong`, playing-row text uses `accent-hover` — Figma should be updated to match
 - 2026-10-31 — Phase 7 done — "Done when" met: coverage src/spotify 95% stmts / 86% branches, src/routes 94% / 75% (thresholds enforced in `server/vitest.config.ts`); `npm run check:secrets` finds nothing in the client build (verified it fails on a planted secret); logging test proves no tokens/cookies/OAuth codes/client secret in logs. Added Spotify client unit tests (refresh-once, 5xx backoff 250/500 ms then 502, 429 Retry-After/RATE_LIMITED/QUOTA_EXCEEDED, invalid_grant session destroy, refresh dedupe, PKCE), rate limiting + 16 KB body cap, strict CSP (checked in a real browser), pino logging. 251 tests total
+- 2026-10-31 — Phase 8 repo work done; "Done when" needs the manual steps (droplet, DNS, Spotify dashboard redirect URI + allowlist, server `.env`, GitHub `production` environment secrets) — see docs/DEPLOYMENT.md. Built and ran the image and the full compose stack locally: health, SPA, CSP/HSTS, HTTP→HTTPS, gzip (288 → 98 kB), `Secure` session cookie through Caddy, Redis sessions, no secrets in logs, clean SIGTERM shutdown, zero failed requests across an app redeploy. Switched to Node 22 LTS (Node 20 EOL; Vitest 5 requires ≥ 22.12). Workflow YAML validated with Prettier + PyYAML (actionlint couldn't be downloaded in this environment)
