@@ -1,5 +1,6 @@
-import { BarChart3, Home, Library, MoreHorizontal, Music, Plus, Search } from 'lucide-react';
+import { BarChart3, Home, Library, Music, Plus, Search } from 'lucide-react';
 import { NavItem } from './NavItem';
+import { UserCard } from './UserCard';
 
 // Figma: Sidebar (node 4:12) — 248px wide, surface bg, right border.
 export function Sidebar() {
@@ -40,16 +41,7 @@ export function Sidebar() {
         <p className="px-3.5 text-caption text-text-muted">Your playlists will appear here.</p>
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl bg-surface-2 p-2.5">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-2 to-warning to-50% text-body font-semibold text-on-accent">
-          ?
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="truncate text-body font-semibold">Guest</span>
-          <span className="text-caption text-text-secondary">Not signed in</span>
-        </div>
-        <MoreHorizontal aria-hidden className="size-[18px] opacity-60" />
-      </div>
+      <UserCard />
     </aside>
   );
 }

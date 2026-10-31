@@ -1,26 +1,25 @@
-import { render, screen } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router';
-import { routes } from '@/routes';
-
-function renderAt(path: string) {
-  const router = createMemoryRouter(routes, { initialEntries: [path] });
-  render(<RouterProvider router={router} />);
-}
+import { screen } from '@testing-library/react';
+import { mockApi, premiumUser, renderApp } from '@/test/renderApp';
 
 describe('AppShell', () => {
-  it('renders sidebar, main and player bar', () => {
-    renderAt('/');
+  it('renders sidebar, main and player bar for a logged-in user', async () => {
+    mockApi({ me: premiumUser });
+    renderApp('/');
+    expect(await screen.findByRole('heading', { level: 1 })).toHaveTextContent(
+      /^Good (morning|afternoon|evening), Jesus$/,
+    );
     expect(screen.getByRole('complementary', { name: 'Sidebar' })).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByRole('contentinfo', { name: 'Player' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      /^Good (morning|afternoon|evening)$/,
-    );
   });
 
-  it('marks the current route as active in the nav', () => {
-    renderAt('/library');
-    expect(screen.getByRole('link', { name: 'Library' })).toHaveAttribute('aria-current', 'page');
+  it('marks the current route as active in the nav', async () => {
+    mockApi({ me: premiumUser });
+    renderApp('/library');
+    expect(await screen.findByRole('link', { name: 'Library' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
     expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current');
   });
 });
