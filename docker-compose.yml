@@ -1,0 +1,72 @@
+# Pulse Player production stack: app + Redis (sessions) + Caddy (HTTPS).
+# On the droplet this file lives next to `.env` and `docker/Caddyfile` (see docs/DEPLOYMENT.md).
+name: pulse
+
+services:
+  app:
+    image: ${PULSE_IMAGE:-ghcr.io/krackenslung/sound-app:latest}
+    build: .
+    restart: unless-stopped
+    init: true
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: '3001'
+      REDIS_URL: redis://redis:6379
+    expose:
+      - '3001'
+    depends_on:
+      redis:
+        condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '5' }
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # Append-only file so sessions survive restarts; not exposed outside the compose network.
+    command: ['redis-server', '--appendonly', 'yes', '--save', '60', '1']
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '3' }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp' # HTTP/3
+    environment:
+      PULSE_DOMAIN: ${PULSE_DOMAIN:-music.gallardoapps.com}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data # certificates — keep this volume
+      - caddy-config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: '3' }
+
+volumes:
+  redis-data:
+  caddy-data:
+  caddy-config:
